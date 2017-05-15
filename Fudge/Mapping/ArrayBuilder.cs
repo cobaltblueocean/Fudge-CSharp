@@ -44,7 +44,7 @@ namespace Fudge.Mapping
         /// <summary>
         /// {@inheritDoc}
         /// </summary>
-        public override IMutableFudgeFieldContainer BuildMessage(FudgeSerializer context, object[] array)
+        public IMutableFudgeFieldContainer BuildMessage(FudgeSerializer context, object[] array)
         {
             //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
             //ORIGINAL LINE: final org.fudgemsg.IMutableFudgeFieldContainer msg = context.newMessage();
@@ -61,7 +61,7 @@ namespace Fudge.Mapping
         /// </summary>
         //JAVA TO C# CONVERTER TODO TASK: Most Java annotations will not have direct .NET equivalent attributes:
         //ORIGINAL LINE: @SuppressWarnings("unchecked") @Override public E[] buildObject(FudgeDeserializationContext context, org.fudgemsg.FudgeFieldContainer message)
-        public override E[] BuildObject(FudgeDeserializer context, IFudgeFieldContainer message)
+        public E[] BuildObject(FudgeDeserializer context, IFudgeFieldContainer message)
         {
             //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
             //ORIGINAL LINE: final java.util.List list = ListBuilder.Instance.buildObject(context, message);
@@ -71,5 +71,14 @@ namespace Fudge.Mapping
             return list.ToArray();
         }
 
+        IMutableFudgeFieldContainer IFudgeMessageBuilder<E>.BuildMessage(FudgeSerializer serializer, E obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        E IFudgeObjectBuilder<E>.BuildObject(FudgeDeserializer context, IFudgeFieldContainer message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

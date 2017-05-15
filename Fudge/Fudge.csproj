@@ -103,7 +103,6 @@
     <Compile Include="Mapping\FudgeDefaultBuilderFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mapping\IFudgeBuilder.cs" />
     <Compile Include="Mapping\FudgeBuilderFactory.cs" />
     <Compile Include="Mapping\FudgeBuilderFactoryAdapter.cs" />
     <Compile Include="Mapping\FudgeBuilderFor.cs" />

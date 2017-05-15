@@ -110,9 +110,17 @@ namespace Fudge.Mapping
                 string javaClassName = id.Value.GetType().FullName;
                 try
                 {
+                    Type typeParameterType = id.Value.GetType();
+                    var idValue = id.Value;
+
                     //.getDeclaredField("INSTANCE").get(null)
                     //AddGenericBuilderInternal<Type, IFudgeObjectBuilder>(id.Value.GetType(), (IFudgeObjectBuilder)id.Value.GetType().GetField("INSTANCE").DeclaringType);
-                    AddGenericBuilderInternal<id.Value.GetType()> ((IFudgeObjectBuilder<id.Value.GetType()>)id.Value.GetType().GetField("INSTANCE").DeclaringType);
+
+                    MethodInfo method = typeof(FudgeDefaultBuilderFactory).GetMethod("AddGenericBuilderInternal");
+                    MethodInfo generic = method.MakeGenericMethod(typeParameterType);
+                    generic.Invoke(this, new object { IFudgeObjectBuilder<id.Value.GetType().GetField("INSTANCE").DeclaringType> });
+
+                    //AddGenericBuilderInternal <id.Value.GetType()> ((IFudgeObjectBuilder<id.Value.GetType().GetGenericArguments()[0] >)id.Value.GetType().GetField("INSTANCE").DeclaringType);
                 }
                 catch (TypeLoadException)
                 {

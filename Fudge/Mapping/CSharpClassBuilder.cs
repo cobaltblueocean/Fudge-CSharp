@@ -41,7 +41,7 @@ namespace Fudge.Mapping
         }
 
         /// 
-        public new IMutableFudgeFieldContainer BuildMessage(FudgeSerializer context, Type @object)
+        public IMutableFudgeFieldContainer BuildMessage(FudgeSerializer context, Type @object)
         {
             //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
             //ORIGINAL LINE: final org.fudgemsg.IMutableFudgeFieldContainer msg = context.newMessage();
@@ -53,7 +53,7 @@ namespace Fudge.Mapping
         }
 
         /// 
-        public new Type BuildObject(FudgeDeserializer context, IFudgeFieldContainer message)
+        public Type BuildObject(FudgeDeserializer context, IFudgeFieldContainer message)
         {
             //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
             //ORIGINAL LINE: final String str = message.getString("name");
@@ -74,11 +74,6 @@ namespace Fudge.Mapping
 
 
         public IMutableFudgeFieldContainer BuildMessage(FudgeSerializer serializer, dynamic @object)
-        {
-            throw new NotImplementedException();
-        }
-
-        dynamic IFudgeObjectBuilder.BuildObject(FudgeDeserializer context, IFudgeFieldContainer message)
         {
             throw new NotImplementedException();
         }
