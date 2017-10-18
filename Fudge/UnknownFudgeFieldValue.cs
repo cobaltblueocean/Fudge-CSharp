@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Fudge.Types;
-using Fudge.Wire.Types;
 
 namespace Fudge
 {
@@ -35,14 +34,14 @@ namespace Fudge
     {
 
         private readonly byte[] contents;
-        private readonly FudgeFieldType type;
+        private readonly UnknownFudgeFieldType type;
 
         /// <summary>
         /// Creates a new unknown value.
         /// </summary>
         /// <param name="contents">the binary data from the fudge message</param>
         /// <param name="type">the unknown type placeholder</param>
-        public UnknownFudgeFieldValue(byte[] contents, FudgeFieldType type)
+        public UnknownFudgeFieldValue(byte[] contents, UnknownFudgeFieldType type)
         {
             if (contents == null)
             {
@@ -67,7 +66,7 @@ namespace Fudge
         /// <summary>
         /// Gets the unknown type definition
         /// </summary>
-        public FudgeFieldType Type
+        public UnknownFudgeFieldType Type
         {
             get { return type; }
         }

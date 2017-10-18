@@ -139,6 +139,12 @@
     <Compile Include="Unit\Types\TimeFieldTypeTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fudge\Fudge.csproj">
+      <Project>{109A43D4-CE96-41E7-9FFC-D7A30D238E06}</Project>
+      <Name>Fudge</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -152,12 +158,6 @@
     <EmbeddedResource Include="Resources\unknown.dat" />
     <EmbeddedResource Include="Resources\variableWidthColumnSizes.dat" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Fudge\Fudge.csproj">
-      <Project>{109a43d4-ce96-41e7-9ffc-d7a30d238e06}</Project>
-      <Name>Fudge</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -166,10 +166,15 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <UsingTask AssemblyFile="..\thirdparty\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
+
+  <UsingTask AssemblyFile="..\thirdparty\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
+  
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  
   <Target Name="Test" DependsOnTargets="Build">
     <MakeDir Directories="test-reports" />
     <xunit Assembly="bin\Debug\FudgeTests.dll" Xml="test-reports\FudgeTests.xunit.xml" />
-    <MSBuild.Community.Tasks.Xslt Inputs="test-reports\FudgeTests.xunit.xml" Xsl="..\thirdparty\NUnitXml.xslt" RootTag="" RootAttributes="" Output="test-reports\FudgeTests.NUnit.xml" />
+    <MSBuild.Community.Tasks.Xslt   Inputs="test-reports\FudgeTests.xunit.xml"  Xsl="..\thirdparty\NUnitXml.xslt"  RootTag=""  RootAttributes=""  Output="test-reports\FudgeTests.NUnit.xml"/>
   </Target>
+
 </Project>

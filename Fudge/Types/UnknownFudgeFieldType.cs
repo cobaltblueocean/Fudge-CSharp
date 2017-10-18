@@ -20,7 +20,6 @@ using System.Linq;
 using System.Text;
 using Fudge.Taxon;
 using System.IO;
-using Fudge.Wire.Types;
 
 namespace Fudge.Types
 {
@@ -47,16 +46,11 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize)
+        public override UnknownFudgeFieldValue ReadTypedValue(BinaryReader input, int dataSize)
         {
             byte[] contents = new byte[dataSize];
             input.Read(contents, 0, dataSize);
             return new UnknownFudgeFieldValue(contents, this);
-        }
-
-        public new UnknownFudgeFieldValue ReadValue(BinaryReader input, int dataSize)
-        {
-            return (UnknownFudgeFieldValue)(Object)ReadTypedValue(input, dataSize);
         }
 
         /// <inheritdoc/>

@@ -1,18 +1,19 @@
-﻿/// <summary>
-/// Copyright (C) 2009 - present by OpenGamma Inc. and other contributors.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-/// 
-///     http://www.apache.org/licenses/LICENSE-2.0
-///     
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-/// </summary>
+﻿/* <!--
+ * Copyright (C) 2009 - 2010 by OpenGamma Inc. and other contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -->
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,6 @@ using System.Text;
 using Fudge.Encodings;
 using Fudge.Types;
 using Fudge.Serialization.Reflection;
-using Fudge.Wire.Types;
-using Fudge.Mapping;
 
 namespace Fudge.Serialization
 {
@@ -36,7 +35,6 @@ namespace Fudge.Serialization
     {
         private readonly FudgeContext context;
         private readonly SerializationTypeMap typeMap;
-        private readonly SerializationBuffer _serialisationBuffer = new SerializationBuffer();
 
         /// <summary>Constant defining the ordinal for the field in which type information is stored.</summary>
         public const int TypeIdFieldOrdinal = 0;
@@ -85,27 +83,6 @@ namespace Fudge.Serialization
             get { return typeMap; }
         }
 
-        public FudgeContext FudgeContext
-        {
-            get
-            {
-                return this.context;
-            }
-        }
-
-        private SerializationBuffer SerialisationBuffer
-        {
-            get
-            {
-                return _serialisationBuffer;
-            }
-        }
-
-        public void Reset()
-        {
-            SerialisationBuffer.reset();
-        }
-
         /// <summary>
         /// Serializes an object graph to a Fudge message stream.
         /// </summary>
@@ -118,7 +95,7 @@ namespace Fudge.Serialization
                 throw new ArgumentNullException("graph");
             }
 
-            // Delegate to FudgeSerializer to do the work
+            // Delegate to FudgeSerializationContext to do the work
             var serializationContext = new FudgeSerializationContext(context, typeMap, writer, TypeMappingStrategy);
             serializationContext.SerializeGraph(graph);
         }
@@ -192,124 +169,6 @@ namespace Fudge.Serialization
         {
             var reader = new FudgeMsgStreamReader(context, new FudgeMsg[] { msg });
             return Deserialize<T>(reader);
-        }
-
-        public MutableFudgeMsg NewMessage()
-        {
-            return (MutableFudgeMsg)context.NewMessage();
-        }
-
-        public MutableFudgeMsg NewMessage(FudgeMsg fromMessage)
-        {
-            return (MutableFudgeMsg)context.NewMessage(fromMessage);
-        }
-
-        public void AddToMessage(
-      MutableFudgeMsg message, String name, int ordinal, Object obj)
-        {
-            if (obj == null)
-            {
-                return;
-            }
-            FudgeFieldType fieldType = FudgeContext.TypeDictionary.GetByCSharpType(obj.GetType());
-            if (IsNative(fieldType, obj))
-            {
-                message.Add(name, ordinal, fieldType, obj);
-            }
-            else
-            {
-                // look up a custom or default builder and embed as sub-message
-                message.Add(name, ordinal, FudgeWireType.SUB_MESSAGE, ObjectToFudgeMsg(obj));
-            }
-        }
-
-        private Boolean IsNative(FudgeFieldType fieldType, Object obj)
-        {
-            if (fieldType == null)
-            {
-                return false;
-            }
-            return FudgeWireType.SUB_MESSAGE.Equals(fieldType) == false ||
-                    (FudgeWireType.SUB_MESSAGE.Equals(fieldType) && obj is FudgeMsg);
-        }
-
-        public MutableFudgeMsg ObjectToFudgeMsg(Object obj)
-        {
-            if (obj == null)
-            {
-                throw new NullReferenceException("Object cannot be null");
-            }
-            SerialisationBuffer.beginObject(obj);
-            try
-            {
-                Type clazz = obj.GetType();
-                IFudgeMessageBuilder<Object> builder = FudgeContext.ObjectDictionary.getMessageBuilder<Object>(clazz);
-                return (MutableFudgeMsg)builder.buildMessage(this, obj);
-            }
-            finally
-            {
-                SerialisationBuffer.endObject(obj);
-            }
-        }
-
-        public static MutableFudgeMsg AddClassHeader(MutableFudgeMsg message, Type clazz)
-        {
-            while (clazz != null && clazz != typeof(Object))
-            {
-                message.Add(null, TypeIdFieldOrdinal, FudgeWireType.STRING, clazz.Name);
-                clazz = clazz.BaseType;
-            }
-            return message;
-        }
-
-        public static MutableFudgeMsg AddClassHeader(MutableFudgeMsg message, Type clazz, Type receiverTarget)
-        {
-            while (clazz != null && receiverTarget.IsAssignableFrom(clazz) && receiverTarget != clazz)
-            {
-                message.Add(null, TypeIdFieldOrdinal, FudgeWireType.STRING, clazz.Name);
-                clazz = clazz.BaseType;
-            }
-            return message;
-        }
-
-        public virtual void ObjectToFudgeMsgWithClassHeaders(IMutableFudgeFieldContainer message, string name, int? ordinal, object @object)
-        {
-            ObjectToFudgeMsgWithClassHeaders(message, name, ordinal, @object, typeof(object));
-        }
-
-        public virtual void ObjectToFudgeMsgWithClassHeaders(IMutableFudgeFieldContainer message, string name, int? ordinal, object @object, Type receiverTarget)
-        {
-            if (@object == null)
-            {
-                return;
-            }
-            //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
-            //ORIGINAL LINE: final Class clazz = object.getClass();
-            Type clazz = @object.GetType();
-            //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
-            //ORIGINAL LINE: final org.fudgemsg.FudgeFieldType fieldType = getFudgeContext().getTypeDictionary().getByJavaType(clazz);
-            //JAVA TO C# CONVERTER TODO TASK: Java wildcard generics are not converted to .NET:
-            FudgeFieldType fieldType = FudgeContext.TypeDictionary.GetByCSharpType(clazz);
-            if ((fieldType != null) && !FudgeMsgFieldType.Instance.Equals(fieldType))
-            {
-                // goes natively into a message
-                message.Add(name, ordinal, fieldType, @object);
-            }
-            else
-            {
-                // look up a custom or default builder and embed as sub-message
-                //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
-                //ORIGINAL LINE: final org.fudgemsg.IMutableFudgeFieldContainer submsg = objectToFudgeMsg(object);
-                MutableFudgeMsg submsg = ObjectToFudgeMsg(@object);
-                if (!FudgeContext.ObjectDictionary.isDefaultObject(clazz))
-                {
-                    if (submsg.GetByOrdinal(0) == null)
-                    {
-                        AddClassHeader(submsg, clazz, receiverTarget);
-                    }
-                }
-                message.Add(name, ordinal, FudgeMsgFieldType.Instance, submsg);
-            }
         }
     }
 }

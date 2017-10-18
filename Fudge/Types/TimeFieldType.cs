@@ -41,7 +41,7 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize)
+        public override FudgeTime ReadTypedValue(BinaryReader input, int dataSize)
         {
             int? timeZone;
             int seconds;
@@ -60,11 +60,6 @@ namespace Fudge.Types
                 // Timezone
                 return new FudgeTime(precision, seconds, nanos, timeZone.Value);
             }
-        }
-
-        public new FudgeTime ReadValue(BinaryReader input, int dataSize)
-        {
-            return (FudgeTime)(Object)ReadTypedValue(input, dataSize);
         }
 
         /// <inheritdoc/>

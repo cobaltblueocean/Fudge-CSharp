@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Fudge</RootNamespace>
     <AssemblyName>Fudge</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -58,10 +58,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IQToolkit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\IQToolkit.1.0.0.0\lib\net40\IQToolkit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MongoDB.Bson, Version=1.10.1.73, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <HintPath>..\packages\mongocsharpdriver.1.10.1\lib\net35\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -78,6 +74,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -92,67 +89,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractFudgeBuilder.cs" />
-    <Compile Include="AbstractFudgeMsg.cs" />
-    <Compile Include="FudgeMsgReader.cs" />
-    <Compile Include="FudgeMsgWriter.cs" />
-    <Compile Include="Mapping\ArrayBuilder.cs" />
-    <Compile Include="Mapping\EnumBuilder.cs" />
-    <Compile Include="Mapping\FromFudgeMsgObjectBuilder.cs" />
-    <Compile Include="Mapping\FudgeBuilder.cs" />
-    <Compile Include="Mapping\FudgeDefaultBuilderFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Mapping\FudgeBuilderFactory.cs" />
-    <Compile Include="Mapping\FudgeBuilderFactoryAdapter.cs" />
-    <Compile Include="Mapping\FudgeBuilderFor.cs" />
-    <Compile Include="Mapping\FudgeDeserializer.cs" />
-    <Compile Include="Mapping\FudgeFieldContainerBuilder.cs" />
-    <Compile Include="Mapping\FudgeFieldName.cs" />
-    <Compile Include="Mapping\FudgeFieldOrdinal.cs" />
-    <Compile Include="Mapping\FudgeMessageBuilder.cs" />
-    <Compile Include="Mapping\FudgeMsgConstructorObjectBuilder.cs" />
-    <Compile Include="Mapping\FudgeObjectBuilder.cs" />
-    <Compile Include="Mapping\FudgeObjectDictionary.cs" />
-    <Compile Include="Mapping\FudgeObjectMessageFactory.cs" />
-    <Compile Include="Mapping\FudgeObjectReader.cs" />
-    <Compile Include="Mapping\FudgeObjectWriter.cs" />
-    <Compile Include="Mapping\GenericFudgeBuilderFor.cs" />
-    <Compile Include="Mapping\HasFudgeBuilder.cs" />
-    <Compile Include="Mapping\ImmutableFudgeBuilderFactory.cs" />
-    <Compile Include="Mapping\ImmutableFudgeObjectDictionary.cs" />
-    <Compile Include="Mapping\CSharpClassBuilder.cs" />
-    <Compile Include="Mapping\DotNetAssemblyBuilder.cs" />
-    <Compile Include="Mapping\ListBuilder.cs" />
-    <Compile Include="Mapping\MapBuilder.cs" />
-    <Compile Include="Mapping\MongoDBFudgeBuilder.cs" />
-    <Compile Include="Mapping\PrimitiveBuilder.cs" />
-    <Compile Include="Mapping\ReflectionBuilderBase.cs" />
-    <Compile Include="Mapping\ReflectionMessageBuilder.cs" />
-    <Compile Include="Mapping\ReflectionObjectBuilder.cs" />
-    <Compile Include="Mapping\SetBuilder.cs" />
-    <Compile Include="Mapping\ToFudgeMsgMessageBuilder.cs" />
-    <Compile Include="MutableFudgeMsg.cs" />
-    <Compile Include="Serialization\FudgeSerializationContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="StandardFudgeMsg.cs" />
-    <Compile Include="Types\DateTimeAccuracy.cs" />
-    <Compile Include="Types\FudgeTypeConverter.cs" />
-    <Compile Include="UnmodifiableFudgeContext.cs" />
-    <Compile Include="UnmodifiableFudgeField.cs" />
-    <Compile Include="UnmodifiableFudgeMsg.cs" />
-    <Compile Include="Util\AtomicBoolean.cs" />
-    <Compile Include="Util\ClasspathUtilities.cs" />
-    <Compile Include="Util\EnumExtension.cs" />
-    <Compile Include="Util\ObjectExtension.cs" />
-    <Compile Include="Util\StringExtension.cs" />
-    <Compile Include="Util\TypeExtension.cs" />
-    <Compile Include="Util\Variant.cs" />
-    <Compile Include="Wire\AbstractFudgeStreamWriter.cs" />
-    <Compile Include="Wire\FudgeEncoded.cs" />
-    <Compile Include="Wire\FudgeSize.cs" />
-    <Compile Include="Wire\Type\BooleanWireType.cs" />
     <Compile Include="Encodings\FudgeEncodedStreamReader.cs" />
     <Compile Include="Encodings\FudgeEncodedStreamWriter.cs" />
     <Compile Include="Encodings\FudgeEncodingExtensions.cs" />
@@ -160,8 +96,8 @@
     <Compile Include="Encodings\FudgeJSONStreamWriter.cs" />
     <Compile Include="Encodings\FudgeMsgStreamReader.cs" />
     <Compile Include="Encodings\FudgeMsgStreamWriter.cs" />
-    <Compile Include="Encodings\FudgeStreamMultiwriter.cs" />
     <Compile Include="Encodings\FudgeParseException.cs" />
+    <Compile Include="Encodings\FudgeStreamMultiwriter.cs" />
     <Compile Include="Encodings\FudgeStreamReaderBase.cs" />
     <Compile Include="Encodings\FudgeXmlStreamReader.cs" />
     <Compile Include="Encodings\FudgeXmlStreamWriter.cs" />
@@ -172,29 +108,21 @@
     <Compile Include="FudgeEncodingObject.cs" />
     <Compile Include="FudgeExtensions.cs" />
     <Compile Include="FudgeFieldPrefixCodec.cs" />
-    <Compile Include="FudgeStreamElement.cs" />
-    <Compile Include="FudgeStreamParser.cs" />
-    <Compile Include="Interface\IAppendingFudgeFieldContainer.cs" />
-    <Compile Include="Mapping\SerializationBuffer.cs" />
-    <Compile Include="Serialization\Reflection\DataContractSurrogate.cs" />
-    <Compile Include="Serialization\Reflection\DotNetSeializationSurrogateSurrogate.cs" />
-    <Compile Include="Serialization\Reflection\DotNetSerializableSurrogate.cs" />
-    <Compile Include="Serialization\Reflection\ImmutableSurrogate.cs" />
-    <Compile Include="Serialization\Reflection\ReflectionUtil.cs" />
-    <Compile Include="Serialization\Reflection\SerializableAttributeSurrogate.cs" />
-    <Compile Include="Util\FudgeStreamPipe.cs" />
-    <Compile Include="Interface\IFudgeFieldContainer.cs" />
     <Compile Include="FudgeFieldType.cs" />
     <Compile Include="FudgeMsg.cs" />
     <Compile Include="FudgeMsgEnvelope.cs" />
     <Compile Include="FudgeMsgField.cs" />
     <Compile Include="FudgeMsgFormatter.cs" />
     <Compile Include="FudgeRuntimeException.cs" />
+    <Compile Include="FudgeStreamElement.cs" />
+    <Compile Include="FudgeStreamParser.cs" />
     <Compile Include="FudgeTypeDictionary.cs" />
-    <Compile Include="Interface\IFudgeField.cs" />
-    <Compile Include="Interface\IFudgeStreamReader.cs" />
-    <Compile Include="Interface\IFudgeStreamWriter.cs" />
-    <Compile Include="Interface\IMutableFudgeFieldContainer.cs" />
+    <Compile Include="IAppendingFudgeFieldContainer.cs" />
+    <Compile Include="IFudgeField.cs" />
+    <Compile Include="IFudgeFieldContainer.cs" />
+    <Compile Include="IFudgeStreamReader.cs" />
+    <Compile Include="IFudgeStreamWriter.cs" />
+    <Compile Include="IMutableFudgeFieldContainer.cs" />
     <Compile Include="Linq\ExpressionTreeStructureHasher.cs" />
     <Compile Include="Linq\FudgeExpressionTranslator.cs" />
     <Compile Include="Linq\FudgeLinqExtensions.cs" />
@@ -204,56 +132,63 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\ContextProperties.cs" />
     <Compile Include="Serialization\DefaultTypeMappingStrategy.cs" />
+    <Compile Include="Serialization\FudgeDeserializationContext.cs" />
+    <Compile Include="Serialization\FudgeFieldNameAttribute.cs" />
     <Compile Include="Serialization\FudgeFieldNameConvention.cs" />
     <Compile Include="Serialization\FudgeFieldNameConventionAttribute.cs" />
-    <Compile Include="Serialization\FudgeFieldNameAttribute.cs" />
-    <Compile Include="Serialization\FudgeDeserializationContext.cs" />
     <Compile Include="Serialization\FudgeInlineAttribute.cs" />
+    <Compile Include="Serialization\FudgeSerializationContext.cs" />
     <Compile Include="Serialization\FudgeSerializationExtensions.cs" />
     <Compile Include="Serialization\FudgeSerializer.cs" />
     <Compile Include="Serialization\FudgeSurrogateAttribute.cs" />
     <Compile Include="Serialization\FudgeTransientAttribute.cs" />
     <Compile Include="Serialization\IFudgeDeserializer.cs" />
     <Compile Include="Serialization\IFudgeSerializable.cs" />
-    <Compile Include="Serialization\IFudgeSerializer.cs" />
     <Compile Include="Serialization\IFudgeSerializationSurrogate.cs" />
+    <Compile Include="Serialization\IFudgeSerializer.cs" />
     <Compile Include="Serialization\IFudgeTypeMappingStrategy.cs" />
     <Compile Include="Serialization\JavaTypeMappingStrategy.cs" />
     <Compile Include="Serialization\NamespaceDoc.cs" />
     <Compile Include="Serialization\Reflection\ArraySurrogate.cs" />
     <Compile Include="Serialization\Reflection\CollectionSurrogateBase.cs" />
+    <Compile Include="Serialization\Reflection\DataContractSurrogate.cs" />
     <Compile Include="Serialization\Reflection\DictionarySurrogate.cs" />
+    <Compile Include="Serialization\Reflection\DotNetSeializationSurrogateSurrogate.cs" />
+    <Compile Include="Serialization\Reflection\DotNetSerializableSurrogate.cs" />
+    <Compile Include="Serialization\Reflection\FudgeSurrogateSelector.cs" />
+    <Compile Include="Serialization\Reflection\ImmutableSurrogate.cs" />
     <Compile Include="Serialization\Reflection\ListSurrogate.cs" />
     <Compile Include="Serialization\Reflection\NamespaceDoc.cs" />
     <Compile Include="Serialization\Reflection\PropertyBasedSerializationSurrogate.cs" />
-    <Compile Include="Serialization\Reflection\FudgeSurrogateSelector.cs" />
+    <Compile Include="Serialization\Reflection\ReflectionUtil.cs" />
+    <Compile Include="Serialization\Reflection\SerializableAttributeSurrogate.cs" />
     <Compile Include="Serialization\Reflection\ToFromFudgeMsgSurrogate.cs" />
     <Compile Include="Serialization\Reflection\TypeData.cs" />
     <Compile Include="Serialization\Reflection\TypeDataCache.cs" />
     <Compile Include="Serialization\SerializableSurrogate.cs" />
     <Compile Include="Serialization\SerializationTypeMap.cs" />
-    <Compile Include="Types\DateTimeFieldType.cs" />
-    <Compile Include="Types\FudgeArrayFieldTypeBase.cs" />
-    <Compile Include="Types\FudgeDate.cs" />
-    <Compile Include="Types\DateFieldType.cs" />
-    <Compile Include="Types\FudgeDateTime.cs" />
-    <Compile Include="Types\FudgeDateTimePrecision.cs" />
-    <Compile Include="Types\FudgeTime.cs" />
-    <Compile Include="Types\SecondaryFieldType.cs" />
     <Compile Include="Taxon\IFudgeTaxonomy.cs" />
     <Compile Include="Taxon\IFudgeTaxonomyResolver.cs" />
     <Compile Include="Taxon\ImmutableMapTaxonomyResolver.cs" />
     <Compile Include="Taxon\MapFudgeTaxonomy.cs" />
     <Compile Include="Types\ByteArrayFieldType.cs" />
-    <Compile Include="Types\LongArrayFieldType.cs" />
-    <Compile Include="Types\ShortArrayFieldType.cs" />
-    <Compile Include="Types\IntArrayFieldType.cs" />
+    <Compile Include="Types\DateFieldType.cs" />
+    <Compile Include="Types\DateTimeFieldType.cs" />
     <Compile Include="Types\DoubleArrayFieldType.cs" />
     <Compile Include="Types\FloatArrayFieldType.cs" />
+    <Compile Include="Types\FudgeArrayFieldTypeBase.cs" />
+    <Compile Include="Types\FudgeDate.cs" />
+    <Compile Include="Types\FudgeDateTime.cs" />
+    <Compile Include="Types\FudgeDateTimePrecision.cs" />
     <Compile Include="Types\FudgeMsgFieldType.cs" />
+    <Compile Include="Types\FudgeTime.cs" />
     <Compile Include="Types\IndicatorFieldType.cs" />
     <Compile Include="Types\IndicatorType.cs" />
+    <Compile Include="Types\IntArrayFieldType.cs" />
+    <Compile Include="Types\LongArrayFieldType.cs" />
     <Compile Include="Types\PrimitiveFieldTypes.cs" />
+    <Compile Include="Types\SecondaryFieldType.cs" />
+    <Compile Include="Types\ShortArrayFieldType.cs" />
     <Compile Include="Types\StringFieldType.cs" />
     <Compile Include="Types\TimeFieldType.cs" />
     <Compile Include="Types\UnknownFudgeFieldType.cs" />
@@ -262,36 +197,8 @@
     <Compile Include="Util\BinaryNBOWriter.cs" />
     <Compile Include="Util\FudgeBinaryReader.cs" />
     <Compile Include="Util\FudgeBinaryWriter.cs" />
+    <Compile Include="Util\FudgeStreamPipe.cs" />
     <Compile Include="Util\ModifiedUTF8Encoding.cs" />
-    <Compile Include="Wire\Type\ByteArrayWireTypes.cs" />
-    <Compile Include="Wire\Type\ByteWireType.cs" />
-    <Compile Include="Wire\Type\DateTimeWireType.cs" />
-    <Compile Include="Wire\Type\DateWireType.cs" />
-    <Compile Include="Wire\Type\DoubleArrayWireType.cs" />
-    <Compile Include="Wire\Type\DoubleWireType.cs" />
-    <Compile Include="Wire\Type\FloatArrayWireType.cs" />
-    <Compile Include="Wire\Type\FloatWireType.cs" />
-    <Compile Include="Wire\Type\FudgeWireType.cs" />
-    <Compile Include="Wire\Type\IndicatorWireType.cs" />
-    <Compile Include="Wire\Type\IntArrayWireType.cs" />
-    <Compile Include="Wire\Type\IntWireType.cs" />
-    <Compile Include="Wire\Type\LongArrayWireType.cs" />
-    <Compile Include="Wire\Type\LongWireType.cs" />
-    <Compile Include="Wire\Type\ShortArrayWireType.cs" />
-    <Compile Include="Wire\Type\ShortWireType.cs" />
-    <Compile Include="Wire\Type\StringWireType.cs" />
-    <Compile Include="Wire\Type\SubMessageWireType.cs" />
-    <Compile Include="Wire\Type\TimeWireType.cs" />
-    <Compile Include="Wire\Type\UnknownWireType.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="docs\sandcastle.bat" />
-    <None Include="docs\sandcastle.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="docs\fudge_content.xml" />
-    <Content Include="docs\summary.xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -310,7 +217,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="docs\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

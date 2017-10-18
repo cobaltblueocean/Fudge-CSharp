@@ -29,16 +29,15 @@ namespace Fudge
     {
         /// <summary>Indicates stream has not current element.</summary>
         NoElement,
+        /// <summary>Issued when a new outermost message is started.</summary>
+        MessageStart,
+        /// <summary>Issued when an outermost message is completed.</summary>
+        MessageEnd,
         /// <summary>Issued when a simple (non-hierarchical) field is encountered.</summary>
         SimpleField,
         /// <summary>Issued when a sub-Message field is encountered.</summary>
         SubmessageFieldStart,
         /// <summary>Issued when the end of a sub-Message field is reached.</summary>
-        SubmessageFieldEnd,
-        /// <summary>Issued when a new outermost message is started.</summary>
-        MessageStart,
-        /// <summary>Issued when an outermost message is completed.</summary>
-        MessageEnd
-
+        SubmessageFieldEnd
     }
 }

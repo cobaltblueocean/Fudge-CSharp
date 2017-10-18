@@ -63,9 +63,9 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize)
+        public override FudgeDateTime ReadTypedValue(BinaryReader input, int dataSize)
         {
-            FudgeDate date = (FudgeDate)(Object)DateFieldType.Instance.ReadTypedValue(input, 0);
+            FudgeDate date = DateFieldType.Instance.ReadTypedValue(input, 0);
 
             int? timeZone;
             int seconds;
@@ -79,11 +79,6 @@ namespace Fudge.Types
             var time = new FudgeTime(timePrecision, seconds, nanos, timeZone);
 
             return new FudgeDateTime(date, time, precision);
-        }
-
-        public new FudgeDateTime ReadValue(BinaryReader input, int dataSize)
-        {
-            return (FudgeDateTime)(Object)ReadTypedValue(input, dataSize);
         }
 
         /// <inheritdoc/>

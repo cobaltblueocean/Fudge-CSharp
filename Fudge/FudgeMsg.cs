@@ -86,16 +86,6 @@ namespace Fudge
         /// </summary>
         /// <param name="context"><see cref="FudgeContext"/> to use for the message.</param>
         /// <param name="fields">Fields to populate the message.</param>
-        public FudgeMsg(FudgeContext context, IFudgeField field)
-            : this(context, new IFudgeField[] { field })
-        {
-        }
-
-        /// <summary>
-        /// Constructs a new <see cref="FudgeMsg"/> using a given context, and populates with a set of fields.
-        /// </summary>
-        /// <param name="context"><see cref="FudgeContext"/> to use for the message.</param>
-        /// <param name="fields">Fields to populate the message.</param>
         public FudgeMsg(FudgeContext context, params IFudgeField[] fields)
             : this(context)
         {
@@ -184,34 +174,6 @@ namespace Fudge
         }
 
         #endregion
-
-        public HashSet<String> AllFieldNames
-        {
-            get
-            {
-                HashSet<String> allFieldNames = new HashSet<String>() ;
-                foreach (FudgeMsgField field in fields)
-                {
-                    allFieldNames.Add(field.Name);
-                }
-                return allFieldNames;
-            }
-        }
-
-        /// <summary>
-        /// Checks whether this message has any field which matches the given name.
-        /// </summary>
-        /// <param name="fieldName">the field name to check, null matches fields without a name</param>
-        /// <returns>true if this message has at least one field with the specified name</returns>
-        public Boolean HasField(String fieldName)
-        {
-            foreach (FudgeMsgField field in fields)
-            {
-                if (field.Name == fieldName)
-                    return true;
-            }
-            return false;
-        }
 
         /// <summary>
         /// Adds all the values in the enumerable to this message as fields of a given name.
@@ -827,9 +789,8 @@ namespace Fudge
         /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
-            //var copy = new List<FudgeMsgField>(fields);
-            //return copy.GetEnumerator();
-            return this.GetEnumerator();
+            var copy = new List<FudgeMsgField>(fields);
+            return copy.GetEnumerator();
         }
 
 

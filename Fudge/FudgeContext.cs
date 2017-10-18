@@ -22,7 +22,6 @@ using System.IO;
 using Fudge.Util;
 using Fudge.Encodings;
 using Fudge.Types;
-using Fudge.Mapping;
 
 namespace Fudge
 {
@@ -54,12 +53,6 @@ namespace Fudge
         private ITaxonomyResolver taxonomyResolver;
         private object[] properties;     // REVIEW 2009-11-28 t0rx -- Should we only create this on demand?
         private FudgeStreamParser parser;
-        private FudgeObjectDictionary _objectDictionary;
-
-
-        public static FudgeContext GLOBAL_DEFAULT = new UnmodifiableFudgeContext(new FudgeContext());
-        public static FudgeMsg EMPTY_MESSAGE = new UnmodifiableFudgeMsg(GLOBAL_DEFAULT);
-        public static FudgeMsgEnvelope EMPTY_MESSAGE_ENVELOPE = new FudgeMsgEnvelope(EMPTY_MESSAGE);
 
         /// <summary>
         /// Constructs a new <see cref="FudgeContext"/>.
@@ -69,7 +62,6 @@ namespace Fudge
             properties = new object[0];              // This will expand on use
             parser = new FudgeStreamParser(this);
             typeHandler = new FudgeTypeHandler(typeDictionary);
-            _objectDictionary = new FudgeObjectDictionary();
         }
 
         /// <summary>
@@ -98,24 +90,6 @@ namespace Fudge
             }
         }
 
-
-        /// <summary>
-        /// Gets or sets the <c>FudgeObjectDictionary</c> for use within this context when encoding or decoding messages.
-        /// </summary>
-        public FudgeObjectDictionary ObjectDictionary
-        {
-            get { return _objectDictionary; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value", "Every Fudge context must have a Object dictionary.");
-                }
-                _objectDictionary = value;
-            }
-        }
-
-
         /// <summary>
         /// Gets the <see cref="FudgeTypeHandler"/> for this context.
         /// </summary>
@@ -141,16 +115,6 @@ namespace Fudge
         public FudgeMsg NewMessage(params IFudgeField[] fields)
         {
             return new FudgeMsg(this, fields);
-        }
-
-        public FudgeMsg NewMessage(FudgeMsg fromMessage)
-        {
-            return new FudgeMsg(fromMessage);
-        }
-
-        public dynamic GetFieldValue(Type clazz, IFudgeField field)
-        {
-            return TypeDictionary.GetFieldValue(clazz, field);
         }
 
         /// <summary>

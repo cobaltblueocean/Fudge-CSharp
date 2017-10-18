@@ -39,72 +39,6 @@ namespace Fudge.Types
         /// <summary>Represents midnight with no timezone</summary>
         public static readonly FudgeTime Midnight = new FudgeTime(FudgeDateTimePrecision.Nanosecond, 0, 0);
 
-        public static readonly int NO_TIMEZONE_OFFSET = -128;
-
-        private DateTimeAccuracy _accuracy;
-        private int _timezoneOffset;
-        private DateTime _localTime;
-
-
-        public FudgeTime(DateTimeAccuracy accuracy, int timezoneOffset, int seconds, int nanos)
-        {
-            _accuracy = accuracy;
-            _timezoneOffset = timezoneOffset;
-            if (seconds < 0)
-            {
-                throw new ArgumentException("seconds cannot be negative");
-            }
-            if (nanos < 0)
-            {
-                throw new ArgumentException("nanos cannot be negative");
-            }
-            if (accuracy.GreaterThan(DateTimeAccuracy.SECOND))
-            {
-                if (accuracy.GreaterThan(DateTimeAccuracy.MILLISECOND))
-                {
-                    if (accuracy.GreaterThan(DateTimeAccuracy.MICROSECOND))
-                    {
-                        // As accurate as can be - no rounding needed
-                    }
-                    else
-                    {
-                        nanos -= nanos % 1000;
-                    }
-                }
-                else
-                {
-                    nanos -= nanos % 1000000;
-                }
-            }
-            else
-            {
-                nanos = 0;
-                if (accuracy.GreaterThan(DateTimeAccuracy.DAY))
-                {
-                    if (accuracy.GreaterThan(DateTimeAccuracy.HOUR))
-                    {
-                        if (accuracy.GreaterThan(DateTimeAccuracy.MINUTE))
-                        {
-                            // Accurate to the second - already rounded for this
-                        }
-                        else
-                        {
-                            seconds -= seconds % 60;
-                        }
-                    }
-                    else
-                    {
-                        seconds -= seconds % 3600;
-                    }
-                }
-                else
-                {
-                    seconds = 0;
-                }
-            }
-            _localTime = GetLocalTime();
-        }
-
         /// <summary>
         /// Constructs a new <c>FudgeTime</c> which is just hours, without a timezone.
         /// </summary>
@@ -270,28 +204,6 @@ namespace Fudge.Types
             }
         }
 
-        public DateTimeAccuracy Accuracy
-        {
-            get { return _accuracy; }
-        }
-
-        public int EncodedTimezoneOffset
-        {
-            get
-            {
-                return _timezoneOffset;
-            }
-        }
-        
-        public int SecondsSinceMidnight
-        {
-            get
-            {
-                TimeSpan mySpan = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-                return Convert.ToInt32(mySpan.TotalSeconds);
-            }
-        }
-
         /// <summary>Gets the hour component of this time.</summary>
         public int Hour
         {
@@ -338,11 +250,6 @@ namespace Fudge.Types
         public FudgeDateTimePrecision Precision
         {
             get { return precision; }
-        }
-
-        private DateTime GetLocalTime()
-        {
-            return TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now); 
         }
 
         #region Overrides from object

@@ -318,7 +318,7 @@ namespace Fudge.Encodings
                     return br.ReadDouble();
             }
 
-            return type.ReadDynamicValue(br, varSize);
+            return type.ReadValue(br, varSize);
         }
 
         private byte? SafelyReadOneByte()

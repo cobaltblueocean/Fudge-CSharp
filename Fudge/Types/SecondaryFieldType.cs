@@ -1,18 +1,19 @@
-/// <summary>
-/// Copyright (C) 2009 - present by OpenGamma Inc. and other contributors.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-/// 
-///     http://www.apache.org/licenses/LICENSE-2.0
-///     
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-/// </summary>
+/* <!--
+ * Copyright (C) 2009 - 2010 by OpenGamma Inc. and other contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -->
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,16 +21,13 @@ using System.Text;
 using Fudge.Taxon;
 using System.IO;
 
-namespace Fudge.Types
+namespace Fudge
 {
     /// <summary>
     /// Marker interface to indicate that this type isn't a primary type
     /// </summary>
     public interface ISecondaryFieldType
     {
-        object ConvertValueFrom(object value);
-        object Minimize(object value, ref FudgeFieldType type);
-        FudgeFieldType getPrimaryType();
     }
 
     /// <summary>
@@ -96,14 +94,9 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize)
+        public override T ReadTypedValue(BinaryReader input, int dataSize)
         {
             throw new NotSupportedException("Secondary type should never have to read a value, the wire type should handle this");
-        }
-
-        public new T ReadValue(BinaryReader input, int dataSize)
-        {
-            return (T)(Object)ReadTypedValue(input, dataSize);
         }
 
         /// <inheritdoc/>
@@ -112,11 +105,6 @@ namespace Fudge.Types
             throw new NotSupportedException("Secondary type should never have to write a value, the wire type should handle this");
         }
         #endregion
-
-        public override FudgeFieldType getPrimaryType()
-        {
-            return wireType;
-        }
 
         /// <inheritdoc/>
         public override object Minimize(object value, ref FudgeFieldType type)

@@ -1,25 +1,25 @@
-/// <summary>
-/// Copyright (C) 2009 - present by OpenGamma Inc. and other contributors.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-/// 
-///     http://www.apache.org/licenses/LICENSE-2.0
-///     
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-/// </summary>
+/* <!--
+ * Copyright (C) 2009 - 2009 by OpenGamma Inc. and other contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -->
+ */
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Fudge.Taxon;
 using System.IO;
 using Fudge.Types;
-using Fudge.Util;
 
 namespace Fudge
 {
@@ -208,7 +208,7 @@ namespace Fudge
         /// <param name="input"><see cref="BinaryReader"/> to read the data from.</param>
         /// <param name="dataSize">Number of bytes for the data representation.</param>
         /// <returns>Decoded object.</returns>
-        public abstract dynamic ReadDynamicValue(BinaryReader input, int dataSize);
+        public abstract object ReadValue(BinaryReader input, int dataSize);
     }
 
     /// <summary>
@@ -288,15 +288,15 @@ namespace Fudge
         /// <param name="input"><see cref="BinaryReader"/> to read data from.</param>
         /// <param name="dataSize">The number of bytes to read from the <see cref="BinaryReader"/>.</param>
         /// <returns>Decoded object.</returns>
-        /// <remarks>This method is a typed version of <see cref="FudgeFieldType.ReadTypedValue"/>.</remarks>
-        public virtual dynamic ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
+        /// <remarks>This method is a typed version of <see cref="FudgeFieldType.ReadValue"/>.</remarks>
+        public virtual TValue ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
         {
             // In Fudge-Java this is just readValue, but it creates problems here because the parameters are the same as the base's ReadValue
             if (IsVariableSize)
             {
                 throw new NotSupportedException("This method must be overridden for variable size types.");
             }
-            return null; //(Variant)default(TValue);
+            return default(TValue);
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace Fudge
         }
 
         /// <inheritdoc />
-        public override dynamic ReadDynamicValue(BinaryReader input, int dataSize)
+        public sealed override object ReadValue(BinaryReader input, int dataSize)
         {
             return ReadTypedValue(input, dataSize);
         }

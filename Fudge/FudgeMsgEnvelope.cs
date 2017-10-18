@@ -1,18 +1,19 @@
-/// <summary>
-/// Copyright (C) 2009 - present by OpenGamma Inc. and other contributors.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-/// 
-///     http://www.apache.org/licenses/LICENSE-2.0
-///     
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-/// </summary>
+/* <!--
+ * Copyright (C) 2009 - 2009 by OpenGamma Inc. and other contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -->
+ */
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,9 +28,8 @@ namespace Fudge
     /// </summary>
     public class FudgeMsgEnvelope : FudgeEncodingObject
     {
-        private readonly FudgeMsg _message;
-        private readonly int _version;
-        private readonly int _processingDirectives;
+        private readonly FudgeMsg message;
+        private readonly int version;
 
         /// <summary>
         /// Constructs a new envelope containing an emtpy message.
@@ -44,9 +44,9 @@ namespace Fudge
         /// <summary>
         /// Creates a new <c>FudgeMsgEnvelope</c> around an existing <c>FudgeMsg</c>.
         /// </summary>
-        /// <param name="message">message contained within the envelope</param>
-        public FudgeMsgEnvelope(FudgeMsg message)
-            : this(message, 0)
+        /// <param name="msg">message contained within the envelope</param>
+        public FudgeMsgEnvelope(FudgeMsg msg)
+            : this(msg, 0)
         {
         }
 
@@ -57,34 +57,17 @@ namespace Fudge
         /// <param name="message">message contained within the envelope</param>
         /// <param name="version">schema version, 0 to 255</param>
         public FudgeMsgEnvelope(FudgeMsg message, int version)
-            : this(message, version, 0)
-        {
-        }
-
-        /// <summary>
-        /// Creates an envelope wrapping the given message with a version and processing directive flags.
-        /// </summary>
-        /// <param name="message">message contained within the envelope</param>
-        /// <param name="version">schema version, 0 to 255</param>
-        /// <param name="processingDirectives">the processing directive flags, from 0 to 255</param>
-        public FudgeMsgEnvelope(FudgeMsg message, int version, int processingDirectives)
         {
             if (message == null)
             {
                 throw new ArgumentNullException("message", "Must specify a message to wrap.");
             }
-            if (processingDirectives < 0 || processingDirectives > 255)
-            {
-                throw new ArgumentOutOfRangeException("Processing directives " + processingDirectives + " must fit in one byte");
-            }
             if ((version < 0) || (version > 255))
             {
                 throw new ArgumentOutOfRangeException("version", "Provided version " + version + " which doesn't fit within one byte.");
             }
-            this._message = message;
-            this._version = version;
-            this._processingDirectives = processingDirectives;
-
+            this.message = message;
+            this.version = version;
         }
 
         /// <summary>
@@ -92,7 +75,7 @@ namespace Fudge
         /// </summary>
         public FudgeMsg Message
         {
-            get { return _message; }
+            get { return message; }
         }
 
         /// <summary>
@@ -100,17 +83,7 @@ namespace Fudge
         /// </summary>
         public int Version
         {
-            get { return _version; }
-        }
-
-        /// <summary>
-        /// Gets the processing directive flags.
-        /// </summary>
-        public int ProcessingDirectives
-        {
-            get{
-                return _processingDirectives;
-            }
+            get { return version; }
         }
 
         /// <summary>
@@ -123,28 +96,8 @@ namespace Fudge
             int size = 0;
             // Message envelope header
             size += 8;
-            size += _message.GetSize(taxonomy);
+            size += message.GetSize(taxonomy);
             return size;
-        }
-
-        /// <summary>
-        /// Returns a string suitable for debugging.
-        /// </summary>
-        /// <returns>a string, not null</returns>
-        public String ToString()
-        {
-            StringBuilder buf = new StringBuilder();
-            buf.Append("FudgeMsgEnvelope[");
-            if (Version != 0)
-            {
-                buf.Append("version=").Append(Version).Append(',');
-            }
-            if (ProcessingDirectives != 0)
-            {
-                buf.Append("processing=").Append(ProcessingDirectives).Append(',');
-            }
-            buf.Append(Message).Append(']');
-            return buf.ToString();
         }
     }
 }

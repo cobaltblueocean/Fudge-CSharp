@@ -41,7 +41,7 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize)
+        public override FudgeDate ReadTypedValue(BinaryReader input, int dataSize)
         {
             int rawValue = input.ReadInt32();
 
@@ -50,11 +50,6 @@ namespace Fudge.Types
             int day = rawValue & 0x1f;
 
             return new FudgeDate(year, month, day);
-        }
-
-        public new FudgeDate ReadValue(BinaryReader input, int dataSize)
-        {
-            return (FudgeDate)(Object)ReadTypedValue(input, dataSize);
         }
 
         /// <inheritdoc/>

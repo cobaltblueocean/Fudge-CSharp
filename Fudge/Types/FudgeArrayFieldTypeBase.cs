@@ -56,7 +56,7 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc />
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
+        public override T[] ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
         {
             int nElements = dataSize / elementSize;
             T[] result = new T[nElements];
@@ -65,12 +65,6 @@ namespace Fudge.Types
                 result[i] = reader(input);
             }
             return result;
-        }
-
-
-        public new T[] ReadValue(BinaryReader input, int dataSize)
-        {
-            return (T[])(Object)ReadTypedValue(input, dataSize);
         }
 
         /// <inheritdoc />

@@ -17,10 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
 using System.Reflection;
-using IQToolkit;
 using System.Diagnostics;
 
 namespace Fudge.Linq
@@ -29,7 +27,7 @@ namespace Fudge.Linq
     /// Used to translate <see cref="Expression"/>s so that calls to get values from members of the
     /// reference type become <c>GetValue</c> calls on the <see cref="IFudgeFieldContainer"/> instead.
     /// </summary>
-    internal class FudgeExpressionTranslator : IQToolkit.ExpressionVisitor
+    internal class FudgeExpressionTranslator : ExpressionVisitor
     {
         private static readonly ParameterExpression msgParam = Expression.Parameter(typeof(IFudgeFieldContainer), "msg");
 

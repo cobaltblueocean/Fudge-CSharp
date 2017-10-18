@@ -14,11 +14,6 @@
  * limitations under the License.
  * -->
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IQToolkit;
 using System.Linq.Expressions;
 
 namespace Fudge.Linq
@@ -26,7 +21,7 @@ namespace Fudge.Linq
     /// <summary>
     /// ExpressionTreeStructureHasher computes a fast hash code based on the structure of the tree, ignoring any constant values, method names, etc.
     /// </summary>
-    public class ExpressionTreeStructureHasher : IQToolkit.ExpressionVisitor
+    public class ExpressionTreeStructureHasher : ExpressionVisitor
     {
         private readonly Expression expression;
         private int currentHash;

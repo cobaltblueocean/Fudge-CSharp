@@ -16,13 +16,11 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 using Fudge.Types;
 using System.Diagnostics;
 using System.Threading;
 using System.Net;
-using Fudge.Wire.Types;
 
 namespace Fudge
 {
@@ -100,7 +98,7 @@ namespace Fudge
 
             rwLock.AcquireWriterLock(Timeout.Infinite);
             try
-            {
+            {                
                 if (!(type is ISecondaryFieldType))
                 {
                     int newLength = Math.Max(type.TypeId + 1, typesById.Length);
@@ -135,12 +133,12 @@ namespace Fudge
             {
                 return null;
             }
-
+            
             rwLock.AcquireReaderLock(Timeout.Infinite);
 
             FudgeFieldType result = null;
             typesByCSharpType.TryGetValue(csharpType, out result);
-
+            
             rwLock.ReleaseReaderLock();
             return result;
         }
@@ -171,7 +169,7 @@ namespace Fudge
         {
             if ((unknownTypesById.Length <= typeId) || (unknownTypesById[typeId] == null))
             {
-                int newLength = Math.Max(typeId + 1, unknownTypesById.Length);
+                int newLength = Math.Max(typeId + 1, unknownTypesById.Length); 
                 lock (unknownTypesById)
                 {
                     if ((unknownTypesById.Length < newLength) || (unknownTypesById[typeId] == null))
@@ -187,176 +185,6 @@ namespace Fudge
             return unknownTypesById[typeId];
         }
 
-        public dynamic GetFieldValue(Type clazz, IFudgeField field)
-        {
-            if (field == null)
-            {
-                return null;
-            }
-            Object value = field.Value;
-            if (value == null)
-            {
-                return null;
-            }
-            if (clazz.IsAssignableFrom(value.GetType()))
-            {
-                return value;
-            }
-            FudgeFieldType type = field.Type;
-            if (type is ISecondaryFieldType)
-            {
-                ISecondaryFieldType sourceType = (ISecondaryFieldType)type;
-                if (clazz.IsAssignableFrom(sourceType.getPrimaryType().CSharpType))
-                {
-                    // been asked for the primary type
-                    return sourceType.ConvertValueFrom(value);
-                }
-                else
-                {
-                    //FudgeTypeConverter<Object, T> converter = getTypeConverter(clazz);
-                    var converter = new FudgeTypeConverter();
-
-
-                    if (converter == null)
-                    {
-                        // don't recognize the requested type
-                        throw new ArgumentException("cannot convert " + sourceType + " to unregistered secondary type " + clazz.FullName);
-                    }
-                    else
-                    {
-                        if (converter.canConvertPrimary(sourceType.getPrimaryType().CSharpType))
-                        {
-                            // primary and requested have a common base
-                            return converter.primaryToSecondary(sourceType.ConvertValueFrom(value));
-                        }
-                        else
-                        {
-                            // no common ground
-                            throw new ArgumentException("no Fudge primary type allows conversion from " + sourceType + " to " + clazz.FullName);
-                        }
-                    }
-                }
-            }
-            else if (type == FudgeWireType.INDICATOR)
-            {
-                // indicators always get converted to NULL when cast to another type
-                return null;
-            }
-            else
-            {
-                var converter = new FudgeTypeConverter();
-                if (converter == null)
-                {
-                    // don't recognize the requested type
-                    // get the field as a string and then try to inflate the enum
-                    //return (T) Enum.valueOf((Class<? extends Enum>) clazz, getFieldValue(String.class, field));
-                    if (!clazz.IsEnum)
-                    {
-                        throw new ArgumentException("cannot convert " + type + " to unregistered secondary type " + clazz.FullName);
-                    }
-
-                    if (Enum.GetUnderlyingType(clazz) != value.GetType())
-                    {
-                        throw new ArgumentException("cannot convert " + type + " to unregistered secondary type " + clazz.FullName);
-                    }
-
-                    if (clazz.GetCustomAttributes(typeof(FlagsAttribute), false).Length == 0)
-                    {
-                        throw new ArgumentException("cannot convert " + type + " to unregistered secondary type " + clazz.FullName);
-
-                    }
-                    if (Enum.IsDefined(clazz, value))
-                    {
-                        return Enum.Parse(clazz, value.ToString());
-                    }
-                    else
-                    {
-                        throw new ArgumentException("cannot convert " + type + " to unregistered secondary type " + clazz.FullName);
-                    }
-                }
-                else
-                {
-                    if (converter.canConvertPrimary(value.GetType()))
-                    {
-                        // secondary type extends our current type
-                        return converter.primaryToSecondary(value);
-                    }
-                    else
-                    {
-                        // secondary type doesn't extend our current type
-                        throw new ArgumentException("secondary type " + clazz.FullName + " does not allow conversion from " + value.GetType().FullName);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Type conversion test for secondary types.
-        /// </summary>
-        /// <param name="clazz">the target class for the converted value, not null</param>
-        /// <param name="field">the field containing the value to convert, null returns false</param>
-        /// <returns>true if a conversion is possible, false otherwise</returns>
-        public Boolean canConvertField(Type clazz, IFudgeField field)
-        {
-            if (field == null)
-            {
-                return false;
-            }
-            Object value = field.Value;
-            if (value == null)
-            {
-                return false;
-            }
-            if (clazz.IsAssignableFrom(value.GetType()))
-            {
-                return true;
-            }
-            FudgeFieldType type = field.Type;
-            if (type is ISecondaryFieldType)
-            {
-                ISecondaryFieldType sourceType = (ISecondaryFieldType)type;
-                if (clazz.IsAssignableFrom(sourceType.getPrimaryType().CSharpType))
-                {
-                    // been asked for the primary type
-                    return true;
-                }
-                else
-                {
-                    var converter = new FudgeTypeConverter();
-                    if (converter == null)
-                    {
-                        // don't recognize the requested type
-                        return false;
-                    }
-                    else
-                    {
-                        // check common base
-                        return converter.canConvertPrimary(sourceType.getPrimaryType().CSharpType);
-                    }
-                }
-            }
-            else if (type is IndicatorFieldType)
-            {
-                // indicators can't be converted to instances
-                return false;
-            }
-            else
-            {
-                var converter = new FudgeTypeConverter();
-                if (converter == null)
-                {
-                    // don't recognize the requested type
-                    return false;
-                }
-                else
-                {
-                    // does secondary type extend current type
-                    return converter.canConvertPrimary(value.GetType());
-                }
-            }
-        }
-
-        #region "Standard Fudge Field Types"
         // --------------------------
         // STANDARD FUDGE FIELD TYPES
         // --------------------------
@@ -420,7 +248,5 @@ namespace Fudge
         public const byte TIME_TYPE_ID = 27;
         /// <summary>Predefined constant for date and time- refer to the Fudge encoding specification.</summary>
         public const byte DATETIME_TYPE_ID = 28;
-
-        #endregion
     }
 }

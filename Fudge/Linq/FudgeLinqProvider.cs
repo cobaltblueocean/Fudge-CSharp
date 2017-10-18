@@ -17,15 +17,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
-using Fudge;
-using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Collections;
 using System.Diagnostics;
-using IQToolkit;
 using System.Threading;
+using System.Data.Objects;
 
 namespace Fudge.Linq
 {
@@ -272,7 +269,7 @@ namespace Fudge.Linq
         /// <remarks>
         /// It'd be nice to use IQToolkit.QueryCache.QueryParameterizer, but that's not public
         /// </remarks>
-        private class ConstantExtractor : System.Linq.Expressions.ExpressionVisitor
+        private class ConstantExtractor : ExpressionVisitor
         {
             private readonly List<ParameterExpression> newParameters = new List<ParameterExpression>();
             private readonly List<object> constantValues = new List<object>();
@@ -313,7 +310,7 @@ namespace Fudge.Linq
         /// <summary>
         /// This turns a body that expects a number of parameters, to instead have just one array param and index into that
         /// </summary>
-        private class ParamArrayRewriter : System.Linq.Expressions.ExpressionVisitor
+        private class ParamArrayRewriter : ExpressionVisitor
         {
             private static readonly ParameterExpression paramParam = Expression.Parameter(typeof(object[]), "params");
             private readonly ParameterExpression[] parameters;

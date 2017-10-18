@@ -42,14 +42,9 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
+        public override IndicatorType ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
         {
             return IndicatorType.Instance;
-        }
-
-        public new IndicatorType ReadValue(BinaryReader input, int dataSize)
-        {
-            return (IndicatorType)(Object)ReadTypedValue(input, dataSize);
         }
 
         /// <inheritdoc/>

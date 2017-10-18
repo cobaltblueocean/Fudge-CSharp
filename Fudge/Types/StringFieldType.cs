@@ -53,12 +53,7 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize)
-        {
-            return ReadString(input, dataSize);
-        }
-
-        public new String ReadValue(BinaryReader input, int dataSize)
+        public override string ReadTypedValue(BinaryReader input, int dataSize)
         {
             return ReadString(input, dataSize);
         }

@@ -46,7 +46,7 @@ namespace Fudge.Types
         }
 
         /// <inheritdoc/>
-        public override dynamic ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
+        public override FudgeMsg ReadTypedValue(BinaryReader input, int dataSize) //throws IOException
         {
             throw new NotSupportedException("Sub-messages can only be decoded from FudgeStreamParser.");
         }
