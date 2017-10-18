@@ -1,36 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{21CF7F0A-1BE0-4E54-9BDA-A31089802967}</ProjectGuid>
+    <ProjectGuid>{D89A1444-D030-4913-864E-878729240520}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Fudge.Tests</RootNamespace>
+    <RootNamespace>FudgeTests</RootNamespace>
     <AssemblyName>FudgeTests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,7 +26,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,84 +34,64 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IQToolkit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\thirdparty\IQToolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="RabbitMQ.Client, Version=1.6.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\thirdparty\RabbitMQ.Client.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="xunit, Version=1.4.9.1465, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\thirdparty\xunit.dll</HintPath>
-    </Reference>
   </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <Compile Include="InterOp\FudgeInterOpTest.cs" />
     <Compile Include="InterOp\SteamComparingBinaryNBOWriter.cs" />
+    <Compile Include="Perf\ShortPerformanceTest.cs" />
     <Compile Include="Perf\SmallFinancialTick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Perf\ShortPerformanceTest.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Unit\Encodings\DebuggingWriter.cs" />
+    <Compile Include="Unit\Encodings\FudgeEncodedStreamReaderTest.cs" />
+    <Compile Include="Unit\Encodings\FudgeJSONStreamReaderTest.cs" />
     <Compile Include="Unit\Encodings\FudgeJSONStreamWriterTest.cs" />
+    <Compile Include="Unit\Encodings\FudgeMsgStreamTest.cs" />
+    <Compile Include="Unit\Encodings\FudgeXmlStreamReaderTest.cs" />
+    <Compile Include="Unit\Encodings\FudgeXmlStreamWriterTest.cs" />
+    <Compile Include="Unit\FudgeContextPropertyTest.cs" />
+    <Compile Include="Unit\FudgeContextTest.cs" />
+    <Compile Include="Unit\FudgeFieldPrefixCodecTest.cs" />
+    <Compile Include="Unit\FudgeMsgCodecTest.cs" />
+    <Compile Include="Unit\FudgeMsgFormatterTest.cs" />
+    <Compile Include="Unit\FudgeMsgTest.cs" />
+    <Compile Include="Unit\FudgeStreamParserTest.cs" />
+    <Compile Include="Unit\FudgeStreamPipeTest.cs" />
+    <Compile Include="Unit\FudgeTypeDictionaryTest.cs" />
+    <Compile Include="Unit\FudgeUtils.cs" />
+    <Compile Include="Unit\Linq\Examples.cs" />
+    <Compile Include="Unit\Linq\ExpressionTreeStructureHasherTest.cs" />
     <Compile Include="Unit\Serialization\DefaultTypeMappingStrategyTest.cs" />
     <Compile Include="Unit\Serialization\FudgeSerializationContextTest.cs" />
     <Compile Include="Unit\Serialization\FudgeSerializerTest.cs" />
     <Compile Include="Unit\Serialization\JavaTypeMappingStrategyTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\CollectionSurrogateBaseTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\DataContractSurrogateTest.cs" />
-    <Compile Include="Unit\Serialization\Reflection\DotNetSerializationSurrogateSurrogateTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\DotNetSerializableSurrogateTest.cs" />
+    <Compile Include="Unit\Serialization\Reflection\DotNetSerializationSurrogateSurrogateTest.cs" />
+    <Compile Include="Unit\Serialization\Reflection\FudgeSurrogateSelectorTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\ImmutableSurrogateTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\PropertyBasedSerializationSurrogateTest.cs" />
-    <Compile Include="Unit\Serialization\Reflection\FudgeSurrogateSelectorTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\SerialiableAttributeSurrogateTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\ToFromFudgeMsgSurrogateTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\TypeDataCacheTest.cs" />
     <Compile Include="Unit\Serialization\Reflection\TypeDataTest.cs" />
     <Compile Include="Unit\Serialization\SerializableSurrogateTest.cs" />
     <Compile Include="Unit\Serialization\SerializationExampleClasses.cs" />
-    <Compile Include="Unit\FudgeContextPropertyTest.cs" />
-    <Compile Include="Unit\Encodings\DebuggingWriter.cs" />
-    <Compile Include="Unit\Encodings\FudgeEncodedStreamReaderTest.cs" />
-    <Compile Include="Unit\Encodings\FudgeJSONStreamReaderTest.cs" />
-    <Compile Include="Unit\Encodings\FudgeMsgStreamTest.cs" />
-    <Compile Include="Unit\Encodings\FudgeXmlStreamReaderTest.cs" />
-    <Compile Include="Unit\Encodings\FudgeXmlStreamWriterTest.cs" />
-    <Compile Include="Unit\FudgeContextTest.cs" />
-    <Compile Include="Unit\FudgeMsgCodecTest.cs" />
-    <Compile Include="Unit\FudgeMsgFormatterTest.cs" />
-    <Compile Include="Unit\FudgeMsgTest.cs" />
-    <Compile Include="Unit\FudgeFieldPrefixCodecTest.cs" />
-    <Compile Include="Unit\FudgeStreamParserTest.cs" />
-    <Compile Include="Unit\FudgeStreamPipeTest.cs" />
-    <Compile Include="Unit\FudgeUtils.cs" />
-    <Compile Include="Unit\FudgeTypeDictionaryTest.cs" />
-    <Compile Include="Unit\Linq\Examples.cs" />
-    <Compile Include="Unit\Linq\ExpressionTreeStructureHasherTest.cs" />
     <Compile Include="Unit\Serialization\SerializationTypeMapTest.cs" />
     <Compile Include="Unit\StandardFudgeMessages.cs" />
     <Compile Include="Unit\Types\ByteArrayFieldTypeTest.cs" />
@@ -140,24 +105,29 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fudge\Fudge.csproj">
-      <Project>{109A43D4-CE96-41E7-9FFC-D7A30D238E06}</Project>
+      <Project>{109a43d4-ce96-41e7-9ffc-d7a30d238e06}</Project>
       <Name>Fudge</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\allNames.dat" />
-    <EmbeddedResource Include="Resources\allOrdinals.dat" />
-    <EmbeddedResource Include="Resources\fixedWidthByteArrays.dat" />
-    <EmbeddedResource Include="Resources\subMsg.dat" />
-    <EmbeddedResource Include="Resources\unknown.dat" />
-    <EmbeddedResource Include="Resources\variableWidthColumnSizes.dat" />
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -166,15 +136,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-
-  <UsingTask AssemblyFile="..\thirdparty\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
-  
-  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
-  
-  <Target Name="Test" DependsOnTargets="Build">
-    <MakeDir Directories="test-reports" />
-    <xunit Assembly="bin\Debug\FudgeTests.dll" Xml="test-reports\FudgeTests.xunit.xml" />
-    <MSBuild.Community.Tasks.Xslt   Inputs="test-reports\FudgeTests.xunit.xml"  Xsl="..\thirdparty\NUnitXml.xslt"  RootTag=""  RootAttributes=""  Output="test-reports\FudgeTests.NUnit.xml"/>
-  </Target>
-
 </Project>

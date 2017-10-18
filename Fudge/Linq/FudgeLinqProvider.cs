@@ -49,7 +49,7 @@ namespace Fudge.Linq
     /// on which IQToolkit is based.
     /// </para>
     /// </remarks>
-    public class FudgeLinqProvider : QueryProvider
+    public class FudgeLinqProvider : IQueryProvider
     {
         private static readonly Dictionary<CacheEntry, CacheEntry> cache = new Dictionary<CacheEntry, CacheEntry>();
         private static readonly ReaderWriterLock cacheLock = new ReaderWriterLock();
@@ -90,13 +90,13 @@ namespace Fudge.Linq
         }
 
         /// <inheritdoc/>
-        public override string GetQueryText(Expression expression)
+        public string GetQueryText(Expression expression)
         {
             return expression.ToString();
         }
 
         /// <inheritdoc/>
-        public override object Execute(Expression expression)
+        public TResult Execute<TResult>(Expression expression)
         {
             if (expression.NodeType != ExpressionType.Call)
                 throw new Exception("Unsupported node type: " + expression.NodeType);
@@ -124,7 +124,7 @@ namespace Fudge.Linq
                 cachedEntry = new CacheEntry(cacheKey, newSelect.Compile());
                 AddCacheEntry(cachedEntry);
             }
-            return cachedEntry.Invoke(values.ToArray());
+            return (TResult)cachedEntry.Invoke(values.ToArray());
         }        
 
         private CacheEntry GetCachedEntry(CacheEntry entry)
@@ -151,6 +151,36 @@ namespace Fudge.Linq
 
                 cacheLock.ReleaseWriterLock();
             }
+        }
+
+        public IQueryable CreateQuery(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        IQueryable IQueryProvider.CreateQuery(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        object IQueryProvider.Execute(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        TResult IQueryProvider.Execute<TResult>(Expression expression)
+        {
+            throw new NotImplementedException();
         }
 
         private class CacheEntry
@@ -251,7 +281,7 @@ namespace Fudge.Linq
                 if (other == null)
                     return false;
 
-                return ExpressionComparer.AreEqual(Expression, other.Expression, false);
+                return Expression.Lambda<Func<bool>>(Expression.Equal(Expression, other.Expression)).Compile()();
             }
 
             public override int GetHashCode()
