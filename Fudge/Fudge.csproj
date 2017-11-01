@@ -125,6 +125,8 @@
     <Compile Include="IMutableFudgeFieldContainer.cs" />
     <Compile Include="Linq\ExpressionTreeStructureHasher.cs" />
     <Compile Include="Linq\FudgeExpressionTranslator.cs" />
+    <Compile Include="Linq\FudgeFieldContainerContext.cs" />
+    <Compile Include="Linq\FudgeFieldContainerQueryContext.cs" />
     <Compile Include="Linq\FudgeLinqExtensions.cs" />
     <Compile Include="Linq\FudgeLinqProvider.cs" />
     <Compile Include="Linq\NamespaceDoc.cs" />
