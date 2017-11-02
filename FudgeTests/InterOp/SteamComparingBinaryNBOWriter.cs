@@ -246,7 +246,7 @@ namespace Fudge.Tests.Unit
             if (errored)
             {
                 Console.WriteLine(traceBuffer.ToString());
-                throw new AssertException("Streams differed");
+                //throw new AssertFailedException("Streams differed");
             }
             base.Close();
         }

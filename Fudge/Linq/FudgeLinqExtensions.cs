@@ -39,7 +39,7 @@ namespace Fudge.Linq
         /// </para>
         /// <para>See the <c>Linq.Examples</c> unit test for some examples.</para>
         /// </remarks>
-        public static IQueryable<T> AsQueryable<T>(this IEnumerable<FudgeMsg> msgSource)
+        public static IOrderedQueryable<T> AsQueryable<T>(this IEnumerable<FudgeMsg> msgSource)
         {
             return msgSource.Cast<IFudgeFieldContainer>().AsQueryable<T>();
         }
@@ -61,9 +61,9 @@ namespace Fudge.Linq
         /// <para>We need this version in addition to IEnumerable&lt;IFudgeFieldContainer&gt; and IEnumerable&lt;FudgeMsg&gt;
         /// because otherwise arrays would be ambiguous.</para>
         /// </remarks>
-        public static IQueryable<T> AsQueryable<T>(this FudgeMsg[] msgSource)
+        public static IOrderedQueryable<T> AsQueryable<T>(this FudgeMsg[] msgSource)
         {
-            return new Query<T>(new FudgeLinqProvider(msgSource));
+            return new FudgeFieldContainerContext(msgSource.Cast<IFudgeFieldContainer>()) as IOrderedQueryable<T>;
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace Fudge.Linq
         /// </para>
         /// <para>See the <c>Linq.Examples</c> unit test for some examples.</para>
         /// </remarks>
-        public static IQueryable<T> AsQueryable<T>(this IEnumerable<IFudgeFieldContainer> msgSource)
+        public static IOrderedQueryable<T> AsQueryable<T>(this IEnumerable<IFudgeFieldContainer> msgSource)
         {
-            return new Query<T>(new FudgeLinqProvider(msgSource));
+            return new FudgeFieldContainerContext(msgSource.Cast<IFudgeFieldContainer>()) as IOrderedQueryable<T>;
         }
     }
 }

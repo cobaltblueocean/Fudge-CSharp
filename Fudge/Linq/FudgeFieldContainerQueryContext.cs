@@ -30,17 +30,16 @@ using System.Threading.Tasks;
 namespace Fudge.Linq
 {
     /// <summary>
-    /// 
+    /// This is responsible for creating queries and evaluating them.  At the lowest level this basically means we need to be able to create queries and then execute them. 
     /// </summary>
     public class FudgeFieldContainerQueryContext
     {
         private static readonly Dictionary<CacheEntry, CacheEntry> cache = new Dictionary<CacheEntry, CacheEntry>();
         private static readonly ReaderWriterLock cacheLock = new ReaderWriterLock();
 
-        private readonly IEnumerable<IFudgeFieldContainer> source;
-        private readonly bool useCache;
+        private readonly bool useCache = true;
 
-        internal TResult Execute<TResult>(Expression expression, bool isEnumerable, IEnumerable<IFudgeFieldContainer> source)
+        internal object Execute(Expression expression, bool isEnumerable, IEnumerable<IFudgeFieldContainer> source)
         {
 
             if (expression.NodeType != ExpressionType.Call)
@@ -87,7 +86,7 @@ namespace Fudge.Linq
             //    return queryableElements.Provider.Execute(newExpressionTree);
             //}
 
-            return (TResult)cachedEntry.Invoke(values.ToArray());
+            return cachedEntry.Invoke(values.ToArray());
         }
 
         private CacheEntry GetCachedEntry(CacheEntry entry)

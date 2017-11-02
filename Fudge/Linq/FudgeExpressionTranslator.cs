@@ -16,6 +16,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -73,7 +74,7 @@ namespace Fudge.Linq
         protected override Expression VisitConstant(ConstantExpression c)
         {
             // This is where we switch the ultimate source used by the expression tree from the Query<type> to our IEnumerable<IFudgeFieldContainer>
-            if (c.Type.IsGenericType && c.Type.GetGenericTypeDefinition() == typeof(Query<>) && c.Type.GetGenericArguments()[0] == dataType)
+            if (c.Type.IsGenericType && c.Type.GetGenericTypeDefinition() == typeof(IOrderedQueryable<>) && c.Type.GetGenericArguments()[0] == dataType)
             {
                 return Expression.Constant(source, typeof(IEnumerable<>).MakeGenericType(typeof(IFudgeFieldContainer)));
             }
@@ -81,7 +82,7 @@ namespace Fudge.Linq
             return base.VisitConstant(c);
         }
 
-        protected override Expression VisitLambda(LambdaExpression lambda)
+        protected Expression VisitLambda(LambdaExpression lambda)
         {
             // If we have a lambda of the form dataType => something then it now becomes IFudgeFieldContainer => something
             var body = Visit(lambda.Body);
@@ -95,6 +96,31 @@ namespace Fudge.Linq
                 return lambda;
             else
                 return Expression.Lambda(body, parameters.ToArray());
+        }
+
+        internal ReadOnlyCollection<Expression> VisitExpressionList(ReadOnlyCollection<Expression> original)
+        {
+            List<Expression> list = null;
+            for (int i = 0, n = original.Count; i < n; i++)
+            {
+                Expression p = this.Visit(original[i]);
+                if (list != null)
+                {
+                    list.Add(p);
+                }
+                else if (p != original[i])
+                {
+                    list = new List<Expression>(n);
+                    for (int j = 0; j < i; j++)
+                    {
+                        list.Add(original[j]);
+                    }
+                    list.Add(p);
+                }
+            }
+            if (list != null)
+                return list.ToReadOnlyCollection();
+            return original;
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression m)
@@ -140,7 +166,7 @@ namespace Fudge.Linq
             return UpdateMethodCall(m, obj, method, args);
         }
 
-        protected override Expression VisitMemberAccess(MemberExpression m)
+        protected override Expression VisitMember(MemberExpression m)
         {
             // Pick up accesses to dataType.member and translate to IFudgeFieldContainer.GetValue(membername)
             if (m.Expression != null && m.Expression.NodeType == ExpressionType.Parameter && m.Expression.Type == dataType)
@@ -150,8 +176,45 @@ namespace Fudge.Linq
             }
             else
             {
-                return base.VisitMemberAccess(m);
+                return base.VisitMember(m);
+            }
+        }
+
+        private static MethodCallExpression UpdateMethodCall(MethodCallExpression node, Expression obj, MethodInfo method, IEnumerable<Expression> args)
+        {
+            if (obj != node.Object || method != node.Method || args != node.Arguments)
+            {
+                return Expression.Call(obj, method, args);
+            }
+
+            return node;
+        }
+    }
+
+    internal static class ReadOnlyCollectionExtensions
+    {
+        internal static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> sequence)
+        {
+            if (sequence == null)
+                return DefaultReadOnlyCollection<T>.Empty;
+            ReadOnlyCollection<T> col = sequence as ReadOnlyCollection<T>;
+            if (col != null)
+                return col;
+            return new ReadOnlyCollection<T>(sequence.ToArray());
+        }
+        private static class DefaultReadOnlyCollection<T>
+        {
+            private static volatile ReadOnlyCollection<T> _defaultCollection;
+            internal static ReadOnlyCollection<T> Empty
+            {
+                get
+                {
+                    if (_defaultCollection == null)
+                        _defaultCollection = new ReadOnlyCollection<T>(new T[] { });
+                    return _defaultCollection;
+                }
             }
         }
     }
+
 }

@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using Xunit;
 using Fudge.Linq;
-using IQToolkit;
 
 namespace Fudge.Tests.Unit.Linq
 {
@@ -83,6 +81,7 @@ namespace Fudge.Tests.Unit.Linq
         public void CheckExpressionComparerBehaviour()
         {
             // This test is just to validate how IQToolkit.ExpressionComparer behaves
+            // Kei Nakai: Updated the method as System.Linq.Expression behaves (2017/11/2)
             var data = new int[] { 1, 3, 5, 6 };
             int mod = 2;
             var query1 = from entry in data.AsQueryable() where entry % mod == 0 select entry * 4;
@@ -91,10 +90,10 @@ namespace Fudge.Tests.Unit.Linq
             var query3 = from entry in data.AsQueryable() where entry % mod == 0 select entry * 5;
             var query4 = from entry in data.AsQueryable() where entry % 2 == 0 select entry * 4;
 
-            Assert.False(ExpressionComparer.AreEqual(query1.Expression, query2.Expression));            // Different parameter value
-            Assert.True(ExpressionComparer.AreEqual(query1.Expression, query2.Expression, false));      // Different parameter value
-            Assert.True(ExpressionComparer.AreEqual(query1.Expression, query3.Expression, false));      // Different constant
-            Assert.False(ExpressionComparer.AreEqual(query1.Expression, query4.Expression, false));     // Constant versus parameter
+            Assert.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query2.Expression)).Compile()());            // Different parameter value
+            Assert.True(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query2.Expression, false, null)).Compile()());      // Different parameter value
+            Assert.True(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query3.Expression, false, null)).Compile()());      // Different constant
+            Assert.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query4.Expression, false, null)).Compile()());     // Constant versus parameter
         }
     }
 }

@@ -53,6 +53,7 @@ namespace Fudge.Linq
     {
         private readonly IEnumerable<IFudgeFieldContainer> source;
         private readonly bool useCache;
+        private FudgeFieldContainerQueryContext _FudgeFieldContainerQueryContext = new FudgeFieldContainerQueryContext();
 
         /// <summary>
         /// Constructs a new <c>FudgeLinqProvider</c> from a set of <see cref="IFudgeFieldContainer"/>s (e.g. <see cref="FudgeMsg"/>s),
@@ -95,38 +96,29 @@ namespace Fudge.Linq
         /// <inheritdoc/>
         public TResult Execute<TResult>(Expression expression)
         {
-            throw new NotImplementedException();
+            return Execute<TResult>(expression);
         }        
 
 
         public IQueryable CreateQuery(Expression expression)
         {
-            throw new NotImplementedException();
+            return new FudgeFieldContainerContext(this, expression);
         }
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            throw new NotImplementedException();
-        }
-
-        IQueryable IQueryProvider.CreateQuery(Expression expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression)
-        {
-            throw new NotImplementedException();
+            return (IQueryable<TElement>)new FudgeFieldContainerContext(this, expression);
         }
 
         object IQueryProvider.Execute(Expression expression)
         {
-            throw new NotImplementedException();
+            return Execute<IFudgeFieldContainer>(expression);
         }
 
         TResult IQueryProvider.Execute<TResult>(Expression expression)
         {
-            throw new NotImplementedException();
+            var isEnumerable = (typeof(TResult).Name == "IEnumerable`1");
+            return (TResult)_FudgeFieldContainerQueryContext.Execute(expression, isEnumerable, source);
         }
     }
 

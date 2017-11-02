@@ -28,12 +28,47 @@ using System.Threading.Tasks;
 namespace Fudge.Linq
 {
     /// <summary>
-    /// 
+    /// This is to represent the result of a sorting query that calls the method(s) OrderBy, OrderByDescending, ThenBy or ThenByDescending. 
     /// </summary>
     public class FudgeFieldContainerContext : IOrderedQueryable<IFudgeFieldContainer>
     {
+        private Expression _Expression;
+        private IQueryProvider _Provider;
 
+        /// <summary>
+        /// LINQ Expression
+        /// </summary>
+        public Expression Expression { get { return _Expression; } private set { _Expression = value; } }
 
+        /// <summary>
+        /// LINQ Provider
+        /// </summary>
+        public IQueryProvider Provider { get { return _Provider; } private set { _Provider = value; } }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="source">Source to query using this LINQ</param>
+        public FudgeFieldContainerContext(IEnumerable<IFudgeFieldContainer> source)
+        {
+            Provider = new FudgeLinqProvider(source);
+            Expression = Expression.Constant(this);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="provider">LINQ Provider</param>
+        /// <param name="expression">Query expression</param>
+        internal FudgeFieldContainerContext(IQueryProvider provider, Expression expression)
+        {
+            Provider = provider;
+            Expression = expression;
+        }
+
+        /// <summary>
+        /// Element type
+        /// </summary>
         public Type ElementType
         {
             get
@@ -42,18 +77,18 @@ namespace Fudge.Linq
             }
         }
 
-        public Expression Expression { get; private set; }
-
-        public IQueryProvider Provider { get; private set; }
-
+        /// <summary>
+        /// Get Enumerator
+        /// </summary>
+        /// <returns>IEnumerator of IFudgeFieldContainer</returns>
         public IEnumerator<IFudgeFieldContainer> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return Provider.Execute<IEnumerable<IFudgeFieldContainer>>(Expression).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
     }
 }
