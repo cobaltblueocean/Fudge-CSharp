@@ -32,7 +32,7 @@ namespace Fudge.Linq
     /// </summary>
     public class FudgeFieldContainerContext : IOrderedQueryable<IFudgeFieldContainer>
     {
-       
+
 
         public Type ElementType
         {
