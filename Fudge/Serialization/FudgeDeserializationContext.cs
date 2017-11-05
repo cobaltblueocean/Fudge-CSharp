@@ -32,7 +32,7 @@ namespace Fudge.Serialization
     /// <remarks>
     /// You should not need to use this class directly.
     /// </remarks>
-    internal class FudgeDeserializationContext : IFudgeDeserializer
+    public class FudgeDeserializationContext : IFudgeDeserializer
     {
         private readonly FudgeContext context;
         private readonly SerializationTypeMap typeMap;

@@ -32,7 +32,7 @@ namespace Fudge.Serialization
     /// <remarks>
     /// You should not need to use this class directly.
     /// </remarks>
-    internal class FudgeSerializationContext : IFudgeSerializer
+    public class FudgeSerializationContext : IFudgeSerializer, IFudgeMessageFactory
     {
         private readonly FudgeContext context;
         private readonly IFudgeStreamWriter writer;
@@ -225,6 +225,25 @@ namespace Fudge.Serialization
             if (firstTime)
                 return -1;
             return indexIdMap[index];
+        }
+
+        /// <summary>
+        /// Creates an initially empty message.
+        /// </summary>
+        /// <returns>the empty message container, not null</returns>
+        public IMutableFudgeFieldContainer NewMessage()
+        {
+            return this.context.NewMessage();
+        }
+
+        /// <summary>
+        /// Creates a new message initially populated with the supplied message.
+        /// </summary>
+        /// <param name="FromMessage">the source message to copy fields from, not null</param>
+        /// <returns>the new message container, not null</returns>
+        public IMutableFudgeFieldContainer NewMessage(IFudgeFieldContainer FromMessage)
+        {
+            return this.context.NewMessage(FromMessage.GetAllFields().ToArray());
         }
 
         /// <summary>

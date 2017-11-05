@@ -139,6 +139,7 @@
     <Compile Include="IAppendingFudgeFieldContainer.cs" />
     <Compile Include="IFudgeField.cs" />
     <Compile Include="IFudgeFieldContainer.cs" />
+    <Compile Include="IFudgeMessageFactory.cs" />
     <Compile Include="IFudgeStreamReader.cs" />
     <Compile Include="IFudgeStreamWriter.cs" />
     <Compile Include="IMutableFudgeFieldContainer.cs" />
