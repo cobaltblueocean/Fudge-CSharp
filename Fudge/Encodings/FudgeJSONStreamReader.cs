@@ -22,6 +22,7 @@ using System.IO;
 using System.Diagnostics;
 using Fudge.Types;
 using System.Globalization;
+using Fudge.Taxon;
 
 namespace Fudge.Encodings
 {
@@ -38,6 +39,10 @@ namespace Fudge.Encodings
         private Token nextToken;
         private bool done = false;
         private Stack<State> stack = new Stack<State>();
+        private int processingDirectives = 0;
+        private int schemaVersion = 0;
+        private short taxonomyId = 0;
+        private IFudgeTaxonomy taxonomy;
 
         /// <summary>
         /// Constructs a <see cref="FudgeJSONStreamReader"/> on a given <see cref="TextReader"/>.
@@ -137,6 +142,28 @@ namespace Fudge.Encodings
 
         #endregion
 
+        private void HandleHeaders(Token token)
+        {
+            String fieldName = i.next();
+            if (fieldName.equals(getSettings().getProcessingDirectivesField()))
+            {
+                processingDirectives = integerValue(o.get(fieldName));
+            }
+            else if (fieldName.equals(getSettings().getSchemaVersionField()))
+            {
+                schemaVersion = integerValue(o.get(fieldName));
+            }
+            else if (fieldName.equals(getSettings().getTaxonomyField()))
+            {
+                taxonomyId = integerValue(o.get(fieldName));
+            }
+            else
+            {
+                _fieldLookahead.add(fieldName);
+                break;
+            }
+        }
+
         private void HandleObjectEnd(Token token)
         {
             stack.Pop();
@@ -180,6 +207,51 @@ namespace Fudge.Encodings
         }
 
         private int Depth { get { return stack.Count; } }
+
+        /// <inheritdoc/>
+        public override int ProcessingDirectives
+        {
+            get
+            {
+                return processingDirectives;
+            }
+        }
+
+        /// <inheritdoc/>
+        public override int SchemaVersion
+        {
+            get
+            {
+                return schemaVersion;
+            }
+        }
+
+        /// <inheritdoc/>
+        public override short TaxonomyId
+        {
+            get
+            {
+                return taxonomyId;
+            }
+        }
+
+        /// <inheritdoc/>
+        public override IFudgeTaxonomy Taxonomy
+        {
+            get
+            {
+                return taxonomy;
+            }
+        }
+
+        /// <inheritdoc/>
+        public override FudgeContext FudgeContext
+        {
+            get
+            {
+                return context;
+            }
+        }
 
         private void HandleSimpleValue(Token token)
         {

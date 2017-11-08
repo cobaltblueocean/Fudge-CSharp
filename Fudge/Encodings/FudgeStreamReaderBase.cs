@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Fudge.Taxon;
 
 namespace Fudge.Encodings
 {
@@ -74,6 +75,36 @@ namespace Fudge.Encodings
         {
             get;
             protected set;
+        }
+
+        /// <inheritdoc/>
+        public abstract int ProcessingDirectives
+        {
+            get;
+        }
+
+        /// <inheritdoc/>
+        public abstract int SchemaVersion
+        {
+            get;
+        }
+
+        /// <inheritdoc/>
+        public abstract short TaxonomyId
+        {
+            get;
+        }
+
+        /// <inheritdoc/>
+        public abstract IFudgeTaxonomy Taxonomy
+        {
+            get;
+        }
+
+        /// <inheritdoc/>
+        public abstract FudgeContext FudgeContext
+        {
+            get;
         }
 
         #endregion

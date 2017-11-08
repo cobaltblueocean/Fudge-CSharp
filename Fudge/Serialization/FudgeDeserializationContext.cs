@@ -44,6 +44,13 @@ namespace Fudge.Serialization
         private readonly Stack<State> stack;
         private readonly IFudgeTypeMappingStrategy typeMappingStrategy;
 
+        /// <summary>
+        /// Creates a new FudgeDeserializationContext for the given FudgeContext.
+        /// </summary>
+        /// <param name="context">the FudgeContext to use</param>
+        /// <param name="typeMap">the SerializationTypeMap to use</param>
+        /// <param name="reader">the IFudgeStreamReader to use</param>
+        /// <param name="typeMappingStrategy">the IFudgeTypeMappingStrategy to use</param>
         public FudgeDeserializationContext(FudgeContext context, SerializationTypeMap typeMap, IFudgeStreamReader reader, IFudgeTypeMappingStrategy typeMappingStrategy)
         {
             this.context = context;
@@ -56,15 +63,30 @@ namespace Fudge.Serialization
             this.typeMappingStrategy = typeMappingStrategy;
         }
 
+        /// <summary>
+        /// Get the real object
+        /// </summary>
+        /// <returns></returns>
         public object DeserializeGraph()
         {
             return DeserializeGraph(null);
         }
 
+        /// <summary>
+        /// Get the real object by Type
+        /// </summary>
+        /// <typeparam name="T">Type to get the real object</typeparam>
+        /// <returns>object</returns>
         public T DeserializeGraph<T>()
         {
             return (T) DeserializeGraph(typeof (T));
         }
+
+        /// <summary>
+        /// Get the real object by Type
+        /// </summary>
+        /// <param name="typeHint">Type to get the real object</param>
+        /// <returns>object</returns>
         public object DeserializeGraph(Type typeHint)
         {
             // We simply return the first object

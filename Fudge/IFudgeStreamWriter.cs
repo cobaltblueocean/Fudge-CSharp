@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Fudge.Taxon;
 
 namespace Fudge
 {
@@ -39,6 +40,14 @@ namespace Fudge
         /// <param name="name">Name of the field, or <c>null</c> if none.</param>
         /// <param name="ordinal">Ordinal of the field, or <c>null</c> if none.</param>
         void StartSubMessage(string name, int? ordinal);
+
+        /// <summary>
+        /// Writes a message envelope header.
+        /// </summary>
+        /// <param name="processingDirectives">the processing directive flags</param>
+        /// <param name="schemaVersion">the schema version value</param>
+        /// <param name="messageSize">the Fudge encoded size of the underlying message, including the message envelope</param>
+        void WriteEnvelopeHeader(int processingDirectives, int schemaVersion, int messageSize);
 
         /// <summary>
         /// Writes a simple field to the data stream.
@@ -64,5 +73,22 @@ namespace Fudge
         /// Tells the writer that we have finished with the whole top-level message.
         /// </summary>
         void EndMessage();
+
+        /// <summary>
+        /// Get the bound <see cref="FudgeContext"/> used for type and taxonomy resolution.
+        /// </summary>
+        FudgeContext FudgeContext { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IFudgeTaxonomy"/> (if any) that is currently being used to encode fields. Returns null
+        /// if no taxonomy is specified or the taxonomy identifier cannot be resolved by the bound <see cref="FudgeContext"/>.
+        /// </summary>
+        IFudgeTaxonomy Taxonomy { get; }
+
+        /// <summary>
+        /// Gets or sets the current taxonomy identifier.
+        /// </summary>
+        int TaxonomyId { get; set; }
+
     }
 }

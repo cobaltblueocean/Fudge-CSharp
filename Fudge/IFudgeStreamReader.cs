@@ -71,7 +71,6 @@ namespace Fudge
         /// </summary>
         object FieldValue { get; }
 
-
         /// <summary>
         /// Returns the processing directivies specified in the last envelope header read.
         /// </summary>
