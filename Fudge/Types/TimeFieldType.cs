@@ -74,7 +74,7 @@ namespace Fudge.Types
             nanos = input.ReadInt32();
 
             timeZone = firstFourBytes >> 24;
-            precision = (FudgeDateTimePrecision)((firstFourBytes >> 20) & 0x0f);
+            precision = FudgeDateTimePrecision.FromEncodedValue((firstFourBytes >> 20) & 0x0f);
             seconds = firstFourBytes & 0x000fffff;
 
             if (timeZone == -128)
@@ -92,7 +92,7 @@ namespace Fudge.Types
         internal static void WriteEncodedTime(BinaryWriter output, FudgeDateTimePrecision precision, int? timezone, int seconds, int nanos)
         {
             int firstFourBytes = (timezone.HasValue ? timezone.Value / 15 : -128) << 24;
-            firstFourBytes |= ((int)precision) << 20;
+            firstFourBytes |= ((int)precision.GetEncodedValue()) << 20;
             firstFourBytes |= seconds;
             output.Write(firstFourBytes);
             output.Write(nanos);

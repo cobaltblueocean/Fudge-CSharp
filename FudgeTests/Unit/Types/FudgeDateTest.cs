@@ -178,7 +178,7 @@ namespace Fudge.Tests.Unit.Types
             Assert.Throws<InvalidCastException>(() => date.ToInt64(null));
             Assert.Throws<InvalidCastException>(() => date.ToSByte(null));
             Assert.Throws<InvalidCastException>(() => date.ToSingle(null));
-            Assert.Equal("1987-03-04", date.ToString(null));
+            Assert.Equal("1987-03-04", date.ToString());
             Assert.Throws<InvalidCastException>(() => date.ToUInt16(null));
             Assert.Throws<InvalidCastException>(() => date.ToUInt32(null));
             Assert.Throws<InvalidCastException>(() => date.ToUInt64(null));

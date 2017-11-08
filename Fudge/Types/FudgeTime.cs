@@ -35,7 +35,11 @@ namespace Fudge.Types
         internal const int NanosPerTick = 1000000000 / TicksPerSecond;
 
         /// <summary>The default precision assumed for .net <see cref="DateTime"/> objects.</summary>
-        public const FudgeDateTimePrecision DefaultDateTimePrecision = FudgeDateTimePrecision.Nanosecond;
+        public static FudgeDateTimePrecision DefaultDateTimePrecision
+        {
+            get { return FudgeDateTimePrecision.Nanosecond; }
+        }
+
         /// <summary>Represents midnight with no timezone</summary>
         public static readonly FudgeTime Midnight = new FudgeTime(FudgeDateTimePrecision.Nanosecond, 0, 0);
 
@@ -120,7 +124,7 @@ namespace Fudge.Types
                 if (timeZoneOffset < -127 * 15 || timeZoneOffset > 127 * 15)
                     throw new ArgumentOutOfRangeException("timeZoneOffset");
             }
-            if (precision < FudgeDateTimePrecision.Hour)
+            if (precision.LessThan(FudgeDateTimePrecision.Hour))
                 throw new ArgumentOutOfRangeException("precision");
             this.seconds = hour * 3600 + minute * 60 + second;
             this.nanos = nanoseconds;
@@ -159,7 +163,7 @@ namespace Fudge.Types
                 if (timeZoneOffset < -127 * 15 || timeZoneOffset > 127 * 15)
                     throw new ArgumentOutOfRangeException("timeZoneOffset");
             }
-            if (precision < FudgeDateTimePrecision.Hour)
+            if (precision.LessThan(FudgeDateTimePrecision.Hour))
                 throw new ArgumentOutOfRangeException("precision");
             this.precision = precision;
             this.seconds = totalSeconds;
@@ -183,7 +187,7 @@ namespace Fudge.Types
         /// <param name="precision"><see cref="FudgeDateTimePrecision"/> for this <c>FudgeTime</c>.</param>
         public FudgeTime(DateTime dateTime, FudgeDateTimePrecision precision)
         {
-            if (precision < FudgeDateTimePrecision.Hour)
+            if (precision.LessThan(FudgeDateTimePrecision.Hour))
                 throw new ArgumentOutOfRangeException("precision");
             TimeSpan time = dateTime.TimeOfDay;
             this.precision = precision;
@@ -274,8 +278,8 @@ namespace Fudge.Types
         public override string ToString()
         {
             // We match ISO 8601 format - e.g. "12:34:27.123+01:15"
-            int subSecond = nanos / nanoDividers[(int)precision];
-            string result = string.Format(precisionFormatters[(int)precision], Hour, Minute, Second, subSecond);
+            int subSecond = nanos / nanoDividers[(int)precision.GetEncodedValue()];
+            string result = string.Format(precisionFormatters[(int)precision.GetEncodedValue()], Hour, Minute, Second, subSecond);
             if (timeZoneOffset.HasValue)
             {
                 int mins = Math.Abs(timeZoneOffset.Value) % 60;
@@ -301,7 +305,7 @@ namespace Fudge.Types
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return seconds ^ nanos ^ (timeZoneOffset ?? int.MinValue) ^ (int)precision;
+            return seconds ^ nanos ^ (timeZoneOffset ?? int.MinValue) ^ (int)precision.GetEncodedValue();
         }
 
         #endregion

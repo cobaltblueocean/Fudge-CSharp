@@ -51,7 +51,7 @@ namespace Fudge.Types
         public FudgeDateTime(DateTime dateTime, FudgeDateTimePrecision precision)
         {
             this.date = new FudgeDate(dateTime);
-            if (precision > FudgeDateTimePrecision.Day)
+            if (precision.GreaterThan(FudgeDateTimePrecision.Day))
             {
                 this.time = new FudgeTime(dateTime, precision);
             }
@@ -80,7 +80,7 @@ namespace Fudge.Types
         public FudgeDateTime(DateTimeOffset dateTimeOffset, FudgeDateTimePrecision precision)
         {
             this.date = new FudgeDate(dateTimeOffset.Date);
-            if (precision > FudgeDateTimePrecision.Day)
+            if (precision.GreaterThan(FudgeDateTimePrecision.Day))
             {
                 int seconds = (int)(dateTimeOffset.TimeOfDay.Ticks / FudgeTime.TicksPerSecond);
                 int nanos = (int)(dateTimeOffset.TimeOfDay.Ticks % FudgeTime.TicksPerSecond);
@@ -109,7 +109,7 @@ namespace Fudge.Types
         public FudgeDateTime(int year, int month, int day, int hour, int minute, int second, int nanosecond, FudgeDateTimePrecision precision)
         {
             this.date = new FudgeDate(year, month, day);
-            if (precision > FudgeDateTimePrecision.Day)
+            if (precision.GreaterThan(FudgeDateTimePrecision.Day))
             {
                 this.time = new FudgeTime(hour, minute, second, nanosecond, precision);
             }
@@ -135,7 +135,7 @@ namespace Fudge.Types
         public FudgeDateTime(int year, int month, int day, int hour, int minute, int second, int nanosecond, int timeZoneOffset, FudgeDateTimePrecision precision)
         {
             this.date = new FudgeDate(year, month, day);
-            if (precision > FudgeDateTimePrecision.Day)
+            if (precision.GreaterThan(FudgeDateTimePrecision.Day))
             {
                 this.time = new FudgeTime(hour, minute, second, nanosecond, timeZoneOffset, precision);
             }
@@ -340,7 +340,7 @@ namespace Fudge.Types
         public override string ToString()
         {
             string result = date.ToString(precision);
-            if (precision > FudgeDateTimePrecision.Day)
+            if (precision.GreaterThan(FudgeDateTimePrecision.Day))
                 result += "T" + time.ToString();            // Using T to match ISO 8601
             return result;
         }

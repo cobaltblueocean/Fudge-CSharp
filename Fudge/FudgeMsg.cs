@@ -774,6 +774,21 @@ namespace Fudge
             }
         }
 
+        public Boolean HasField(String FieldName)
+        {
+            Boolean found = false;
+            foreach (FudgeMsgField field in fields)
+            {
+                if (field.Name == FieldName)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            return found;
+        }
+
         #region IEnumerable<IFudgeField> Members
 
         /// <inheritdoc />

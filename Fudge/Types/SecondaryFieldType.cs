@@ -21,7 +21,7 @@ using System.Text;
 using Fudge.Taxon;
 using System.IO;
 
-namespace Fudge
+namespace Fudge.Types
 {
     /// <summary>
     /// Marker interface to indicate that this type isn't a primary type

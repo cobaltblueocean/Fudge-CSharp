@@ -236,18 +236,21 @@ namespace Fudge.Types
         /// <returns>Date as a string.</returns>
         public string ToString(FudgeDateTimePrecision precision)
         {
-            switch (precision)
+            if (precision == FudgeDateTimePrecision.Millennium)
             {
-                case FudgeDateTimePrecision.Millennium:
-                    return string.Format("{0:d2}000", Year / 1000);
-                case FudgeDateTimePrecision.Century:
-                    return string.Format("{0:d2}00", Year / 100);
-                case FudgeDateTimePrecision.Year:
-                    return string.Format("{0:d4}", Year);
-                case FudgeDateTimePrecision.Month:
-                    return string.Format("{0:d4}-{1:d2}", Year, Month);
-                default:
-                    return ToString();
+                return string.Format("{0:d2}000", Year / 1000);
+            }
+            else if (precision == FudgeDateTimePrecision.Century) {
+                return string.Format("{0:d2}00", Year / 100);
+            }
+            else if (precision == FudgeDateTimePrecision.Year) {
+                return string.Format("{0:d4}", Year);
+            }
+            else if (precision == FudgeDateTimePrecision.Month) {
+                return string.Format("{0:d4}-{1:d2}", Year, Month);
+            }
+            else {
+                return ToString();
             }
         }
 

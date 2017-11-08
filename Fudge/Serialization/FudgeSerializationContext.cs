@@ -44,6 +44,15 @@ namespace Fudge.Serialization
         private readonly IndexedStack<State> inlineStack = new IndexedStack<State>();       // Used to check for cycles in inlined messages and keep track of the index of the current message
         private int currentMessageId = 0;
 
+
+        public FudgeSerializationContext(FudgeContext context)
+        {
+            this.context = context;
+            this.writer = new FudgeMsgStreamWriter();
+            this.typeMap = new SerializationTypeMap(context);
+            this.typeMappingStrategy = new DefaultTypeMappingStrategy();
+        }
+
         public FudgeSerializationContext(FudgeContext context, SerializationTypeMap typeMap, IFudgeStreamWriter writer, IFudgeTypeMappingStrategy typeMappingStrategy)
         {
             this.context = context;

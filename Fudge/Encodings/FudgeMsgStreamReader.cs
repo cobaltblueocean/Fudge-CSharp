@@ -36,6 +36,10 @@ namespace Fudge.Encodings
         private IFudgeField field;
         private IEnumerator<FudgeMsg> messageSource;
         private FudgeMsg nextMessage;
+        private int processingDirectives = 0;
+        private int schemaVersion = 0;
+        private short taxonomyId = 0;
+        private IFudgeTaxonomy _taxonomy;
 
         /// <summary>
         /// Constructs a new <see cref="FudgeMsgStreamReader"/> using a given <see cref="FudgeMsg"/> for data.
@@ -60,6 +64,14 @@ namespace Fudge.Encodings
 
             messageSource = messages.GetEnumerator();
             currentState = null;
+
+            //processingDirectives = messageSource.
+            if (context.TaxonomyResolver != null)
+            {
+                IFudgeTaxonomy taxonomy = context.TaxonomyResolver.ResolveTaxonomy(taxonomyId);
+                _taxonomy = taxonomy;
+            }
+
         }
 
         #region IFudgeStreamReader Members
@@ -125,6 +137,7 @@ namespace Fudge.Encodings
                     element = FudgeStreamElement.SimpleField;
                 }
             }
+
             return element;
         }
 
@@ -156,6 +169,34 @@ namespace Fudge.Encodings
         public object FieldValue
         {
             get { return field.Value; }
+        }
+
+        public int ProcessingDirectives
+        {
+            get { return processingDirectives; }
+        }
+
+        public int SchemaVersion
+        {
+            get { return schemaVersion; }
+        }
+
+        public short TaxonomyId
+        {
+            get { return taxonomyId; }
+        }
+
+        public IFudgeTaxonomy Taxonomy
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public FudgeContext FudgeContext
+        {
+            get
+            {
+                return context;
+            }
         }
 
         #endregion
