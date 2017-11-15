@@ -69,8 +69,8 @@
       <HintPath>..\packages\mongocsharpdriver.1.10.1\lib\net35\MongoDB.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -111,6 +111,7 @@
     <Compile Include="Encodings\FudgeEncodedStreamReader.cs" />
     <Compile Include="Encodings\FudgeEncodedStreamWriter.cs" />
     <Compile Include="Encodings\FudgeEncodingExtensions.cs" />
+    <Compile Include="Encodings\FudgeJsonSettings.cs" />
     <Compile Include="Encodings\FudgeJSONStreamReader.cs" />
     <Compile Include="Encodings\FudgeJSONStreamWriter.cs" />
     <Compile Include="Encodings\FudgeMsgStreamReader.cs" />

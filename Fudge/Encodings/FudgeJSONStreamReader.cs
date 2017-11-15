@@ -23,6 +23,7 @@ using System.Diagnostics;
 using Fudge.Types;
 using System.Globalization;
 using Fudge.Taxon;
+using Newtonsoft.Json;
 
 namespace Fudge.Encodings
 {
@@ -43,6 +44,8 @@ namespace Fudge.Encodings
         private int schemaVersion = 0;
         private short taxonomyId = 0;
         private IFudgeTaxonomy taxonomy;
+        private dynamic jsonObj;
+        private FudgeJsonSettings _settings = new FudgeJsonSettings();
 
         /// <summary>
         /// Constructs a <see cref="FudgeJSONStreamReader"/> on a given <see cref="TextReader"/>.
@@ -58,6 +61,8 @@ namespace Fudge.Encodings
 
             this.context = context;
             this.reader = reader;
+
+            jsonObj = JsonConvert.DeserializeObject(this.reader.ReadToEnd());
         }
 
         /// <summary>
@@ -142,18 +147,19 @@ namespace Fudge.Encodings
 
         #endregion
 
-        private void HandleHeaders(Token token)
+        private void HandleHeaders(JsonToken token)
         {
+
             String fieldName = i.next();
-            if (fieldName.equals(getSettings().getProcessingDirectivesField()))
+            if (fieldName.Equals(getSettings().getProcessingDirectivesField()))
             {
-                processingDirectives = integerValue(o.get(fieldName));
+                processingDirectives = jsonObj.;
             }
-            else if (fieldName.equals(getSettings().getSchemaVersionField()))
+            else if (fieldName.Equals(getSettings().getSchemaVersionField()))
             {
                 schemaVersion = integerValue(o.get(fieldName));
             }
-            else if (fieldName.equals(getSettings().getTaxonomyField()))
+            else if (fieldName.Equals(getSettings().getTaxonomyField()))
             {
                 taxonomyId = integerValue(o.get(fieldName));
             }
