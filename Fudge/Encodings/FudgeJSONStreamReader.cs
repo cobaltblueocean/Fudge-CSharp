@@ -23,6 +23,7 @@ using System.Diagnostics;
 using Fudge.Types;
 using System.Globalization;
 using Fudge.Taxon;
+using Newtonsoft.Json;
 
 namespace Fudge.Encodings
 {
@@ -58,6 +59,17 @@ namespace Fudge.Encodings
 
             this.context = context;
             this.reader = reader;
+
+            dynamic x = JsonConvert.DeserializeObject(reader.ReadToEnd());
+            var page = x.page;
+            var total_pages = x.total_pages;
+            var albums = x.albums;
+            foreach (var album in albums)
+            {
+                var albumName = album.name;
+
+                // Access album data;
+            }
         }
 
         /// <summary>

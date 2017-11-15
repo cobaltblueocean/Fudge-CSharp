@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Fudge.Taxon;
 
 namespace Fudge.Encodings
 {
@@ -54,6 +55,35 @@ namespace Fudge.Encodings
         private int Depth
         {
             get { return stack.Count; }
+        }
+
+        public FudgeContext FudgeContext
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IFudgeTaxonomy Taxonomy
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int TaxonomyId
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #region IFudgeStreamWriter Members
@@ -306,7 +336,12 @@ namespace Fudge.Encodings
             }
             sb.Append("\"");
             return sb.ToString();
-        }       
+        }
+
+        public void WriteEnvelopeHeader(int processingDirectives, int schemaVersion, int messageSize)
+        {
+            throw new NotImplementedException();
+        }
 
         private class JSONObject
         {
