@@ -62,7 +62,16 @@ namespace Fudge.Encodings
             this.context = context;
             this.reader = reader;
 
-            jsonObj = JsonConvert.DeserializeObject(this.reader.ReadToEnd());
+            dynamic x = JsonConvert.DeserializeObject(reader.ReadToEnd());
+            var page = x.page;
+            var total_pages = x.total_pages;
+            var albums = x.albums;
+            foreach (var album in albums)
+            {
+                var albumName = album.name;
+
+                // Access album data;
+            }
         }
 
         /// <summary>
