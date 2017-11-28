@@ -62,6 +62,8 @@ namespace Fudge.Encodings
             this.context = context;
             this.reader = reader;
 
+            // jsonObj = JsonConvert.DeserializeObject(this.reader.ReadToEnd());
+
             dynamic x = JsonConvert.DeserializeObject(reader.ReadToEnd());
             var page = x.page;
             var total_pages = x.total_pages;
@@ -160,15 +162,15 @@ namespace Fudge.Encodings
         {
 
             String fieldName = i.next();
-            if (fieldName.Equals(getSettings().getProcessingDirectivesField()))
+            if (fieldName.Equals(_settings.ProcessingDirectivesField))
             {
                 processingDirectives = jsonObj.;
             }
-            else if (fieldName.Equals(getSettings().getSchemaVersionField()))
+            else if (fieldName.Equals(_settings.SchemaVersionField))
             {
                 schemaVersion = integerValue(o.get(fieldName));
             }
-            else if (fieldName.Equals(getSettings().getTaxonomyField()))
+            else if (fieldName.Equals(_settings.TaxonomyField))
             {
                 taxonomyId = integerValue(o.get(fieldName));
             }
