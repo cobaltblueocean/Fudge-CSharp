@@ -24,6 +24,7 @@ using Fudge.Types;
 using System.Globalization;
 using Fudge.Taxon;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Fudge.Encodings
 {
@@ -44,6 +45,7 @@ namespace Fudge.Encodings
         private int schemaVersion = 0;
         private short taxonomyId = 0;
         private IFudgeTaxonomy taxonomy;
+        private JObject jsonObject;
 
         /// <summary>
         /// Constructs a <see cref="FudgeJSONStreamReader"/> on a given <see cref="TextReader"/>.
