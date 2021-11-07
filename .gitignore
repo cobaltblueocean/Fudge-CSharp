@@ -12,3 +12,4 @@ Help/
 # ReSharper stuff
 _ReSharper.Fudge
 Fudge.*.ReSharper.user
+/.vs/Fudge/v16/TestStore/0/testlog.manifest

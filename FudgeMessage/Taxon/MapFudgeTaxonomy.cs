@@ -30,9 +30,9 @@ namespace FudgeMessage.Taxon
     /// </summary>
     public class MapFudgeTaxonomy : IFudgeTaxonomy
     {
-        private readonly Dictionary<int, string> namesByOrdinal;
-        private readonly Dictionary<string, int> ordinalsByName;
-        private static readonly Dictionary<int, string> emptyDictionary = new Dictionary<int, string>();
+        private readonly Dictionary<short, string> namesByOrdinal;
+        private readonly Dictionary<string, short> ordinalsByName;
+        private static readonly Dictionary<short, string> emptyDictionary = new Dictionary<short, string>();
 
         /// <summary>
         /// Creates a new taxonomy with an empty dictionary.
@@ -46,14 +46,14 @@ namespace FudgeMessage.Taxon
         /// Creates a new taxonomy with a default dictionary to map field names to/from ordinal values.
         /// </summary>
         /// <param name="namesByOrdinal">initial mapping of ordinals to field names</param>
-        public MapFudgeTaxonomy(Dictionary<int, string> namesByOrdinal)
+        public MapFudgeTaxonomy(Dictionary<short, string> namesByOrdinal)
         {
             if (namesByOrdinal == null)
             {
                 namesByOrdinal = emptyDictionary;
             }
-            this.namesByOrdinal = new Dictionary<int, string>(namesByOrdinal);
-            this.ordinalsByName = new Dictionary<string, int>(namesByOrdinal.Count);
+            this.namesByOrdinal = new Dictionary<short, string>(namesByOrdinal);
+            this.ordinalsByName = new Dictionary<string, short>(namesByOrdinal.Count);
             foreach (var entry in namesByOrdinal)
             {
                 ordinalsByName.Add(entry.Value, entry.Key);
@@ -65,7 +65,7 @@ namespace FudgeMessage.Taxon
         /// </summary>
         /// <param name="ordinals">array of ordinal values</param>
         /// <param name="names">array of field names</param>
-        public MapFudgeTaxonomy(int[] ordinals, string[] names)
+        public MapFudgeTaxonomy(short[] ordinals, string[] names)
         {
             if (ordinals == null)
             {
@@ -79,8 +79,8 @@ namespace FudgeMessage.Taxon
             {
                 throw new ArgumentException("Arrays of ordinals and names must be of same length.");
             }
-            namesByOrdinal = new Dictionary<int, string>(ordinals.Length);
-            ordinalsByName = new Dictionary<string, int>(ordinals.Length);
+            namesByOrdinal = new Dictionary<short, string>(ordinals.Length);
+            ordinalsByName = new Dictionary<string, short>(ordinals.Length);
             for (int i = 0; i < ordinals.Length; i++)
             {
                 namesByOrdinal.Add(ordinals[i], names[i]);
@@ -100,7 +100,7 @@ namespace FudgeMessage.Taxon
         /// <inheritdoc />
         public short? GetFieldOrdinal(string fieldName)
         {
-            int result;
+            short result;
             return ordinalsByName.TryGetValue(fieldName, out result) ? (short?)result : null;
         }
 

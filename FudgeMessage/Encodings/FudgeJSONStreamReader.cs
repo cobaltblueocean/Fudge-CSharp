@@ -36,8 +36,8 @@ namespace FudgeMessage.Encodings
     /// </remarks>
     public class FudgeJSONStreamReader : FudgeStreamReaderBase
     {
-        private readonly FudgeContext context;
-        private readonly TextReader reader;
+        private readonly FudgeContext _context;
+        private readonly TextReader _reader;
         private Token nextToken;
         private bool done = false;
         private Stack<State> stack = new Stack<State>();
@@ -60,21 +60,26 @@ namespace FudgeMessage.Encodings
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
-            this.context = context;
-            this.reader = reader;
+            var s = reader.ReadToEnd();
+
+            this._context = context;
+            this._reader = new StringReader(s);
 
             // jsonObj = JsonConvert.DeserializeObject(this.reader.ReadToEnd());
 
-            dynamic x = JsonConvert.DeserializeObject(reader.ReadToEnd());
-            var page = x.page;
-            var total_pages = x.total_pages;
-            var albums = x.albums;
-            foreach (var album in albums)
-            {
-                var albumName = album.name;
+            //dynamic x = JsonConvert.DeserializeObject(s);
+            //var page = x.page;
+            //var total_pages = x.total_pages;
+            //var albums = x.albums;
+            //if (albums != null)
+            //{
+            //    foreach (var album in albums)
+            //    {
+            //        var albumName = album.name;
 
-                // Access album data;
-            }
+            //        // Access album data;
+            //    }
+            //}
         }
 
         /// <summary>
@@ -267,7 +272,7 @@ namespace FudgeMessage.Encodings
         {
             get
             {
-                return context;
+                return _context;
             }
         }
 
@@ -363,7 +368,7 @@ namespace FudgeMessage.Encodings
         {
             while (true)
             {
-                int next = reader.Read();
+                int next = _reader.Read();
                 if (next == -1)
                 {
                     return Token.EOF;
@@ -424,7 +429,7 @@ namespace FudgeMessage.Encodings
             bool done = false;
             while (!done)
             {
-                int next = reader.Peek();
+                int next = _reader.Peek();
                 switch (next)
                 {
                     case -1:        // EOF
@@ -446,7 +451,7 @@ namespace FudgeMessage.Encodings
                         break;
                     default:
                         sb.Append((char)next);
-                        reader.Read();
+                        _reader.Read();
                         break;
                 }
             }
@@ -480,7 +485,7 @@ namespace FudgeMessage.Encodings
             // We've already had the opening quote
             while (true)
             {
-                int next = reader.Read();
+                int next = _reader.Read();
                 if (next == -1)
                 {
                     return Token.EOF;
@@ -495,7 +500,7 @@ namespace FudgeMessage.Encodings
                     case '\\':
                         {
                             // Escaped char
-                            next = reader.Read();
+                            next = _reader.Read();
                             if (next == -1)
                             {
                                 return Token.EOF;
@@ -538,7 +543,7 @@ namespace FudgeMessage.Encodings
         private char ReadUnicode()
         {
             char[] buffer = new char[4];
-            if (reader.Read(buffer, 0, 4) != 4)
+            if (_reader.Read(buffer, 0, 4) != 4)
                 throw new FudgeParseException("Premature EOF whilst trying to read \\u in string");
 
             StringBuilder sb = new StringBuilder();
@@ -549,7 +554,7 @@ namespace FudgeMessage.Encodings
 
         public override void Close()
         {
-            reader.Close();
+            _reader.Close();
         }
 
         private class State

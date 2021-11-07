@@ -16,6 +16,7 @@
  */
 using System.Collections.Generic;
 using System.Linq;
+using FudgeMessage;
 
 namespace FudgeMessage.Linq
 {
@@ -63,7 +64,14 @@ namespace FudgeMessage.Linq
         /// </remarks>
         public static IOrderedQueryable<T> AsQueryable<T>(this FudgeMsg[] msgSource)
         {
-            return new FudgeFieldContainerContext(msgSource.Cast<IFudgeFieldContainer>()) as IOrderedQueryable<T>;
+            IOrderedQueryable<T> result;
+
+            result = new FudgeFieldContainerContext(msgSource.Cast<IFudgeFieldContainer>()) as IOrderedQueryable<T>;
+
+            if (result == null)
+                result = (IOrderedQueryable<T>)msgSource.CastAsList<T>().AsQueryable<T>();
+
+            return result;
         }
 
         /// <summary>
@@ -83,7 +91,55 @@ namespace FudgeMessage.Linq
         /// </remarks>
         public static IOrderedQueryable<T> AsQueryable<T>(this IEnumerable<IFudgeFieldContainer> msgSource)
         {
-            return new FudgeFieldContainerContext(msgSource.Cast<IFudgeFieldContainer>()) as IOrderedQueryable<T>;
+            IOrderedQueryable<T> result;
+
+            result = new FudgeFieldContainerContext(msgSource.Cast<IFudgeFieldContainer>()) as IOrderedQueryable<T>;
+
+            if (result == null)
+                result = (IOrderedQueryable<T>)msgSource.CastAsList<T>().AsQueryable<T>();
+
+            return result;
+        }
+
+
+        private static List<T> CastAsList<T>(this FudgeMsg[] msgSource)
+        {
+            List<T> result = new List<T>();
+            int i = 0;
+
+            foreach (var msg in msgSource)
+            {
+                result.Add(ClassUtility.NewInstance<T>(typeof(T)));
+
+                var fields = msg.GetAllFields();
+                foreach (var field in fields)
+                {
+                    ClassUtility.SetPropertyValue(result[i], field.Name, field.Value);
+                }
+                i++;
+            }
+
+            return result;
+        }
+
+        private static List<T> CastAsList<T>(this IEnumerable<IFudgeFieldContainer> msgSource)
+        {
+            List<T> result = new List<T>();
+            int i = 0;
+
+            foreach (var msg in msgSource)
+            {
+                result.Add(ClassUtility.NewInstance<T>(typeof(T)));
+
+                var fields = msg.GetAllFields();
+                foreach (var field in fields)
+                {
+                    ClassUtility.SetPropertyValue(result[i], field.Name, field.Value);
+                }
+                i++;
+            }
+
+            return result;
         }
     }
 }

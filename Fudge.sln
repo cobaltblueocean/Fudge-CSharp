@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FudgeMessage", "FudgeMessage\FudgeMessage.csproj", "{72B139FD-0449-4226-8314-5D392811BDB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FudgeMessage", "FudgeMessage\FudgeMessage.csproj", "{72B139FD-0449-4226-8314-5D392811BDB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FudgeMessage.Tests", "FudgeMessage.Tests\FudgeMessage.Tests.csproj", "{642BE2EF-73FD-448F-99D1-E3CE4FBD663F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{72B139FD-0449-4226-8314-5D392811BDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72B139FD-0449-4226-8314-5D392811BDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72B139FD-0449-4226-8314-5D392811BDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{642BE2EF-73FD-448F-99D1-E3CE4FBD663F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{642BE2EF-73FD-448F-99D1-E3CE4FBD663F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{642BE2EF-73FD-448F-99D1-E3CE4FBD663F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{642BE2EF-73FD-448F-99D1-E3CE4FBD663F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\allNames.dat" />
+    <None Remove="Resources\allOrdinals.dat" />
+    <None Remove="Resources\fixedWidthByteArrays.dat" />
+    <None Remove="Resources\subMsg.dat" />
+    <None Remove="Resources\unknown.dat" />
+    <None Remove="Resources\variableWidthColumnSizes.dat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\allNames.dat" />
+    <EmbeddedResource Include="Resources\allOrdinals.dat" />
+    <EmbeddedResource Include="Resources\fixedWidthByteArrays.dat" />
+    <EmbeddedResource Include="Resources\subMsg.dat" />
+    <EmbeddedResource Include="Resources\unknown.dat" />
+    <EmbeddedResource Include="Resources\variableWidthColumnSizes.dat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mercury.Test.Utility" Version="0.8.0.3" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FudgeMessage\FudgeMessage.csproj" />
+  </ItemGroup>
+
+</Project>
