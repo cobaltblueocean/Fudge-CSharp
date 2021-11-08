@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FudgeMessage.Taxon;
+using FudgeMessage.Util;
 
 namespace FudgeMessage
 {
@@ -73,7 +74,7 @@ namespace FudgeMessage
                 // one for the size prefix
                 size++;
                 // then for the UTF Encoding
-                size += UTF8.GetLengthBytes(Name);
+                size += ModifiedUTF8Encoding.GetLengthBytes(Name);
             }
             if (type.IsVariableSize)
             {

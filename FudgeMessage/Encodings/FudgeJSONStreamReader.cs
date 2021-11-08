@@ -53,7 +53,17 @@ namespace FudgeMessage.Encodings
         /// </summary>
         /// <param name="context">Context to control behaviours.</param>
         /// <param name="reader"><see cref="TextReader"/> providing the data.</param>
-        public FudgeJSONStreamReader(FudgeContext context, TextReader reader)
+        public FudgeJSONStreamReader(FudgeContext context, TextReader reader):this(context, reader, false)
+        {
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="FudgeJSONStreamReader"/> on a given <see cref="TextReader"/>.
+        /// </summary>
+        /// <param name="context">Context to control behaviours.</param>
+        /// <param name="reader"><see cref="TextReader"/> providing the data.</param>
+        /// <param name="validateJson">if true, validate JSON format, if false, uncheck JSON format.</param>
+        public FudgeJSONStreamReader(FudgeContext context, TextReader reader, Boolean validateJson)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -65,21 +75,24 @@ namespace FudgeMessage.Encodings
             this._context = context;
             this._reader = new StringReader(s);
 
-            // jsonObj = JsonConvert.DeserializeObject(this.reader.ReadToEnd());
+            if (validateJson)
+            {
+                jsonObj = JsonConvert.DeserializeObject(this._reader.ReadToEnd());
 
-            //dynamic x = JsonConvert.DeserializeObject(s);
-            //var page = x.page;
-            //var total_pages = x.total_pages;
-            //var albums = x.albums;
-            //if (albums != null)
-            //{
-            //    foreach (var album in albums)
-            //    {
-            //        var albumName = album.name;
+                dynamic x = JsonConvert.DeserializeObject(s);
+                var page = x.page;
+                var total_pages = x.total_pages;
+                var albums = x.albums;
+                if (albums != null)
+                {
+                    foreach (var album in albums)
+                    {
+                        var albumName = album.name;
 
-            //        // Access album data;
-            //    }
-            //}
+                        // Access album data;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -97,6 +110,31 @@ namespace FudgeMessage.Encodings
             : this(context, new StringReader(text))
         {
         }
+
+        /// <summary>
+        /// Constructs a <see cref="FudgeJSONStreamReader"/> using a <c>string</c> for the underlying data.
+        /// </summary>
+        /// <param name="context">Context to control behaviours.</param>
+        /// <param name="text">Text containing JSON message.</param>
+        /// <param name="validateJson">if true, validate JSON format, if false, uncheck JSON format.</param>
+        /// <example>This example shows a simple JSON string being converted into a <see cref="FudgeMsg"/> object:
+        /// <code>
+        /// string json = @"{""name"" : ""fred""}";
+        /// FudgeMsg msg = new FudgeJSONStreamReader(json).ReadToMsg();
+        /// </code>
+        /// </example>
+        public FudgeJSONStreamReader(FudgeContext context, string text, Boolean validateJson)
+            : this(context, new StringReader(text), validateJson)
+        {
+        }
+
+
+        /// <inheritdoc/>
+        public void SetTaxonomy(IFudgeTaxonomy fudgeTaxonomy)
+        {
+            this.taxonomy = fudgeTaxonomy;
+        }
+
 
         #region IFudgeStreamReader Members
 
