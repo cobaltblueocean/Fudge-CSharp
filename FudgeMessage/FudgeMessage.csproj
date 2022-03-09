@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.8.0.2</Version>
+    <Version>0.8.0.3</Version>
     <Company>Kei Nakai</Company>
     <Authors>Kei Nakai</Authors>
     <Description>Original project is developed and published by OpenGamma Inc.
