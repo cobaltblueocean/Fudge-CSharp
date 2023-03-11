@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using NUnit.Framework;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -200,16 +201,33 @@ namespace FudgeMessage.Tests.Perf
 
         private static int SerializationCycle()
         {
-            MemoryStream outputStream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
+            UnicodeEncoding uniEncoding = new UnicodeEncoding();
             SmallFinancialTick tick = new SmallFinancialTick();
-            formatter.Serialize(outputStream, tick);
 
-            byte[] data = outputStream.ToArray();
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (StreamWriter sw = new StreamWriter(outputStream, uniEncoding))
+                {
 
-            MemoryStream inputStream = new MemoryStream(data);
-            formatter.Deserialize(inputStream);
-            return data.Length;
+                    try
+                    {
+                        //BinaryFormatter formatter = new BinaryFormatter();
+                        //formatter.Serialize(outputStream, tick);
+                        sw.Write(JsonSerializer.Serialize(tick));
+
+                        byte[] data = outputStream.ToArray();
+
+                        //MemoryStream inputStream = new MemoryStream(data);
+                        //formatter.Deserialize(inputStream);
+                        //JsonSerializer.Deserialize(inputStream);
+                        return data.Length;
+                    }
+                    finally
+                    {
+                        sw.Dispose();
+                    }
+                }
+            }
         }
     }
 }
