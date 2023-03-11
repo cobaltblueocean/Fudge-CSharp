@@ -16,3 +16,4 @@ Fudge.*.ReSharper.user
 /.vs/Fudge/v16/TestStore/0/044.testlog
 *.v2
 *.testlog
+/.vs
