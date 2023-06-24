@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>0.8.1.1</Version>
+    <Version>0.8.1.2</Version>
     <Company>Kei Nakai</Company>
     <Authors>Kei Nakai</Authors>
     <Description>Original project is developed and published by OpenGamma Inc.
@@ -36,11 +36,11 @@ limitations under the License.
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cern.Colt.NET" Version="0.9.1.1" />
-    <PackageReference Include="Mercury.Language.Extensions" Version="0.8.1.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Cern.Colt.NET" Version="0.9.3.4" />
+    <PackageReference Include="Mercury.Language.Extensions" Version="0.8.2.26" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
   </ItemGroup>
 
   <ItemGroup>
