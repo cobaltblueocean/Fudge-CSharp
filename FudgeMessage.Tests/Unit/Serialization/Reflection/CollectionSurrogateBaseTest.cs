@@ -21,9 +21,11 @@ using System.Text;
 using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class CollectionSurrogateBaseTest
     {
         [Test]
@@ -41,12 +43,12 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(testClass);
             var testClass2 = (TestClass)serializer.Deserialize(msg);
 
-            Assert.AreEqual("A", testClass2.List[0].Name);
-            Assert.Null(testClass2.List[1]);
-            Assert.AreEqual("B", testClass2.List[2].Name);
-            Assert.AreEqual("C", testClass2.Array[0].Name);
-            Assert.Null(testClass2.Array[1]);
-            Assert.AreEqual("D", testClass2.Array[2].Name);
+            Assert2.AreEqual("A", testClass2.List[0].Name);
+            Assert2.Null(testClass2.List[1]);
+            Assert2.AreEqual("B", testClass2.List[2].Name);
+            Assert2.AreEqual("C", testClass2.Array[0].Name);
+            Assert2.Null(testClass2.Array[1]);
+            Assert2.AreEqual("D", testClass2.Array[2].Name);
         }
 
         private class TestClass

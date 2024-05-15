@@ -26,9 +26,11 @@ using System.IO;
 using FudgeMessage;
 using FudgeMessage.Types;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Encodings
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeXmlStreamReaderTest
     {
         private FudgeContext context = new FudgeContext();
@@ -41,10 +43,10 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var reader = new FudgeXmlStreamReader(context, xml);
             var msg = reader.ReadMsg();
 
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("name").Type);
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("name").Type);
             var name = msg.GetMessage("name");
-            Assert.AreEqual("surname", name.GetString("type"));
-            Assert.AreEqual("Smith", name.GetString("value"));
+            Assert2.AreEqual("surname", name.GetString("type"));
+            Assert2.AreEqual("Smith", name.GetString("value"));
         }
 
         [Test]
@@ -57,10 +59,10 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var reader = new FudgeXmlStreamReader(context, xml);
             var msg = reader.ReadMsg();
 
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("name").Type);
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("name").Type);
             var name = msg.GetMessage("name");
-            Assert.AreEqual("surname", name.GetString("type"));
-            Assert.AreEqual("Smith", name.GetString(""));
+            Assert2.AreEqual("surname", name.GetString("type"));
+            Assert2.AreEqual("Smith", name.GetString(""));
         }
 
         [Test]
@@ -71,10 +73,10 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var reader = new FudgeXmlStreamReader(context, xml);
             var msg = reader.ReadMsg();
 
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("name").Type);
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("name").Type);
             var name = msg.GetMessage("name");
-            Assert.AreEqual("surname", name.GetString("type"));
-            Assert.AreEqual("Smith", name.GetString("value"));
+            Assert2.AreEqual("surname", name.GetString("type"));
+            Assert2.AreEqual("Smith", name.GetString("value"));
         }
 
         [Test]
@@ -88,7 +90,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
 
             var msg = writer.DequeueMessage();
 
-            Assert.AreEqual("Our House", msg.GetMessage("address").GetString("line1"));
+            Assert2.AreEqual("Our House", msg.GetMessage("address").GetString("line1"));
 
             // Convert back to XML and see if it matches
             var sb = new StringBuilder();
@@ -98,7 +100,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
             new FudgeStreamPipe(reader2, writer2).Process();
 
             var xml2 = sb.ToString();
-            Assert.AreEqual(xml, xml2);
+            Assert2.AreEqual(xml, xml2);
         }
 
         [Test]
@@ -114,7 +116,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
             new FudgeStreamPipe(reader, multiwriter).Process();
             string outputXml = sb.ToString();
 
-            Assert.AreEqual(inputXml, outputXml);
+            Assert2.AreEqual(inputXml, outputXml);
         }
 
         [Test]

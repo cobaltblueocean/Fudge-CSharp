@@ -22,9 +22,11 @@ using FudgeMessage;
 using FudgeMessage.Types;
 using System.Net;
 using Mercury.Test.Utility;
+using NUnit.Framework.Legacy;
 
 namespace FudgeMessage.Tests.Unit
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeMsgTest
     {
         private static readonly FudgeContext fudgeContext = new FudgeContext();
@@ -37,31 +39,31 @@ namespace FudgeMessage.Tests.Unit
             IList<IFudgeField> fields = null;
 
             field = msg.GetByName("boolean");
-            Assert.NotNull(field);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
-            Assert.AreEqual(true, field.Value);
-            Assert.AreEqual("boolean", field.Name);
-            Assert.Null(field.Ordinal);
+            Assert2.NotNull(field);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
+            Assert2.AreEqual(true, field.Value);
+            Assert2.AreEqual("boolean", field.Name);
+            Assert2.Null(field.Ordinal);
 
             field = msg.GetByName("Boolean");
-            Assert.NotNull(field);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
-            Assert.AreEqual((object)false, field.Value);
-            Assert.AreEqual("Boolean", field.Name);
-            Assert.Null(field.Ordinal);
+            Assert2.NotNull(field);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
+            Assert2.AreEqual((object)false, field.Value);
+            Assert2.AreEqual("Boolean", field.Name);
+            Assert2.Null(field.Ordinal);
 
             fields = msg.GetAllByName("boolean");
-            Assert.NotNull(fields);
-            Assert.AreEqual(1, fields.Count);
+            Assert2.NotNull(fields);
+            Assert2.AreEqual(1, fields.Count);
             field = fields[0];
-            Assert.NotNull(field);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
-            Assert.AreEqual(true, field.Value);
-            Assert.AreEqual("boolean", field.Name);
-            Assert.Null(field.Ordinal);
+            Assert2.NotNull(field);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
+            Assert2.AreEqual(true, field.Value);
+            Assert2.AreEqual("boolean", field.Name);
+            Assert2.Null(field.Ordinal);
 
             // Check the indicator type specially
-            Assert.AreEqual(IndicatorType.Instance, msg.GetValue("indicator"));
+            Assert2.AreEqual(IndicatorType.Instance, msg.GetValue("indicator"));
         }
 
         [Test]
@@ -75,28 +77,28 @@ namespace FudgeMessage.Tests.Unit
             msg.Add("boolean", true);
 
             field = msg.GetByName("boolean");
-            Assert.NotNull(field);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
-            Assert.AreEqual(true, field.Value);
-            Assert.AreEqual("boolean", field.Name);
-            Assert.Null(field.Ordinal);
+            Assert2.NotNull(field);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
+            Assert2.AreEqual(true, field.Value);
+            Assert2.AreEqual("boolean", field.Name);
+            Assert2.Null(field.Ordinal);
 
             fields = msg.GetAllByName("boolean");
-            Assert.NotNull(fields);
-            Assert.AreEqual(2, fields.Count);
+            Assert2.NotNull(fields);
+            Assert2.AreEqual(2, fields.Count);
             field = fields[0];
-            Assert.NotNull(field);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
-            Assert.AreEqual(true, field.Value);
-            Assert.AreEqual("boolean", field.Name);
-            Assert.Null(field.Ordinal);
+            Assert2.NotNull(field);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
+            Assert2.AreEqual(true, field.Value);
+            Assert2.AreEqual("boolean", field.Name);
+            Assert2.Null(field.Ordinal);
 
             field = fields[1];
-            Assert.NotNull(field);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
-            Assert.AreEqual(true, field.Value);
-            Assert.AreEqual("boolean", field.Name);
-            Assert.Null(field.Ordinal);
+            Assert2.NotNull(field);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType, field.Type);
+            Assert2.AreEqual(true, field.Value);
+            Assert2.AreEqual("boolean", field.Name);
+            Assert2.Null(field.Ordinal);
         }
 
         [Test]
@@ -104,27 +106,27 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
 
-            Assert.AreEqual((sbyte)5, msg.GetSByte("byte"));
-            Assert.AreEqual((sbyte)5, msg.GetSByte("Byte"));
+            Assert2.AreEqual((sbyte)5, msg.GetSByte("byte"));
+            Assert2.AreEqual((sbyte)5, msg.GetSByte("Byte"));
 
             short shortValue = ((short)sbyte.MaxValue) + 5;
-            Assert.AreEqual(shortValue, msg.GetShort("short"));
-            Assert.AreEqual(shortValue, msg.GetShort("Short"));
+            Assert2.AreEqual(shortValue, msg.GetShort("short"));
+            Assert2.AreEqual(shortValue, msg.GetShort("Short"));
 
             int intValue = ((int)short.MaxValue) + 5;
-            Assert.AreEqual(intValue, msg.GetInt("int"));
-            Assert.AreEqual(intValue, msg.GetInt("Integer"));
+            Assert2.AreEqual(intValue, msg.GetInt("int"));
+            Assert2.AreEqual(intValue, msg.GetInt("Integer"));
 
             long longValue = ((long)int.MaxValue) + 5;
-            Assert.AreEqual(longValue, msg.GetLong("long"));
-            Assert.AreEqual(longValue, msg.GetLong("Long"));
+            Assert2.AreEqual(longValue, msg.GetLong("long"));
+            Assert2.AreEqual(longValue, msg.GetLong("Long"));
 
-            Assert.AreEqual(0.5f, msg.GetFloat("float"));
-            Assert.AreEqual(0.5f, msg.GetFloat("Float"));
-            Assert.AreEqual(0.27362, msg.GetDouble("double"));
-            Assert.AreEqual(0.27362, msg.GetDouble("Double"));
+            Assert2.AreEqual(0.5f, msg.GetFloat("float"));
+            Assert2.AreEqual(0.5f, msg.GetFloat("Float"));
+            Assert2.AreEqual(0.27362, msg.GetDouble("double"));
+            Assert2.AreEqual(0.27362, msg.GetDouble("Double"));
 
-            Assert.AreEqual("Kirk Wylie", msg.GetString("String"));
+            Assert2.AreEqual("Kirk Wylie", msg.GetString("String"));
         }
 
         [Test]
@@ -132,12 +134,12 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
 
-            Assert.Throws<OverflowException>(() => msg.GetSByte("int"));
-            Assert.Throws<OverflowException>(() => msg.GetShort("int"));
-            Assert.AreEqual(5, msg.GetInt("byte"));
-            Assert.AreEqual(((long)short.MaxValue) + 5, msg.GetLong("int"));
-            Assert.AreEqual(0.27362f, msg.GetFloat("double"));
-            Assert.AreEqual(0.5, msg.GetDouble("float"));
+            Assert2.ThrowsException<OverflowException>(() => msg.GetSByte("int"));
+            Assert2.ThrowsException<OverflowException>(() => msg.GetShort("int"));
+            Assert2.AreEqual(5, msg.GetInt("byte"));
+            Assert2.AreEqual(((long)short.MaxValue) + 5, msg.GetLong("int"));
+            Assert2.AreEqual(0.27362f, msg.GetFloat("double"));
+            Assert2.AreEqual(0.5, msg.GetDouble("float"));
         }
 
         [Test]
@@ -145,13 +147,13 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
 
-            Assert.Null(msg.GetSByte("foobar"));
-            Assert.Null(msg.GetShort("foobar"));
-            Assert.Null(msg.GetInt("foobar"));
-            Assert.Null(msg.GetLong("foobar"));
-            Assert.Null(msg.GetFloat("foobar"));
-            Assert.Null(msg.GetDouble("foobar"));
-            Assert.Null(msg.GetString("foobar"));
+            Assert2.Null(msg.GetSByte("foobar"));
+            Assert2.Null(msg.GetShort("foobar"));
+            Assert2.Null(msg.GetInt("foobar"));
+            Assert2.Null(msg.GetLong("foobar"));
+            Assert2.Null(msg.GetFloat("foobar"));
+            Assert2.Null(msg.GetDouble("foobar"));
+            Assert2.Null(msg.GetString("foobar"));
         }
 
         [Test]
@@ -159,26 +161,26 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
 
-            Assert.AreEqual((long?)((sbyte)5), msg.GetLong("byte"));
-            Assert.AreEqual((long?)((sbyte)5), msg.GetLong("Byte"));
+            Assert2.AreEqual((long?)((sbyte)5), msg.GetLong("byte"));
+            Assert2.AreEqual((long?)((sbyte)5), msg.GetLong("Byte"));
 
 
             short shortValue = ((short)sbyte.MaxValue) + 5;
-            Assert.AreEqual((long?)(shortValue), msg.GetLong("short"));
-            Assert.AreEqual((long?)(shortValue), msg.GetLong("Short"));
+            Assert2.AreEqual((long?)(shortValue), msg.GetLong("short"));
+            Assert2.AreEqual((long?)(shortValue), msg.GetLong("Short"));
 
             int intValue = ((int)short.MaxValue) + 5;
-            Assert.AreEqual((long?)(intValue), msg.GetLong("int"));
-            Assert.AreEqual((long?)(intValue), msg.GetLong("Integer"));
+            Assert2.AreEqual((long?)(intValue), msg.GetLong("int"));
+            Assert2.AreEqual((long?)(intValue), msg.GetLong("Integer"));
 
             long longValue = ((long)int.MaxValue) + 5;
-            Assert.AreEqual((long?)(longValue), msg.GetLong("long"));
-            Assert.AreEqual((long?)(longValue), msg.GetLong("Long"));
+            Assert2.AreEqual((long?)(longValue), msg.GetLong("long"));
+            Assert2.AreEqual((long?)(longValue), msg.GetLong("Long"));
 
-            Assert.AreEqual((long?)(0), msg.GetLong("float"));
-            Assert.AreEqual((long?)(0), msg.GetLong("Float"));
-            Assert.AreEqual((long?)(0), msg.GetLong("double"));
-            Assert.AreEqual((long?)(0), msg.GetLong("Double"));
+            Assert2.AreEqual((long?)(0), msg.GetLong("float"));
+            Assert2.AreEqual((long?)(0), msg.GetLong("Float"));
+            Assert2.AreEqual((long?)(0), msg.GetLong("double"));
+            Assert2.AreEqual((long?)(0), msg.GetLong("Double"));
         }
 
         [Test]
@@ -186,8 +188,8 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
             long longValue = ((long)int.MaxValue) + 5;
-            Assert.AreEqual(longValue, msg.GetValue<long>("long"));
-            Assert.AreEqual(5, msg.GetValue<long>("byte"));
+            Assert2.AreEqual(longValue, msg.GetValue<long>("long"));
+            Assert2.AreEqual(5, msg.GetValue<long>("byte"));
         }
 
         // ------------
@@ -197,27 +199,27 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllOrdinals(fudgeContext);
 
-            Assert.AreEqual((sbyte)5, msg.GetSByte((short)3));
-            Assert.AreEqual((sbyte)5, msg.GetSByte((short)4));
+            Assert2.AreEqual((sbyte)5, msg.GetSByte((short)3));
+            Assert2.AreEqual((sbyte)5, msg.GetSByte((short)4));
 
             short shortValue = ((short)sbyte.MaxValue) + 5;
-            Assert.AreEqual(shortValue, msg.GetShort((short)5));
-            Assert.AreEqual(shortValue, msg.GetShort((short)6));
+            Assert2.AreEqual(shortValue, msg.GetShort((short)5));
+            Assert2.AreEqual(shortValue, msg.GetShort((short)6));
 
             int intValue = ((int)short.MaxValue) + 5;
-            Assert.AreEqual(intValue, msg.GetInt((short)7));
-            Assert.AreEqual(intValue, msg.GetInt((short)8));
+            Assert2.AreEqual(intValue, msg.GetInt((short)7));
+            Assert2.AreEqual(intValue, msg.GetInt((short)8));
 
             long longValue = ((long)int.MaxValue) + 5;
-            Assert.AreEqual(longValue, msg.GetLong((short)9));
-            Assert.AreEqual(longValue, msg.GetLong((short)10));
+            Assert2.AreEqual(longValue, msg.GetLong((short)9));
+            Assert2.AreEqual(longValue, msg.GetLong((short)10));
 
-            Assert.AreEqual(0.5f, msg.GetFloat((short)11));
-            Assert.AreEqual(0.5f, msg.GetFloat((short)12));
-            Assert.AreEqual(0.27362, msg.GetDouble((short)13));
-            Assert.AreEqual(0.27362, msg.GetDouble((short)14));
+            Assert2.AreEqual(0.5f, msg.GetFloat((short)11));
+            Assert2.AreEqual(0.5f, msg.GetFloat((short)12));
+            Assert2.AreEqual(0.27362, msg.GetDouble((short)13));
+            Assert2.AreEqual(0.27362, msg.GetDouble((short)14));
 
-            Assert.AreEqual("Kirk Wylie", msg.GetString((short)15));
+            Assert2.AreEqual("Kirk Wylie", msg.GetString((short)15));
         }
 
         [Test]
@@ -225,12 +227,12 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllOrdinals(fudgeContext);
 
-            Assert.Throws<OverflowException>(() => msg.GetSByte(7));
-            Assert.Throws<OverflowException>(() => msg.GetShort(7));
-            Assert.Throws<OverflowException>(() => msg.GetInt(9));
-            Assert.AreEqual(((long)short.MaxValue) + 5, msg.GetLong(7));
-            Assert.AreEqual(0.27362f, msg.GetFloat(13));
-            Assert.AreEqual(0.5, msg.GetDouble(11));
+            Assert2.ThrowsException<OverflowException>(() => msg.GetSByte(7));
+            Assert2.ThrowsException<OverflowException>(() => msg.GetShort(7));
+            Assert2.ThrowsException<OverflowException>(() => msg.GetInt(9));
+            Assert2.AreEqual(((long)short.MaxValue) + 5, msg.GetLong(7));
+            Assert2.AreEqual(0.27362f, msg.GetFloat(13));
+            Assert2.AreEqual(0.5, msg.GetDouble(11));
         }
 
         [Test]
@@ -238,13 +240,13 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllOrdinals(fudgeContext);
 
-            Assert.Null(msg.GetSByte((short)100));
-            Assert.Null(msg.GetShort((short)100));
-            Assert.Null(msg.GetInt((short)100));
-            Assert.Null(msg.GetLong((short)100));
-            Assert.Null(msg.GetFloat((short)100));
-            Assert.Null(msg.GetDouble((short)100));
-            Assert.Null(msg.GetString((short)100));
+            Assert2.Null(msg.GetSByte((short)100));
+            Assert2.Null(msg.GetShort((short)100));
+            Assert2.Null(msg.GetInt((short)100));
+            Assert2.Null(msg.GetLong((short)100));
+            Assert2.Null(msg.GetFloat((short)100));
+            Assert2.Null(msg.GetDouble((short)100));
+            Assert2.Null(msg.GetString((short)100));
         }
 
         [Test]
@@ -252,25 +254,25 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllOrdinals(fudgeContext);
 
-            Assert.AreEqual((long)((sbyte)5), msg.GetLong((short)3));
-            Assert.AreEqual((long)((sbyte)5), msg.GetLong((short)4));
+            Assert2.AreEqual((long)((sbyte)5), msg.GetLong((short)3));
+            Assert2.AreEqual((long)((sbyte)5), msg.GetLong((short)4));
 
             short shortValue = ((short)sbyte.MaxValue) + 5;
-            Assert.AreEqual((long)(shortValue), msg.GetLong((short)5));
-            Assert.AreEqual((long)(shortValue), msg.GetLong((short)6));
+            Assert2.AreEqual((long)(shortValue), msg.GetLong((short)5));
+            Assert2.AreEqual((long)(shortValue), msg.GetLong((short)6));
 
             int intValue = ((int)short.MaxValue) + 5;
-            Assert.AreEqual((long)(intValue), msg.GetLong((short)7));
-            Assert.AreEqual((long)(intValue), msg.GetLong((short)8));
+            Assert2.AreEqual((long)(intValue), msg.GetLong((short)7));
+            Assert2.AreEqual((long)(intValue), msg.GetLong((short)8));
 
             long longValue = ((long)int.MaxValue) + 5;
-            Assert.AreEqual(longValue, msg.GetLong((short)9));
-            Assert.AreEqual(longValue, msg.GetLong((short)10));
+            Assert2.AreEqual(longValue, msg.GetLong((short)9));
+            Assert2.AreEqual(longValue, msg.GetLong((short)10));
 
-            Assert.AreEqual(0, msg.GetLong((short)11));
-            Assert.AreEqual(0, msg.GetLong((short)12));
-            Assert.AreEqual(0, msg.GetLong((short)13));
-            Assert.AreEqual(0, msg.GetLong((short)14));
+            Assert2.AreEqual(0, msg.GetLong((short)11));
+            Assert2.AreEqual(0, msg.GetLong((short)12));
+            Assert2.AreEqual(0, msg.GetLong((short)13));
+            Assert2.AreEqual(0, msg.GetLong((short)14));
         }
 
         [Test]
@@ -278,8 +280,8 @@ namespace FudgeMessage.Tests.Unit
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
             byte[] bytes = msg.ToByteArray();
-            Assert.NotNull(bytes);
-            Assert.True(bytes.Length > 10);
+            Assert2.NotNull(bytes);
+            Assert2.True(bytes.Length > 10);
         }
 
         [Test]
@@ -288,24 +290,24 @@ namespace FudgeMessage.Tests.Unit
             FudgeMsg msg = new FudgeMsg();
 
             msg.Add("test", (long)5);
-            Assert.AreEqual((long)5, msg.GetLong("test"));
+            Assert2.AreEqual((long)5, msg.GetLong("test"));
         }
 
         [Test]
         public void FixedLengthByteArrays()
         {
             FudgeMsg msg = StandardFudgeMessages.CreateMessageAllByteArrayLengths(fudgeContext);
-            Assert.AreEqual(ByteArrayFieldType.Length4Instance, msg.GetByName("byte[4]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length8Instance, msg.GetByName("byte[8]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length16Instance, msg.GetByName("byte[16]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length20Instance, msg.GetByName("byte[20]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length32Instance, msg.GetByName("byte[32]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length64Instance, msg.GetByName("byte[64]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length128Instance, msg.GetByName("byte[128]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length256Instance, msg.GetByName("byte[256]").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length512Instance, msg.GetByName("byte[512]").Type);
+            ClassicAssert.AreEqual(ByteArrayFieldType.Length4Instance, msg.GetByName("byte[4]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length8Instance, msg.GetByName("byte[8]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length16Instance, msg.GetByName("byte[16]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length20Instance, msg.GetByName("byte[20]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length32Instance, msg.GetByName("byte[32]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length64Instance, msg.GetByName("byte[64]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length128Instance, msg.GetByName("byte[128]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length256Instance, msg.GetByName("byte[256]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length512Instance, msg.GetByName("byte[512]").Type);
 
-            Assert.AreEqual(ByteArrayFieldType.VariableSizedInstance, msg.GetByName("byte[28]").Type);
+            Assert2.AreEqual(ByteArrayFieldType.VariableSizedInstance, msg.GetByName("byte[28]").Type);
         }
 
         [Test]
@@ -314,7 +316,7 @@ namespace FudgeMessage.Tests.Unit
             FudgeMsg msg = new FudgeMsg();
             msg.Add("int?", 17);
 
-            Assert.AreEqual(PrimitiveFieldTypes.SByteType, msg.GetByName("int?").Type);
+            Assert2.AreEqual(PrimitiveFieldTypes.SByteType, msg.GetByName("int?").Type);
         }
 
         [Test]
@@ -324,10 +326,10 @@ namespace FudgeMessage.Tests.Unit
             var msg = fudgeContext.NewMessage(); ;
             msg.Add("guid", guid);
 
-            Assert.AreEqual(ByteArrayFieldType.Length16Instance, msg.GetByName("guid").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length16Instance, msg.GetByName("guid").Type);
 
             Guid guid2 = msg.GetValue<Guid>("guid");
-            Assert.AreEqual(guid, guid2);
+            Assert2.AreEqual(guid, guid2);
         }
 
         [Test]
@@ -340,14 +342,14 @@ namespace FudgeMessage.Tests.Unit
             msg.Add("ipv6", ipv6Address);
             msg.Add("ipv4", ipv4Address);
 
-            Assert.AreEqual(ByteArrayFieldType.Length16Instance, msg.GetByName("ipv6").Type);
-            Assert.AreEqual(ByteArrayFieldType.Length4Instance, msg.GetByName("ipv4").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length16Instance, msg.GetByName("ipv6").Type);
+            Assert2.AreEqual(ByteArrayFieldType.Length4Instance, msg.GetByName("ipv4").Type);
 
             var ipv6_2 = msg.GetValue<IPAddress>("ipv6");
             var ipv4_2 = msg.GetValue<IPAddress>("ipv4");
 
-            Assert.AreEqual(ipv6Address, ipv6_2);
-            Assert.AreEqual(ipv4Address, ipv4_2);
+            Assert2.AreEqual(ipv6Address, ipv6_2);
+            Assert2.IsTrue(ipv4Address.AreObjectsEqual(ipv4_2, new string[] { "ScopeId" }));  // According to .NET specification, ScopeId is not supported for IP4.  Ignore this roperty.
         }
 
         [Test]
@@ -358,11 +360,11 @@ namespace FudgeMessage.Tests.Unit
             var msg = fudgeContext.NewMessage();
             msg.Add("uri", uri);
 
-            Assert.AreEqual(StringFieldType.Instance, msg.GetByName("uri").Type);
+            Assert2.AreEqual(StringFieldType.Instance, msg.GetByName("uri").Type);
 
             var uri2 = msg.GetValue<Uri>("uri");
 
-            Assert.AreEqual(uri, uri2);
+            Assert2.AreEqual(uri, uri2);
         }
 
         [Test]
@@ -374,7 +376,7 @@ namespace FudgeMessage.Tests.Unit
             {
                 fieldCount++;
             }
-            Assert.AreEqual(msg.GetNumFields(), fieldCount);
+            Assert2.AreEqual(msg.GetNumFields(), fieldCount);
         }
 
         [Test]
@@ -386,7 +388,7 @@ namespace FudgeMessage.Tests.Unit
             {
                 fieldCount++;
             }
-            Assert.AreEqual(msg.GetNumFields(), fieldCount);
+            Assert2.AreEqual(msg.GetNumFields(), fieldCount);
         }
 
         [Test]
@@ -397,15 +399,15 @@ namespace FudgeMessage.Tests.Unit
             // Add a normal sub-message (shouldn't copy)
             IFudgeFieldContainer sub1 = new FudgeMsg(new Field("age", 37));
             msg.Add("sub1", sub1);
-            Assert.AreEqual(sub1, msg.GetValue("sub1"));
+            Assert2.AreEqual(sub1, msg.GetValue("sub1"));
 
             // Add a sub-message that isn't a FudgeMsg (should copy)
             IFudgeFieldContainer sub2 = (IFudgeFieldContainer)new Field("dummy", new Field("colour", "blue")).Value;
             Assert2.IsNotType<FudgeMsg>(sub2);       // Just making sure
             msg.Add("sub2", sub2);
-            Assert.AreNotSame(sub2, msg.GetValue("sub2"));
+            Assert2.AreNotSame(sub2, msg.GetValue("sub2"));
             Assert2.IsType<FudgeMsg>(msg.GetValue("sub2"));
-            Assert.AreEqual("blue", msg.GetMessage("sub2").GetString("colour"));
+            Assert2.AreEqual("blue", msg.GetMessage("sub2").GetString("colour"));
         }
 
         [Test]
@@ -416,18 +418,18 @@ namespace FudgeMessage.Tests.Unit
             msg.Add("bar", 17);
             msg.Add("foo", 2);      // Deliberately do a duplicate
             var names = msg.GetAllFieldNames();
-            Assert.AreEqual(2, names.Count);
-            Assert.Contains("foo", names.ToArray());
-            Assert.Contains("bar", names.ToArray());
+            Assert2.AreEqual(2, names.Count);
+            Assert2.Contains("foo", names.ToArray());
+            Assert2.Contains("bar", names.ToArray());
         }
 
         [Test]
         public void GetMessageMethodsFRN5()
         {
             var msg = StandardFudgeMessages.CreateMessageWithSubMsgs(fudgeContext);
-            Assert.Null(msg.GetMessage(42));
-            Assert.Null(msg.GetMessage("No Such Field"));
-            Assert.True(msg.GetMessage("sub1") is IFudgeFieldContainer);
+            Assert2.Null(msg.GetMessage(42));
+            Assert2.Null(msg.GetMessage("No Such Field"));
+            Assert2.True(msg.GetMessage("sub1") is IFudgeFieldContainer);
         }
     }
 }

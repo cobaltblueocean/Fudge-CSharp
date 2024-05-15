@@ -79,27 +79,55 @@ namespace FudgeMessage.Util
         {
             while (!aborted && reader.HasNext)
             {
-                switch (reader.MoveNext())
+                var element = reader.MoveNext();
+                if (element != null)
                 {
-                    case FudgeStreamElement.MessageStart:
+                    if (element == FudgeStreamElement.MessageStart)
+                    {
                         writer.StartMessage();
-                        break;
-                    case FudgeStreamElement.MessageEnd:
+                    }
+                    else if (element == FudgeStreamElement.MessageEnd)
+                    {
                         writer.EndMessage();
                         FireMessageProcessed();
                         return;                 // We're done now
-                    case FudgeStreamElement.SimpleField:
+                    }
+                    else if (element == FudgeStreamElement.SimpleField)
+                    {
                         writer.WriteField(reader.FieldName, reader.FieldOrdinal, reader.FieldType, reader.FieldValue);
-                        break;
-                    case FudgeStreamElement.SubmessageFieldStart:
+                    }
+                    else if (element == FudgeStreamElement.SubmessageFieldStart)
+                    {
                         writer.StartSubMessage(reader.FieldName, reader.FieldOrdinal);
-                        break;
-                    case FudgeStreamElement.SubmessageFieldEnd:
+                    }
+                    else if (element == FudgeStreamElement.SubmessageFieldEnd)
+                    {
                         writer.EndSubMessage();
-                        break;
-                    default:
-                        break;      // Unknown
+                    }
+
                 }
+
+                //switch (reader.MoveNext())
+                //{
+                //    case FudgeStreamElement.MessageStart:
+                //        writer.StartMessage();
+                //        break;
+                //    case FudgeStreamElement.MessageEnd:
+                //        writer.EndMessage();
+                //        FireMessageProcessed();
+                //        return;                 // We're done now
+                //    case FudgeStreamElement.SimpleField:
+                //        writer.WriteField(reader.FieldName, reader.FieldOrdinal, reader.FieldType, reader.FieldValue);
+                //        break;
+                //    case FudgeStreamElement.SubmessageFieldStart:
+                //        writer.StartSubMessage(reader.FieldName, reader.FieldOrdinal);
+                //        break;
+                //    case FudgeStreamElement.SubmessageFieldEnd:
+                //        writer.EndSubMessage();
+                //        break;
+                //    default:
+                //        break;      // Unknown
+                //}
             }
         }
 

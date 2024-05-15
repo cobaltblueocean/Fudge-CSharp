@@ -25,9 +25,11 @@ using FudgeMessage.Encodings;
 using System.IO;
 using FudgeMessage;
 using FudgeMessage.Types;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class PropertyBasedSerializationSurrogateTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -41,7 +43,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
         [Test]
         public void SimpleExample()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(SimpleExampleClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(SimpleExampleClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -50,15 +52,15 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (SimpleExampleClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreEqual(obj1.Name, obj2.Name);
-            Assert.AreEqual(obj1.Age, obj2.Age);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreEqual(obj1.Name, obj2.Name);
+            Assert2.AreEqual(obj1.Age, obj2.Age);
         }
 
         [Test]
         public void SecondaryTypes()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(SecondaryTypeClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(SecondaryTypeClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -67,14 +69,14 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (SecondaryTypeClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreEqual(obj1.Id, obj2.Id);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreEqual(obj1.Id, obj2.Id);
         }
 
         [Test]
         public void PrimitiveLists()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(PrimitiveListClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(PrimitiveListClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -85,20 +87,20 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
 
             // Check the serialized format
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("Names").Type);
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("Names").Type);
             var listMsg = msg.GetMessage("Names");
-            Assert.AreEqual("FudgeMsg[ => Fred,  => Sheila]", listMsg.ToString());
+            Assert2.AreEqual("FudgeMsg[ => Fred,  => Sheila]", listMsg.ToString());
 
             var obj2 = (PrimitiveListClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreEqual(obj1.Names, obj2.Names);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreEqual(obj1.Names, obj2.Names);
         }
 
         [Test]
         public void SubObjects()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(SubObjectClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(SubObjectClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -109,15 +111,15 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (SubObjectClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreNotSame(obj1.Sub, obj2.Sub);
-            Assert.AreEqual(obj1.Sub.Name, obj2.Sub.Name);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreNotSame(obj1.Sub, obj2.Sub);
+            Assert2.AreEqual(obj1.Sub.Name, obj2.Sub.Name);
         }
 
         [Test]
         public void ListOfSubObjects()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(ListOfObjectsClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(ListOfObjectsClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -127,15 +129,15 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (ListOfObjectsClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreNotSame(obj1.Subs[0], obj2.Subs[0]);
-            Assert.AreEqual(obj1.Subs[0].Name, obj2.Subs[0].Name);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreNotSame(obj1.Subs[0], obj2.Subs[0]);
+            Assert2.AreEqual(obj1.Subs[0].Name, obj2.Subs[0].Name);
         }
 
         [Test]
         public void ArrayOfSubObjects()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(ArrayOfObjectsClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(ArrayOfObjectsClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -145,15 +147,15 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (ArrayOfObjectsClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreNotSame(obj1.Subs[0], obj2.Subs[0]);
-            Assert.AreEqual(obj1.Subs[0].Name, obj2.Subs[0].Name);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreNotSame(obj1.Subs[0], obj2.Subs[0]);
+            Assert2.AreEqual(obj1.Subs[0].Name, obj2.Subs[0].Name);
         }
 
         [Test]
         public void ListOfArrays()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(ListOfArraysClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(ListOfArraysClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -164,15 +166,15 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (ListOfArraysClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreNotSame(obj1.List[0], obj2.List[0]);
-            Assert.AreEqual(obj1.List[0], obj2.List[0]);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreNotSame(obj1.List[0], obj2.List[0]);
+            Assert2.AreEqual(obj1.List[0], obj2.List[0]);
         }
 
         [Test]
         public void Dictionaries()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(DictionaryClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(DictionaryClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -184,23 +186,23 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (DictionaryClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreNotSame(obj1.Map, obj2.Map);
-            Assert.AreEqual(obj1.Map["Fred"], obj2.Map["Fred"]);
-            Assert.AreEqual(obj1.Map["Jemima"], obj2.Map["Jemima"]);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreNotSame(obj1.Map, obj2.Map);
+            Assert2.AreEqual(obj1.Map["Fred"], obj2.Map["Fred"]);
+            Assert2.AreEqual(obj1.Map["Jemima"], obj2.Map["Jemima"]);
         }
 
         [Test]
         public void UnhandleableCases()
         {
-            Assert.False(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(NoDefaultConstructorClass)));
-            Assert.False(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(NoSetterClass)));
+            Assert2.False(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(NoDefaultConstructorClass)));
+            Assert2.False(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(NoSetterClass)));
         }
 
         [Test]
         public void StaticAndTransient()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(StaticTransientClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(StaticTransientClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
@@ -212,30 +214,30 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             StaticTransientClass.Static = 19;
             var obj2 = (StaticTransientClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreEqual(null, obj2.Transient);
-            Assert.AreEqual(19, StaticTransientClass.Static);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreEqual(null, obj2.Transient);
+            Assert2.AreEqual(19, StaticTransientClass.Static);
         }
 
         [Test]
         public void RenamingFields()
         {
-            Assert.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(RenameFieldClass)));
+            Assert2.True(PropertyBasedSerializationSurrogate.CanHandle(typeDataCache, FudgeFieldNameConvention.Identity, typeof(RenameFieldClass)));
 
             var serializer = new FudgeSerializer(context);      // We're relying on it auto-discovering the type surrogate
 
             var obj1 = new RenameFieldClass { Name = "Albert", Age = 72 };
 
             var msg = serializer.SerializeToMsg(obj1);
-            Assert.Null(msg.GetString("Name"));
-            Assert.AreEqual("Albert", msg.GetString("nom"));
-            Assert.AreEqual(72, msg.GetInt("Age"));
+            Assert2.Null(msg.GetString("Name"));
+            Assert2.AreEqual("Albert", msg.GetString("nom"));
+            Assert2.AreEqual(72, msg.GetInt("Age"));
 
             var obj2 = (RenameFieldClass)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj1, obj2);
-            Assert.AreEqual(obj1.Name, obj2.Name);
-            Assert.AreEqual(obj1.Age, obj2.Age);
+            Assert2.AreNotSame(obj1, obj2);
+            Assert2.AreEqual(obj1.Name, obj2.Name);
+            Assert2.AreEqual(obj1.Age, obj2.Age);
         }
 
         [Test]
@@ -245,10 +247,10 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var serializer = new FudgeSerializer(context);
             
             var msg = serializer.SerializeToMsg(obj1);
-            Assert.NotNull(msg.GetByName("MYNAME"));
+            Assert2.NotNull(msg.GetByName("MYNAME"));
             
             var obj2 = (FieldConventionAttributeClass)serializer.Deserialize(msg);
-            Assert.AreEqual(obj1.MyName, obj2.MyName);
+            Assert2.AreEqual(obj1.MyName, obj2.MyName);
         }
 
         [Test]
@@ -261,47 +263,47 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             // Default is identity
             serializer = new FudgeSerializer(context);
-            Assert.AreEqual(FudgeFieldNameConvention.Identity, serializer.TypeMap.FieldNameConvention);
+            Assert2.AreEqual(FudgeFieldNameConvention.Identity, serializer.TypeMap.FieldNameConvention);
             msg = serializer.SerializeToMsg(obj1);
-            Assert.AreEqual("Bobby", msg.GetString("MyName"));
-            Assert.AreEqual(6, msg.GetInt("myAge"));
-            Assert.AreEqual(obj1, serializer.Deserialize(msg));
+            Assert2.AreEqual("Bobby", msg.GetString("MyName"));
+            Assert2.AreEqual(6, msg.GetInt("myAge"));
+            Assert2.AreEqual(obj1, serializer.Deserialize(msg));
 
             context.SetProperty(ContextProperties.FieldNameConventionProperty, FudgeFieldNameConvention.AllLowerCase);
             serializer = new FudgeSerializer(context);
             msg = serializer.SerializeToMsg(obj1);
-            Assert.AreEqual("Bobby", msg.GetString("myname"));
-            Assert.AreEqual(6, msg.GetInt("myage"));
-            Assert.AreEqual(obj1, serializer.Deserialize(msg));
+            Assert2.AreEqual("Bobby", msg.GetString("myname"));
+            Assert2.AreEqual(6, msg.GetInt("myage"));
+            Assert2.AreEqual(obj1, serializer.Deserialize(msg));
 
             context.SetProperty(ContextProperties.FieldNameConventionProperty, FudgeFieldNameConvention.AllUpperCase);
             serializer = new FudgeSerializer(context);
             msg = serializer.SerializeToMsg(obj1);
-            Assert.AreEqual("Bobby", msg.GetString("MYNAME"));
-            Assert.AreEqual(6, msg.GetInt("MYAGE"));
-            Assert.AreEqual(obj1, serializer.Deserialize(msg));
+            Assert2.AreEqual("Bobby", msg.GetString("MYNAME"));
+            Assert2.AreEqual(6, msg.GetInt("MYAGE"));
+            Assert2.AreEqual(obj1, serializer.Deserialize(msg));
 
             context.SetProperty(ContextProperties.FieldNameConventionProperty, FudgeFieldNameConvention.CamelCase);
             serializer = new FudgeSerializer(context);
             msg = serializer.SerializeToMsg(obj1);
-            Assert.AreEqual("Bobby", msg.GetString("myName"));
-            Assert.AreEqual(6, msg.GetInt("myAge"));
-            Assert.AreEqual(obj1, serializer.Deserialize(msg));
+            Assert2.AreEqual("Bobby", msg.GetString("myName"));
+            Assert2.AreEqual(6, msg.GetInt("myAge"));
+            Assert2.AreEqual(obj1, serializer.Deserialize(msg));
 
             context.SetProperty(ContextProperties.FieldNameConventionProperty, FudgeFieldNameConvention.PascalCase);
             serializer = new FudgeSerializer(context);
             msg = serializer.SerializeToMsg(obj1);
-            Assert.AreEqual("Bobby", msg.GetString("MyName"));
-            Assert.AreEqual(6, msg.GetInt("MyAge"));
-            Assert.AreEqual(obj1, serializer.Deserialize(msg));
+            Assert2.AreEqual("Bobby", msg.GetString("MyName"));
+            Assert2.AreEqual(6, msg.GetInt("MyAge"));
+            Assert2.AreEqual(obj1, serializer.Deserialize(msg));
         }
 
         [Test]
         public void ConstuctorRangeChecking()
         {
-            Assert.Throws<ArgumentNullException>(() => new PropertyBasedSerializationSurrogate(null, typeDataCache.GetTypeData(typeof(SimpleExampleClass), FudgeFieldNameConvention.Identity)));
-            Assert.Throws<ArgumentNullException>(() => new PropertyBasedSerializationSurrogate(context, null));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PropertyBasedSerializationSurrogate(context, typeDataCache.GetTypeData(typeof(NoDefaultConstructorClass), FudgeFieldNameConvention.Identity)));
+            Assert2.ThrowsException<ArgumentNullException>(() => new PropertyBasedSerializationSurrogate(null, typeDataCache.GetTypeData(typeof(SimpleExampleClass), FudgeFieldNameConvention.Identity)));
+            Assert2.ThrowsException<ArgumentNullException>(() => new PropertyBasedSerializationSurrogate(context, null));
+            Assert2.ThrowsException<ArgumentOutOfRangeException>(() => new PropertyBasedSerializationSurrogate(context, typeDataCache.GetTypeData(typeof(NoDefaultConstructorClass), FudgeFieldNameConvention.Identity)));
         }
 
         public class SimpleExampleClass

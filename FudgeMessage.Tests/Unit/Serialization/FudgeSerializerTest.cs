@@ -24,9 +24,11 @@ using FudgeMessage.Encodings;
 using System.Diagnostics;
 using FudgeMessage;
 using FudgeMessage.Types;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeSerializerTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -70,9 +72,9 @@ namespace FudgeMessage.Tests.Unit.Serialization
 
             var address2 = (Explicit.Address)serializer.Deserialize(msg);
 
-            Assert.AreEqual(address.Line1, address2.Line1);
-            Assert.AreEqual(address.Line2, address2.Line2);
-            Assert.AreEqual(address.Zip, address2.Zip);
+            Assert2.AreEqual(address.Line1, address2.Line1);
+            Assert2.AreEqual(address.Line2, address2.Line2);
+            Assert2.AreEqual(address.Zip, address2.Zip);
         }
 
         [Test]
@@ -87,9 +89,9 @@ namespace FudgeMessage.Tests.Unit.Serialization
 
             var tick2 = (Explicit.Tick)serializer.Deserialize(msg);
 
-            Assert.AreEqual(tick.Ticker, tick2.Ticker);
-            Assert.AreEqual(tick.Bid, tick2.Bid);
-            Assert.AreEqual(tick.Offer, tick2.Offer);
+            Assert2.AreEqual(tick.Ticker, tick2.Ticker);
+            Assert2.AreEqual(tick.Bid, tick2.Bid);
+            Assert2.AreEqual(tick.Offer, tick2.Offer);
         }
 
         [Test]
@@ -104,8 +106,8 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var msg = serializer.SerializeToMsg(person);
 
             var person2 = (Explicit.Person)serializer.Deserialize(msg);
-            Assert.AreNotSame(person.MainAddress, person2.MainAddress);
-            Assert.AreEqual(person.MainAddress.Line1, person2.MainAddress.Line1);
+            Assert2.AreNotSame(person.MainAddress, person2.MainAddress);
+            Assert2.AreEqual(person.MainAddress.Line1, person2.MainAddress.Line1);
         }
 
         [Test]
@@ -123,10 +125,10 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var msg = serializer.SerializeToMsg(bob);
 
             var bob2 = (Explicit.Sibling)serializer.Deserialize(msg);
-            Assert.AreNotSame(bob, bob2);
-            Assert.AreEqual(1, bob2.Siblings.Count);
-            Assert.AreNotSame(shirley, bob2.Siblings[0]);
-            Assert.AreEqual("Shirley", bob2.Siblings[0].Name);
+            Assert2.AreNotSame(bob, bob2);
+            Assert2.AreEqual(1, bob2.Siblings.Count);
+            Assert2.AreNotSame(shirley, bob2.Siblings[0]);
+            Assert2.AreEqual("Shirley", bob2.Siblings[0].Name);
         }
 
         [Test]
@@ -145,12 +147,12 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var msg = serializer.SerializeToMsg(bob);
 
             var bob2 = (Explicit.Sibling)serializer.Deserialize(msg);
-            Assert.AreNotSame(bob, bob2);
-            Assert.AreEqual(1, bob2.Siblings.Count);
+            Assert2.AreNotSame(bob, bob2);
+            Assert2.AreEqual(1, bob2.Siblings.Count);
             var shirley2 = (Explicit.Sibling)bob2.Siblings[0];
-            Assert.AreNotSame(shirley, shirley2);
-            Assert.AreEqual(1, shirley2.Siblings.Count);
-            Assert.AreEqual(bob2, shirley2.Siblings[0]);
+            Assert2.AreNotSame(shirley, shirley2);
+            Assert2.AreEqual(1, shirley2.Siblings.Count);
+            Assert2.AreEqual(bob2, shirley2.Siblings[0]);
         }
 
         [Test]
@@ -163,9 +165,9 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var msg = serializer.SerializeToMsg(bob);
 
             var typeNames = msg.GetAllValues<string>(FudgeSerializer.TypeIdFieldOrdinal);
-            Assert.AreEqual(2, typeNames.Count);
-            Assert.AreEqual("FudgeMessage.Tests.Unit.Serialization.Explicit+Sibling", typeNames[0]);
-            Assert.AreEqual("FudgeMessage.Tests.Unit.Serialization.Explicit+Person", typeNames[1]);
+            Assert2.AreEqual(2, typeNames.Count);
+            Assert2.AreEqual("FudgeMessage.Tests.Unit.Serialization.Explicit+Sibling", typeNames[0]);
+            Assert2.AreEqual("FudgeMessage.Tests.Unit.Serialization.Explicit+Person", typeNames[1]);
         }
 
         [Test]
@@ -177,7 +179,7 @@ namespace FudgeMessage.Tests.Unit.Serialization
                                          new Field(0, "FudgeMessage.Tests.Unit.Serialization.Explicit+Sibling"),
                                          new Field("name", "Bob"));
             var bob = (Explicit.Sibling)serializer.Deserialize(msg);
-            Assert.AreEqual("Bob", bob.Name);
+            Assert2.AreEqual("Bob", bob.Name);
         }
 
         [Test]
@@ -190,12 +192,12 @@ namespace FudgeMessage.Tests.Unit.Serialization
 
             var msg = serializer.SerializeToMsg(parent);
 
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("In1").Type);
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("In2").Type);
-            Assert.AreEqual(PrimitiveFieldTypes.SByteType, msg.GetByName("In1ForcedOut").Type);     // References In1 and collapses to byte
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("Out1").Type);
-            Assert.AreEqual(PrimitiveFieldTypes.SByteType, msg.GetByName("Out2").Type);            // References Out1
-            Assert.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("Out2ForcedIn").Type);
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("In1").Type);
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("In2").Type);
+            Assert2.AreEqual(PrimitiveFieldTypes.SByteType, msg.GetByName("In1ForcedOut").Type);     // References In1 and collapses to byte
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("Out1").Type);
+            Assert2.AreEqual(PrimitiveFieldTypes.SByteType, msg.GetByName("Out2").Type);            // References Out1
+            Assert2.AreEqual(FudgeMsgFieldType.Instance, msg.GetByName("Out2ForcedIn").Type);
         }
 
         [Test]
@@ -215,12 +217,12 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var msg = serializer.SerializeToMsg(parent);
             var parent2 = (InlineParent)serializer.Deserialize(msg);
 
-            Assert.Null(parent2.In1);
-            Assert.NotNull(parent2.In2);
-            Assert.Null(parent2.In1ForcedOut);
-            Assert.Null(parent2.Out1);
-            Assert.NotNull(parent2.Out2);
-            Assert.NotNull(parent2.Out2ForcedIn);
+            Assert2.Null(parent2.In1);
+            Assert2.NotNull(parent2.In2);
+            Assert2.Null(parent2.In1ForcedOut);
+            Assert2.Null(parent2.Out1);
+            Assert2.NotNull(parent2.Out2);
+            Assert2.NotNull(parent2.Out2ForcedIn);
         }
 
         [Test]
@@ -239,8 +241,8 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var msg = serializer.SerializeToMsg(obj1);
 
             var result = (ClassWithMessageIn)serializer.Deserialize(msg);
-            Assert.AreNotSame(result, result.Other);
-            Assert.AreEqual(result, result.Other.Other);
+            Assert2.AreNotSame(result, result.Other);
+            Assert2.AreEqual(result, result.Other.Other);
         }
 
         [Test]
@@ -255,7 +257,7 @@ namespace FudgeMessage.Tests.Unit.Serialization
 
             var obj2 = (FRN65Class)serializer.Deserialize(msg);
 
-            Assert.AreNotSame(obj2, obj2.Other);
+            Assert2.AreNotSame(obj2, obj2.Other);
         }
 
         public class TemperatureRange

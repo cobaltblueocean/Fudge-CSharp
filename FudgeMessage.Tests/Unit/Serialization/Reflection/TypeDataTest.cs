@@ -25,6 +25,7 @@ using System.Diagnostics;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class TypeDataTest
     {
         [Test]

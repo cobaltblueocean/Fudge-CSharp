@@ -23,9 +23,11 @@ using FudgeMessage.Types;
 using System.IO;
 using FudgeMessage;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Types
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class TimeFieldTypeTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -47,7 +49,7 @@ namespace FudgeMessage.Tests.Unit.Types
             var writer = new FudgeBinaryWriter(stream);
             TimeFieldType.Instance.WriteValue(writer, t);
 
-            Assert.AreEqual("04-90-0e-8b-07-5b-cd-15", stream.ToArray().ToNiceString());   // 04 = timezone, 9 = accuracy, 00e8b = seconds, 075bcd15 = nanos 
+            Assert2.AreEqual("04-90-0e-8b-07-5b-cd-15", stream.ToArray().ToNiceString());   // 04 = timezone, 9 = accuracy, 00e8b = seconds, 075bcd15 = nanos 
         }
 
         private void Cycle(FudgeTime t)
@@ -56,7 +58,7 @@ namespace FudgeMessage.Tests.Unit.Types
             var bytes = msg1.ToByteArray();
             var msg2 = context.Deserialize(bytes).Message;
 
-            Assert.AreEqual(t, msg2.GetValue<FudgeTime>("t"));
+            Assert2.AreEqual(t, msg2.GetValue<FudgeTime>("t"));
         }
     }
 }

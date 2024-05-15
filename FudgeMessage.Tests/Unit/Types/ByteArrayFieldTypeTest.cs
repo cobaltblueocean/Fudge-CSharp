@@ -20,9 +20,11 @@ using System.Text;
 using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Types;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Types
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class ByteArrayFieldTypeTest
     {
         [Test]
@@ -34,18 +36,18 @@ namespace FudgeMessage.Tests.Unit.Types
 
             type = baType;
             data = new byte[4];
-            Assert.AreEqual(data, baType.Minimize(data, ref type));
-            Assert.AreEqual(ByteArrayFieldType.Length4Instance, type);
+            Assert2.AreEqual(data, baType.Minimize(data, ref type));
+            Assert2.AreEqual(ByteArrayFieldType.Length4Instance, type);
 
             type = baType;
             data = new byte[8];
-            Assert.AreEqual(data, baType.Minimize(data, ref type));
-            Assert.AreEqual(ByteArrayFieldType.Length8Instance, type);
+            Assert2.AreEqual(data, baType.Minimize(data, ref type));
+            Assert2.AreEqual(ByteArrayFieldType.Length8Instance, type);
 
             type = baType;
             data = new byte[512];
-            Assert.AreEqual(data, baType.Minimize(data, ref type));
-            Assert.AreEqual(ByteArrayFieldType.Length512Instance, type);
+            Assert2.AreEqual(data, baType.Minimize(data, ref type));
+            Assert2.AreEqual(ByteArrayFieldType.Length512Instance, type);
         }
 
         [Test]
@@ -55,10 +57,10 @@ namespace FudgeMessage.Tests.Unit.Types
             FudgeFieldType type = baType;
             byte[] data = new byte[0];
 
-            Assert.AreEqual(IndicatorType.Instance, baType.Minimize(data, ref type));
-            Assert.AreEqual(IndicatorFieldType.Instance, type);
+            Assert2.AreEqual(IndicatorType.Instance, baType.Minimize(data, ref type));
+            Assert2.AreEqual(IndicatorFieldType.Instance, type);
 
-            Assert.AreEqual(data, baType.ConvertValueFrom(IndicatorType.Instance));
+            Assert2.AreEqual(data, baType.ConvertValueFrom(IndicatorType.Instance));
         }
     }
 }

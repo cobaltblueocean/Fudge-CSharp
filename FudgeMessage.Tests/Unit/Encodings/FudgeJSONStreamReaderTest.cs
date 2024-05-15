@@ -26,6 +26,7 @@ using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Encodings
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeJSONStreamReaderTest
     {
         private FudgeContext context = new FudgeContext();
@@ -36,7 +37,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
 
             var msg = new FudgeJSONStreamReader(context, json).ReadMsg();
 
-            Assert.AreEqual("fred", msg.GetString("name"));
+            Assert2.AreEqual("fred", msg.GetString("name"));
         }
 
         [Test]
@@ -46,9 +47,9 @@ namespace FudgeMessage.Tests.Unit.Encodings
 
             var msg = new FudgeJSONStreamReader(context, json).ReadMsg();
 
-            Assert.AreEqual(1234, msg.GetInt("int"));
-            Assert.AreEqual(123.45, msg.GetDouble("float"));
-            Assert.AreEqual(-1234500, msg.GetDouble("exp"));
+            Assert2.AreEqual(1234, msg.GetInt("int"));
+            Assert2.AreEqual(123.45, msg.GetDouble("float"));
+            Assert2.AreEqual(-1234500, msg.GetDouble("exp"));
         }
 
         [Test]
@@ -58,8 +59,8 @@ namespace FudgeMessage.Tests.Unit.Encodings
 
             var msg = new FudgeJSONStreamReader(context, json).ReadMsg();
 
-            Assert.AreEqual(true, msg.GetBoolean("old"));
-            Assert.AreEqual(false, msg.GetBoolean("young"));
+            Assert2.AreEqual(true, msg.GetBoolean("old"));
+            Assert2.AreEqual(false, msg.GetBoolean("young"));
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
 
             var msg = new FudgeJSONStreamReader(context, json).ReadMsg();
 
-            Assert.AreEqual(IndicatorType.Instance, msg.GetByName("old").Value);
+            Assert2.AreEqual(IndicatorType.Instance, msg.GetByName("old").Value);
         }
 
         [Test]
@@ -80,9 +81,9 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var msg = new FudgeJSONStreamReader(context, json).ReadMsg();
 
             var inner = msg.GetMessage("inner");
-            Assert.NotNull(inner);
-            Assert.AreEqual(3, inner.GetInt("a"));
-            Assert.AreEqual(17.3, inner.GetDouble("b"));
+            Assert2.NotNull(inner);
+            Assert2.AreEqual(3, inner.GetInt("a"));
+            Assert2.AreEqual(17.3, inner.GetDouble("b"));
         }
 
         [Test]
@@ -93,16 +94,16 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var msg = new FudgeJSONStreamReader(context, json).ReadMsg();
 
             var numbers = msg.GetAllByName("numbers");
-            Assert.AreEqual(3, numbers.Count);                 // REVIEW 2009-12-18 t0rx -- Should JSON arrays collapse to primitive arrays where possible?
-            Assert.AreEqual(1, (sbyte)numbers[0].Value);
-            Assert.AreEqual(2, (sbyte)numbers[1].Value);
-            Assert.AreEqual(4, (sbyte)numbers[2].Value);
+            Assert2.AreEqual(3, numbers.Count);                 // REVIEW 2009-12-18 t0rx -- Should JSON arrays collapse to primitive arrays where possible?
+            Assert2.AreEqual(1, (sbyte)numbers[0].Value);
+            Assert2.AreEqual(2, (sbyte)numbers[1].Value);
+            Assert2.AreEqual(4, (sbyte)numbers[2].Value);
 
             var messages = msg.GetAllByName("submsgs");
-            Assert.AreEqual(2, messages.Count);
+            Assert2.AreEqual(2, messages.Count);
             Assert2.IsType<FudgeMsg>(messages[1].Value);
             var message2 = (FudgeMsg)messages[1].Value;
-            Assert.AreEqual(28, (sbyte)message2.GetInt("b"));
+            Assert2.AreEqual(28, (sbyte)message2.GetInt("b"));
         }
 
         [Test]
@@ -112,24 +113,24 @@ namespace FudgeMessage.Tests.Unit.Encodings
 
             var msg = new FudgeJSONStreamReader(context, json).ReadMsg();
 
-            Assert.AreEqual("fred", msg.GetString("name"));
+            Assert2.AreEqual("fred", msg.GetString("name"));
         }
 
         [Test]
         public void BadToken()
         {
             string json = @"{""old"" : ajshgd}";
-            Assert.Throws<FudgeParseException>(() => { new FudgeJSONStreamReader(context, json).ReadMsg(); });
+            Assert2.ThrowsException<FudgeParseException>(() => { new FudgeJSONStreamReader(context, json).ReadMsg(); });
 
             json = @"{abcd : 16}";      // Field names must be quoted
-            Assert.Throws<FudgeParseException>(() => { new FudgeJSONStreamReader(context, json).ReadMsg(); });
+            Assert2.ThrowsException<FudgeParseException>(() => { new FudgeJSONStreamReader(context, json).ReadMsg(); });
         }
 
         [Test]
         public void PrematureEOF()
         {
             string json = @"{""old"" : ";
-            Assert.Throws<FudgeParseException>(() => { new FudgeJSONStreamReader(context, json).ReadMsg(); });
+            Assert2.ThrowsException<FudgeParseException>(() => { new FudgeJSONStreamReader(context, json).ReadMsg(); });
         }
 
         [Test]
@@ -140,9 +141,9 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var writer = new FudgeMsgStreamWriter();
             new FudgeStreamPipe(reader, writer).Process();
 
-            Assert.AreEqual(2, writer.PeekAllMessages().Count);
-            Assert.AreEqual("fred", writer.DequeueMessage().GetString("name"));
-            Assert.AreEqual(17, writer.DequeueMessage().GetInt("number"));
+            Assert2.AreEqual(2, writer.PeekAllMessages().Count);
+            Assert2.AreEqual("fred", writer.DequeueMessage().GetString("name"));
+            Assert2.AreEqual(17, writer.DequeueMessage().GetInt("number"));
         }
 
         [Test]

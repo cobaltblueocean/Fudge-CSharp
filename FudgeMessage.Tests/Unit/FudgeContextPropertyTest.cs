@@ -19,25 +19,27 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using FudgeMessage;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeContextPropertyTest
     {
         [Test]
         public void TypeValidation()
         {
             var prop = new FudgeContextProperty("test", typeof(string));
-            Assert.True(prop.IsValidValue("fred"));
-            Assert.False(prop.IsValidValue(17));
+            Assert2.True(prop.IsValidValue("fred"));
+            Assert2.False(prop.IsValidValue(17));
         }
 
         [Test]
         public void InheritedTypes()
         {
             var prop = new FudgeContextProperty("test", typeof(object));
-            Assert.True(prop.IsValidValue(new object()));
-            Assert.True(prop.IsValidValue(new FudgeContextPropertyTest()));
+            Assert2.True(prop.IsValidValue(new object()));
+            Assert2.True(prop.IsValidValue(new FudgeContextPropertyTest()));
         }
     }
 }

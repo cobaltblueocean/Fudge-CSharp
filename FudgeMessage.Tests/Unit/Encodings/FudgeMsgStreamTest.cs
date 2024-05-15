@@ -23,9 +23,11 @@ using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Encodings;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Encodings
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeMsgStreamTest
     {
         [Test]
@@ -58,7 +60,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var pipe = new FudgeStreamPipe(reader, writer);
             pipe.Process();
 
-            Assert.AreEqual(2, writer.PeekAllMessages().Count);
+            Assert2.AreEqual(2, writer.PeekAllMessages().Count);
             FudgeUtils.AssertAllFieldsMatch(msg1, writer.DequeueMessage());
             FudgeUtils.AssertAllFieldsMatch(msg2, writer.DequeueMessage());
         }

@@ -26,9 +26,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Xml.Serialization;
 using FudgeMessage.Serialization.Reflection;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class DotNetSerializableSurrogateTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -41,10 +43,10 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var serializer = new FudgeSerializer(context);
             var msg = serializer.SerializeToMsg(obj1);
 
-            Assert.AreEqual("Test", msg.GetString("serializedVal"));
+            Assert2.AreEqual("Test", msg.GetString("serializedVal"));
 
             var obj2 = (SimpleTestClass)serializer.Deserialize(msg);
-            Assert.AreEqual("Test", obj2.Val);
+            Assert2.AreEqual("Test", obj2.Val);
         }
 
         // Logged this to deal with later as FRN-73
@@ -57,8 +59,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
         //    var msg = serializer.SerializeToMsg(obj1);
 
         //    var obj2 = (ClassWithIDeserializationCallback)serializer.Deserialize(msg);
-        //    Assert.AreEqual("Test2", obj2.Val);
-        //    Assert.True(obj2.OnDeserializationCalled);
+        //    Assert2.AreEqual("Test2", obj2.Val);
+        //    Assert2.True(obj2.OnDeserializationCalled);
         //}
 
         [Test]
@@ -70,8 +72,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
 
             var obj2 = (ClassWithInner)serializer.Deserialize(msg);
-            Assert.NotNull(obj2);
-            Assert.Null(obj2.Inner);
+            Assert2.NotNull(obj2);
+            Assert2.Null(obj2.Inner);
         }
 
         [Test]
@@ -84,8 +86,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             var obj2 = (ClassWithInner)serializer.Deserialize(msg);
 
-            Assert.NotNull(obj2.Inner);
-            Assert.AreNotSame(obj2, obj2.Inner);
+            Assert2.NotNull(obj2.Inner);
+            Assert2.AreNotSame(obj2, obj2.Inner);
         }
 
         [Test]
@@ -100,22 +102,22 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             var obj2 = (ClassWithSomeTypes)serializer.Deserialize(msg);
 
-            Assert.AreEqual(obj1.Array, obj2.Array);
+            Assert2.AreEqual(obj1.Array, obj2.Array);
 
             // Times are deserialized into UTC, so need to convert the source for comparison
-            Assert.AreEqual(obj1.DateTime.ToUniversalTime(), obj2.DateTime);
+            Assert2.AreEqual(obj1.DateTime.ToUniversalTime(), obj2.DateTime);
 
-            Assert.AreEqual(obj1.List, obj2.List);
-            Assert.AreEqual(obj1.String, obj2.String);
+            Assert2.AreEqual(obj1.List, obj2.List);
+            Assert2.AreEqual(obj1.String, obj2.String);
         }
 
         [Test]
         public void ConstructorArgChecking()
         {
             var typeData = new TypeData(context, new TypeDataCache(context), GetType(), FudgeFieldNameConvention.Identity);
-            Assert.Throws<ArgumentNullException>(() => new DotNetSerializableSurrogate(null, typeData));
-            Assert.Throws<ArgumentNullException>(() => new DotNetSerializableSurrogate(context, null));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new DotNetSerializableSurrogate(context, typeData));
+            Assert2.ThrowsException<ArgumentNullException>(() => new DotNetSerializableSurrogate(null, typeData));
+            Assert2.ThrowsException<ArgumentNullException>(() => new DotNetSerializableSurrogate(context, null));
+            Assert2.ThrowsException<ArgumentOutOfRangeException>(() => new DotNetSerializableSurrogate(context, typeData));
         }
 
 

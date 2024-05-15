@@ -20,6 +20,7 @@ using System.Text;
 using System.IO;
 using FudgeMessage.Encodings;
 using FudgeMessage.Util;
+using System.Diagnostics.Eventing.Reader;
 
 namespace FudgeMessage
 {
@@ -86,29 +87,48 @@ namespace FudgeMessage
             return envelope;
         }
 
-        /**
-         * @param reader
-         * @param msg
-         */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader">Fudge Stream Reader</param>
+        /// <param name="msg">The message</param>
         protected void ProcessFields(IFudgeStreamReader reader, FudgeMsg msg)
         {
             while (reader.HasNext)
             {
                 FudgeStreamElement element = reader.MoveNext();
-                switch (element)
+                if (element == FudgeStreamElement.SimpleField)
                 {
-                    case FudgeStreamElement.SimpleField:
-                        msg.Add(reader.FieldName, reader.FieldOrdinal, reader.FieldType, reader.FieldValue);
-                        break;
-                    case FudgeStreamElement.SubmessageFieldStart:
-                        FudgeMsg subMsg = FudgeContext.NewMessage();
-                        msg.Add(reader.FieldName, reader.FieldOrdinal, subMsg);
-                        ProcessFields(reader, subMsg);
-                        break;
-                    case FudgeStreamElement.SubmessageFieldEnd:
-                    case FudgeStreamElement.MessageEnd:
-                        return;
+                    msg.Add(reader.FieldName, reader.FieldOrdinal, reader.FieldType, reader.FieldValue);
                 }
+                else if (element == FudgeStreamElement.SubmessageFieldStart)
+                {
+                    FudgeMsg subMsg = FudgeContext.NewMessage();
+                    msg.Add(reader.FieldName, reader.FieldOrdinal, subMsg);
+                    ProcessFields(reader, subMsg);
+                }
+                else if (element == FudgeStreamElement.SubmessageFieldEnd)
+                {
+                    // do nothing
+                }
+                else if (element == FudgeStreamElement.MessageEnd)
+                {
+                    return;
+                }
+                //switch (element)
+                //{
+                //    case FudgeStreamElement.SimpleField:
+                //        msg.Add(reader.FieldName, reader.FieldOrdinal, reader.FieldType, reader.FieldValue);
+                //        break;
+                //    case FudgeStreamElement.SubmessageFieldStart:
+                //        FudgeMsg subMsg = FudgeContext.NewMessage();
+                //        msg.Add(reader.FieldName, reader.FieldOrdinal, subMsg);
+                //        ProcessFields(reader, subMsg);
+                //        break;
+                //    case FudgeStreamElement.SubmessageFieldEnd:
+                //    case FudgeStreamElement.MessageEnd:
+                //        return;
+                //}
             }
         }
     }

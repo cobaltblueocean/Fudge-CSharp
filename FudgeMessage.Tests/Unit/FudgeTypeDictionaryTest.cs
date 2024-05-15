@@ -20,9 +20,11 @@ using System.Text;
 using FudgeMessage;
 using FudgeMessage.Types;
 using NUnit.Framework;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeTypeDictionaryTest
     {
         [Test]
@@ -31,12 +33,12 @@ namespace FudgeMessage.Tests.Unit
             FudgeFieldType type = null;
 
             type = new FudgeTypeDictionary().GetByCSharpType(typeof(bool));
-            Assert.NotNull(type);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType.TypeId, type.TypeId);
+            Assert2.NotNull(type);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType.TypeId, type.TypeId);
 
             type = new FudgeTypeDictionary().GetByCSharpType(typeof(Boolean));
-            Assert.NotNull(type);
-            Assert.AreEqual(PrimitiveFieldTypes.BooleanType.TypeId, type.TypeId);
+            Assert2.NotNull(type);
+            Assert2.AreEqual(PrimitiveFieldTypes.BooleanType.TypeId, type.TypeId);
         }
     }
 }

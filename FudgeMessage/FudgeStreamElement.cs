@@ -25,21 +25,52 @@ namespace FudgeMessage
     /// <c>FudgeStreamElement</c> indicates the type of the next element in a Fudge data stream read from an
     /// <see cref="IFudgeStreamReader"/> or written to an <see cref="IFudgeStreamWriter"/>.
     /// </summary>
-    public enum FudgeStreamElement
+    public sealed class FudgeStreamElement
     {
-        /// <summary>Indicates stream has not current element.</summary>
-        MessageEnvelope,
-        /// <summary>Indicates Message Envelope.</summary>
-        NoElement,
-        /// <summary>Issued when a new outermost message is started.</summary>
-        MessageStart,
-        /// <summary>Issued when an outermost message is completed.</summary>
-        MessageEnd,
-        /// <summary>Issued when a simple (non-hierarchical) field is encountered.</summary>
-        SimpleField,
-        /// <summary>Issued when a sub-Message field is encountered.</summary>
-        SubmessageFieldStart,
-        /// <summary>Issued when the end of a sub-Message field is reached.</summary>
-        SubmessageFieldEnd
+        /// <summary>
+        /// Indicates stream has not current element.
+        /// </summary>
+        public static readonly FudgeStreamElement MessageEnvelope = new FudgeStreamElement("MessageEnvelope", "Indicates stream has not current element.");
+
+        /// <summary>
+        /// Indicates Message Envelope.
+        /// </summary>
+        public static readonly FudgeStreamElement NoElement = new FudgeStreamElement("NoElement", "Indicates Message Envelope.");
+
+        /// <summary>
+        /// Issued when a new outermost message is started.
+        /// </summary>
+        public static readonly FudgeStreamElement MessageStart = new FudgeStreamElement("MessageStart", "Issued when a new outermost message is started.");
+
+        /// <summary>
+        /// Issued when an outermost message is completed.
+        /// </summary>
+        public static readonly FudgeStreamElement MessageEnd = new FudgeStreamElement("MessageEnd", "Issued when an outermost message is completed.");
+
+        /// <summary>
+        /// Issued when a simple (non-hierarchical) field is encountered.
+        /// </summary>
+        public static readonly FudgeStreamElement SimpleField = new FudgeStreamElement("SimpleField", "Issued when a simple (non-hierarchical) field is encountered.");
+
+        /// <summary>
+        /// Issued when a sub-Message field is encountered.
+        /// </summary>
+        public static readonly FudgeStreamElement SubmessageFieldStart = new FudgeStreamElement("SubmessageFieldStart", "Issued when a sub-Message field is encountered.");
+
+        /// <summary>
+        /// Issued when the end of a sub-Message field is reached.
+        /// </summary>
+        public static readonly FudgeStreamElement SubmessageFieldEnd = new FudgeStreamElement("SubmessageFieldEnd", "Issued when the end of a sub-Message field is reached.");
+
+
+        private FudgeStreamElement(String name, String description)
+        {
+            Name = name;
+            Description = description;
+        }
+
+        public String Name { get; private set; }
+        public String Description { get; private set; }
     }
+
 }

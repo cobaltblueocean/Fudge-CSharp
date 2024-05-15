@@ -20,9 +20,11 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using FudgeMessage.Serialization;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class DefaultTypeMappingStrategyTest
     {
         [Test]
@@ -30,8 +32,8 @@ namespace FudgeMessage.Tests.Unit.Serialization
         {
             var mapper = new DefaultTypeMappingStrategy();
 
-            Assert.AreEqual("FudgeMessage.Tests.Unit.Serialization.DefaultTypeMappingStrategyTest", mapper.GetName(this.GetType()));
-            Assert.AreEqual(this.GetType(), mapper.GetType("FudgeMessage.Tests.Unit.Serialization.DefaultTypeMappingStrategyTest"));
+            Assert2.AreEqual("FudgeMessage.Tests.Unit.Serialization.DefaultTypeMappingStrategyTest", mapper.GetName(this.GetType()));
+            Assert2.AreEqual(this.GetType(), mapper.GetType("FudgeMessage.Tests.Unit.Serialization.DefaultTypeMappingStrategyTest"));
         }
 
         [Test]
@@ -39,7 +41,7 @@ namespace FudgeMessage.Tests.Unit.Serialization
         {
             var mapper = new DefaultTypeMappingStrategy();
 
-            Assert.Null(mapper.GetType("Bibble"));
+            Assert2.Null(mapper.GetType("Bibble"));
         }
     }
 }

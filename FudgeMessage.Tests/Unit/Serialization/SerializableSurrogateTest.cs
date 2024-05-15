@@ -21,9 +21,11 @@ using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization;
 using System.Reflection;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class SerializableSurrogateTest
     {
         [Test]
@@ -35,14 +37,14 @@ namespace FudgeMessage.Tests.Unit.Serialization
         [Test]
         public void ConstructorRangeChecking()
         {
-            Assert.Throws<ArgumentNullException>(() => new SerializableSurrogate(null));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new SerializableSurrogate(typeof(SerializableSurrogateTest)));
+            Assert2.ThrowsException<ArgumentNullException>(() => new SerializableSurrogate(null));
+            Assert2.ThrowsException<ArgumentOutOfRangeException>(() => new SerializableSurrogate(typeof(SerializableSurrogateTest)));
         }
 
         [Test]
         public void MakeSureHasDefaultConstructor()
         {
-            Assert.Throws<FudgeRuntimeException>(() =>
+            Assert2.ThrowsException<FudgeRuntimeException>(() =>
                 {
                     var surrogate = new SerializableSurrogate(typeof(Class1));
                 });
@@ -51,7 +53,7 @@ namespace FudgeMessage.Tests.Unit.Serialization
         [Test]
         public void MakeSureConstructorPublic()
         {
-            Assert.Throws<FudgeRuntimeException>(() =>
+            Assert2.ThrowsException<FudgeRuntimeException>(() =>
             {
                 var surrogate = new SerializableSurrogate(typeof(Class2));
             });

@@ -23,6 +23,7 @@ using FudgeMessage;
 
 namespace FudgeMessage.Tests.Unit
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeMsgFormatterTest
     {
         private static readonly FudgeContext fudgeContext = new FudgeContext();

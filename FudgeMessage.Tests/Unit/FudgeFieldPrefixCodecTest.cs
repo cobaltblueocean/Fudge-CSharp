@@ -19,48 +19,50 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using FudgeMessage;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeFieldPrefixCodecTest
     {
         [Test]
         public void FieldPrefixComposition()
         {
-            Assert.AreEqual(0x20, FudgeFieldPrefixCodec.ComposeFieldPrefix(false, 10, false, false));
-            Assert.AreEqual(0x40, FudgeFieldPrefixCodec.ComposeFieldPrefix(false, 1024, false, false));
-            Assert.AreEqual(0x60, FudgeFieldPrefixCodec.ComposeFieldPrefix(false, short.MaxValue + 1000, false, false));
-            Assert.AreEqual(0x98, FudgeFieldPrefixCodec.ComposeFieldPrefix(true, 0, true, true));
+            Assert2.AreEqual(0x20, FudgeFieldPrefixCodec.ComposeFieldPrefix(false, 10, false, false));
+            Assert2.AreEqual(0x40, FudgeFieldPrefixCodec.ComposeFieldPrefix(false, 1024, false, false));
+            Assert2.AreEqual(0x60, FudgeFieldPrefixCodec.ComposeFieldPrefix(false, short.MaxValue + 1000, false, false));
+            Assert2.AreEqual(0x98, FudgeFieldPrefixCodec.ComposeFieldPrefix(true, 0, true, true));
         }
 
         [Test]
         public void HasNameChecks()
         {
-            Assert.False(FudgeFieldPrefixCodec.HasName(0x20));
-            Assert.True(FudgeFieldPrefixCodec.HasName(0x98));
+            Assert2.False(FudgeFieldPrefixCodec.HasName(0x20));
+            Assert2.True(FudgeFieldPrefixCodec.HasName(0x98));
         }
 
         [Test]
         public void fixedWidthChecks()
         {
-            Assert.False(FudgeFieldPrefixCodec.IsFixedWidth(0x20));
-            Assert.True(FudgeFieldPrefixCodec.IsFixedWidth(0x98));
+            Assert2.False(FudgeFieldPrefixCodec.IsFixedWidth(0x20));
+            Assert2.True(FudgeFieldPrefixCodec.IsFixedWidth(0x98));
         }
 
         [Test]
         public void hasOrdinalChecks()
         {
-            Assert.False(FudgeFieldPrefixCodec.HasOrdinal(0x20));
-            Assert.True(FudgeFieldPrefixCodec.HasOrdinal(0x98));
+            Assert2.False(FudgeFieldPrefixCodec.HasOrdinal(0x20));
+            Assert2.True(FudgeFieldPrefixCodec.HasOrdinal(0x98));
         }
 
         [Test]
         public void varWidthSizeChecks()
         {
-            Assert.AreEqual(0, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x98));
-            Assert.AreEqual(1, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x20));
-            Assert.AreEqual(2, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x40));
-            Assert.AreEqual(4, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x60));
+            Assert2.AreEqual(0, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x98));
+            Assert2.AreEqual(1, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x20));
+            Assert2.AreEqual(2, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x40));
+            Assert2.AreEqual(4, FudgeFieldPrefixCodec.GetFieldWidthByteCount(0x60));
         }
 
     }

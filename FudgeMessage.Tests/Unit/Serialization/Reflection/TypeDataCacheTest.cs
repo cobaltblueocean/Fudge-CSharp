@@ -22,9 +22,11 @@ using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization.Reflection;
 using FudgeMessage.Serialization;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class TypeDataCacheTest
     {
         [Test]
@@ -34,9 +36,9 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var cache = new TypeDataCache(context);
 
             TypeData data = cache.GetTypeData(this.GetType(), FudgeFieldNameConvention.Identity);
-            Assert.NotNull(data);
+            Assert2.NotNull(data);
             TypeData data2 = cache.GetTypeData(this.GetType(), FudgeFieldNameConvention.Identity);
-            Assert.AreEqual(data, data2);
+            Assert2.AreEqual(data, data2);
         }
 
         [Test]
@@ -45,8 +47,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var context = new FudgeContext();
             var cache = new TypeDataCache(context);
 
-            Assert.Throws<ArgumentNullException>(() => new TypeDataCache(null));
-            Assert.Throws<ArgumentNullException>(() => cache.GetTypeData(null, FudgeFieldNameConvention.Identity));
+            Assert2.ThrowsException<ArgumentNullException>(() => new TypeDataCache(null));
+            Assert2.ThrowsException<ArgumentNullException>(() => cache.GetTypeData(null, FudgeFieldNameConvention.Identity));
         }
 
         [Test]
@@ -56,8 +58,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var cache = new TypeDataCache(context);
 
             var data = cache.GetTypeData(typeof(Cycle), FudgeFieldNameConvention.Identity);
-            Assert.NotNull(data);
-            Assert.AreEqual(data, data.Properties[0].TypeData);
+            Assert2.NotNull(data);
+            Assert2.AreEqual(data, data.Properties[0].TypeData);
         }
 
         public class Cycle

@@ -20,9 +20,11 @@ using System.Text;
 using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeSerializationContextTest
     {
         [Test]
@@ -36,7 +38,7 @@ namespace FudgeMessage.Tests.Unit.Serialization
             serializer.SerializeToMsg(testObj);        // Doesn't throw because no cycles
 
             testObj.Child = testObj;
-            Assert.Throws<FudgeRuntimeException>(() => serializer.SerializeToMsg(testObj));
+            Assert2.ThrowsException<FudgeRuntimeException>(() => serializer.SerializeToMsg(testObj));
         }
 
         private class ClassWithCycles

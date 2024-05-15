@@ -23,6 +23,7 @@ using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeSurrogateSelectorTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -36,7 +37,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             Assert2.IsType<SerializableSurrogate>(surrogate);
 
             // Test exception thrown if no default constructor
-            Assert.Throws<FudgeRuntimeException>(() => selector.GetSurrogate(typeof(DirectNoDefaultConstructorTest), FudgeFieldNameConvention.Identity));
+            Assert2.ThrowsException<FudgeRuntimeException>(() => selector.GetSurrogate(typeof(DirectNoDefaultConstructorTest), FudgeFieldNameConvention.Identity));
         }
 
         [Test]
@@ -50,20 +51,20 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             // SurrogateTest3 has a constructor on the surrogate which takes type
             surrogate = selector.GetSurrogate(typeof(SurrogateTest3), FudgeFieldNameConvention.Identity);
             Assert2.IsType<SurrogateTest3.SurrogateTest3Surrogate>(surrogate);
-            Assert.AreEqual(typeof(SurrogateTest3), ((SurrogateTest3.SurrogateTest3Surrogate)surrogate).Type);
+            Assert2.AreEqual(typeof(SurrogateTest3), ((SurrogateTest3.SurrogateTest3Surrogate)surrogate).Type);
 
             // SurrogateTest4 has a constructor on the surrogate which takes context and type
             surrogate = selector.GetSurrogate(typeof(SurrogateTest4), FudgeFieldNameConvention.Identity);
             Assert2.IsType<SurrogateTest4.SurrogateTest4Surrogate>(surrogate);
-            Assert.AreEqual(typeof(SurrogateTest4), ((SurrogateTest4.SurrogateTest4Surrogate)surrogate).Type);
-            Assert.AreEqual(context, ((SurrogateTest4.SurrogateTest4Surrogate)surrogate).Context);
+            Assert2.AreEqual(typeof(SurrogateTest4), ((SurrogateTest4.SurrogateTest4Surrogate)surrogate).Type);
+            Assert2.AreEqual(context, ((SurrogateTest4.SurrogateTest4Surrogate)surrogate).Context);
             
             //ISurrogateTest is an interface
 
             surrogate = selector.GetSurrogate(typeof(ISurrogateTest), FudgeFieldNameConvention.Identity);
             Assert2.IsType<InterfaceSurrogateTestSurrogate>(surrogate);
-            Assert.AreEqual(typeof(ISurrogateTest), ((InterfaceSurrogateTestSurrogate)surrogate).Type);
-            Assert.AreEqual(context, ((InterfaceSurrogateTestSurrogate)surrogate).Context);
+            Assert2.AreEqual(typeof(ISurrogateTest), ((InterfaceSurrogateTestSurrogate)surrogate).Type);
+            Assert2.AreEqual(context, ((InterfaceSurrogateTestSurrogate)surrogate).Context);
         }
 
         #region Test classes

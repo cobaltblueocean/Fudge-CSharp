@@ -23,9 +23,11 @@ using System.IO;
 using FudgeMessage;
 using FudgeMessage.Encodings;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Encodings
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeEncodedStreamReaderTest
     {
         [Test]
@@ -39,16 +41,16 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var stream = new MemoryStream(bytes);
             var reader = new FudgeEncodedStreamReader(context, stream);
 
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
-            Assert.False(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
-            Assert.False(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
+            Assert2.False(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
+            Assert2.False(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
         }
 
         [Test]
@@ -63,11 +65,11 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var stream = new MemoryStream(bytes);
             var reader = new FudgeEncodedStreamReader(context, stream);
 
-            Assert.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
         }
 
         [Test]
@@ -83,17 +85,17 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var stream = new MemoryStream(bytes);
             var reader = new FudgeEncodedStreamReader(context, stream);
 
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.SubmessageFieldStart, reader.MoveNext());
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.SubmessageFieldEnd, reader.MoveNext());
-            Assert.True(reader.HasNext);
-            Assert.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
-            Assert.False(reader.HasNext);
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.SubmessageFieldStart, reader.MoveNext());
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.SubmessageFieldEnd, reader.MoveNext());
+            Assert2.True(reader.HasNext);
+            Assert2.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
+            Assert2.False(reader.HasNext);
         }
 
         [Test]
@@ -113,14 +115,14 @@ namespace FudgeMessage.Tests.Unit.Encodings
             stream.Position = 0;
             var reader = new FudgeEncodedStreamReader(context, stream);
 
-            Assert.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
-            Assert.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.MessageStart, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.SimpleField, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.MessageEnd, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
+            Assert2.AreEqual(FudgeStreamElement.NoElement, reader.MoveNext());
         }
     }
 }

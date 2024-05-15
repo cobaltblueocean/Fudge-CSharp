@@ -35,21 +35,21 @@ namespace FudgeMessage.Tests.Unit
             var actualIter = actualMsg.GetAllFields().GetEnumerator();
             while (expectedIter.MoveNext())
             {
-                Assert.True(actualIter.MoveNext());
+                Assert2.True(actualIter.MoveNext());
                 IFudgeField expectedField = expectedIter.Current;
                 IFudgeField actualField = actualIter.Current;
 
-                Assert.AreEqual(expectedField.Name, actualField.Name);
-                Assert.AreEqual(expectedField.Type, actualField.Type);
-                Assert.AreEqual(expectedField.Ordinal, actualField.Ordinal);
+                Assert2.AreEqual(expectedField.Name, actualField.Name);
+                Assert2.AreEqual(expectedField.Type, actualField.Type);
+                Assert2.AreEqual(expectedField.Ordinal, actualField.Ordinal);
                 if (expectedField.Value.GetType().IsArray)
                 {
-                    Assert.AreEqual(expectedField.Value.GetType(), actualField.Value.GetType());
-                    Assert.AreEqual(expectedField.Value, actualField.Value);       // XUnit will check all values in the arrays
+                    Assert2.AreEqual(expectedField.Value.GetType(), actualField.Value.GetType());
+                    Assert2.AreEqual(expectedField.Value, actualField.Value);       // XUnit will check all values in the arrays
                 }
                 else if (expectedField.Value is FudgeMsg)
                 {
-                    Assert.True(actualField.Value is FudgeMsg);
+                    Assert2.True(actualField.Value is FudgeMsg);
                     AssertAllFieldsMatch((FudgeMsg)expectedField.Value,
                         (FudgeMsg)actualField.Value);
                 }
@@ -58,16 +58,16 @@ namespace FudgeMessage.Tests.Unit
                     Assert2.IsType<UnknownFudgeFieldValue>(actualField.Value);
                     UnknownFudgeFieldValue expectedValue = (UnknownFudgeFieldValue)expectedField.Value;
                     UnknownFudgeFieldValue actualValue = (UnknownFudgeFieldValue)actualField.Value;
-                    Assert.AreEqual(expectedField.Type.TypeId, actualField.Type.TypeId);
-                    Assert.AreEqual(expectedValue.Type.TypeId, actualField.Type.TypeId);
-                    Assert.AreEqual(expectedValue.Contents, actualValue.Contents);
+                    Assert2.AreEqual(expectedField.Type.TypeId, actualField.Type.TypeId);
+                    Assert2.AreEqual(expectedValue.Type.TypeId, actualField.Type.TypeId);
+                    Assert2.AreEqual(expectedValue.Contents, actualValue.Contents);
                 }
                 else
                 {
-                    Assert.AreEqual(expectedField.Value, actualField.Value);
+                    Assert2.AreEqual(expectedField.Value, actualField.Value);
                 }
             }
-            Assert.False(actualIter.MoveNext());
+            Assert2.False(actualIter.MoveNext());
         }
 
         public static string ToNiceString(this byte[] bytes)

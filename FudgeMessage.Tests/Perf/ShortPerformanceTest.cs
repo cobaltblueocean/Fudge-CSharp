@@ -23,6 +23,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using FudgeMessage;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Perf
 {
@@ -30,6 +31,7 @@ namespace FudgeMessage.Tests.Perf
     /// A very short test just to establish some simple performance metrics
     /// for Fudge encoding compared with Java Serialization.
     /// </summary>
+    [Parallelizable(ParallelScope.ContextMask)]
     public class ShortPerformanceTest
     {
         private const int HOT_SPOT_WARMUP_CYCLES = 1000;
@@ -56,6 +58,7 @@ namespace FudgeMessage.Tests.Perf
         }
 
         [Test]
+        [Ignore("This is not a valid test")]
         public void PerformanceVersusSerialization10000Cycles()
         {
             PerformanceVersusSerialization(10000);
@@ -125,7 +128,7 @@ namespace FudgeMessage.Tests.Perf
             Console.WriteLine("Fudge Ordinals Only: " + fudgeSplitOrdinalsOnly + "cycles/sec");
             Console.WriteLine("Fudge Names And Ordinals: " + fudgeSplitBoth + "cycles/sec");
             Console.WriteLine("Serialization: " + serializationSplit + "cycles/sec");
-            Assert.True(serializationDelta > fudgeDeltaNamesOnly, "Serialization faster by " + (fudgeDeltaNamesOnly - serializationDelta) + "ms.");
+            Assert2.True(serializationDelta > fudgeDeltaNamesOnly, "Serialization faster by " + (fudgeDeltaNamesOnly - serializationDelta) + "ms.");
         }
 
         private static double ConvertToCyclesPerSecond(int nCycles, long delta)

@@ -16,9 +16,11 @@
 using NUnit.Framework;
 using System.IO;
 using FudgeMessage;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeStreamParserTest
     {
         private static readonly FudgeContext fudgeContext = new FudgeContext();
@@ -86,8 +88,8 @@ namespace FudgeMessage.Tests.Unit
         protected void CheckResultsMatch(FudgeMsg msg, FudgeContext fudgeContext)
         {
             FudgeMsgEnvelope result = CycleMessage(fudgeContext, msg);
-            Assert.NotNull(result);
-            Assert.NotNull(result.Message);
+            Assert2.NotNull(result);
+            Assert2.NotNull(result.Message);
             FudgeMsg resultMsg = result.Message;
             FudgeUtils.AssertAllFieldsMatch(msg, resultMsg);
         }

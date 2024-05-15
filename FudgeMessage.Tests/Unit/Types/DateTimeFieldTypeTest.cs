@@ -25,6 +25,7 @@ using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Types
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class DateTimeFieldTypeTest
     {
         private FudgeContext context = new FudgeContext();
@@ -38,14 +39,14 @@ namespace FudgeMessage.Tests.Unit.Types
             var bytes = msg1.ToByteArray();
             var msg2 = context.Deserialize(bytes).Message;
 
-            Assert.AreEqual("1999-12-10T03:04:05.987654321-01:15", msg2.GetValue<FudgeDateTime>("dt").ToString());
+            Assert2.AreEqual("1999-12-10T03:04:05.987654321-01:15", msg2.GetValue<FudgeDateTime>("dt").ToString());
         }
 
         [Test]
         public void MakeSureSizesLineUp()
         {
             // Just in case these ever change in the future
-            Assert.AreEqual(DateTimeFieldType.Instance.FixedSize, TimeFieldType.Instance.FixedSize + DateFieldType.Instance.FixedSize);
+            Assert2.AreEqual(DateTimeFieldType.Instance.FixedSize, TimeFieldType.Instance.FixedSize + DateFieldType.Instance.FixedSize);
         }
 
         [Test]
@@ -58,13 +59,13 @@ namespace FudgeMessage.Tests.Unit.Types
             msg.Add("dt", dt);
             msg.Add("dto", dto);
 
-            Assert.AreEqual(DateTimeFieldType.Instance, msg.GetByName("dt").Type);
+            Assert2.AreEqual(DateTimeFieldType.Instance, msg.GetByName("dt").Type);
             Assert2.IsType<FudgeDateTime>(msg.GetByName("dt").Value);
-            Assert.AreEqual(DateTimeFieldType.Instance, msg.GetByName("dto").Type);
+            Assert2.AreEqual(DateTimeFieldType.Instance, msg.GetByName("dto").Type);
             Assert2.IsType<FudgeDateTime>(msg.GetByName("dto").Value);
 
-            Assert.AreEqual(dt, msg.GetValue<DateTime>("dt"));
-            Assert.AreEqual(dto, msg.GetValue<DateTimeOffset>("dto"));
+            Assert2.AreEqual(dt, msg.GetValue<DateTime>("dt"));
+            Assert2.AreEqual(dto, msg.GetValue<DateTimeOffset>("dto"));
         }
 
         [Test]
@@ -76,18 +77,18 @@ namespace FudgeMessage.Tests.Unit.Types
 
             msg.Add("dt", dt);
             msg.Add("fdt", fdt);
-            Assert.AreEqual(DateFieldType.Instance, msg.GetByName("dt").Type);
+            Assert2.AreEqual(DateFieldType.Instance, msg.GetByName("dt").Type);
             Assert2.IsType<FudgeDate>(msg.GetByName("dt").Value);
-            Assert.AreEqual(DateFieldType.Instance, msg.GetByName("fdt").Type);
+            Assert2.AreEqual(DateFieldType.Instance, msg.GetByName("fdt").Type);
             Assert2.IsType<FudgeDate>(msg.GetByName("fdt").Value);
 
-            Assert.AreEqual(dt, msg.GetValue<DateTime>("dt"));
-            Assert.AreEqual(fdt, msg.GetValue<FudgeDateTime>("fdt"));
+            Assert2.AreEqual(dt, msg.GetValue<DateTime>("dt"));
+            Assert2.AreEqual(fdt, msg.GetValue<FudgeDateTime>("fdt"));
 
             // Error cases
             FudgeFieldType type = null;
-            Assert.AreEqual(null, DateTimeFieldType.Instance.Minimize(null, ref type));
-            Assert.Throws<ArgumentException>(() => DateTimeFieldType.Instance.Minimize("fred", ref type));
+            Assert2.AreEqual(null, DateTimeFieldType.Instance.Minimize(null, ref type));
+            Assert2.ThrowsException<ArgumentException>(() => DateTimeFieldType.Instance.Minimize("fred", ref type));
         }
     }
 }

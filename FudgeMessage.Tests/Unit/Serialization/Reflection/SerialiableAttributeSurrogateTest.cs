@@ -22,9 +22,11 @@ using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization;
 using FudgeMessage.Serialization.Reflection;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class SerialiableAttributeSurrogateTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -39,8 +41,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             var obj2 = (SerializableClass)serializer.Deserialize(msg);
 
-            Assert.AreEqual(2, obj2.GetSerializableField());
-            Assert.AreEqual(0, obj2.GetNonserializableField());
+            Assert2.AreEqual(2, obj2.GetSerializableField());
+            Assert2.AreEqual(0, obj2.GetNonserializableField());
         }
 
         [Test]
@@ -55,7 +57,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             PropertyTest.val = 0;
 
             var obj2 = (PropertyTest)serializer.Deserialize(msg);
-            Assert.AreEqual(0, PropertyTest.val);
+            Assert2.AreEqual(0, PropertyTest.val);
         }
 
         [Test]
@@ -63,9 +65,9 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
         {
             var typeData = new TypeData(context, new TypeDataCache(context), typeof(SerializableClass), FudgeFieldNameConvention.Identity);
             var badTypeData = new TypeData(context, new TypeDataCache(context), GetType(), FudgeFieldNameConvention.Identity);
-            Assert.Throws<ArgumentNullException>(() => new SerializableAttributeSurrogate(null, typeData));
-            Assert.Throws<ArgumentNullException>(() => new SerializableAttributeSurrogate(context, null));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new SerializableAttributeSurrogate(context, badTypeData));
+            Assert2.ThrowsException<ArgumentNullException>(() => new SerializableAttributeSurrogate(null, typeData));
+            Assert2.ThrowsException<ArgumentNullException>(() => new SerializableAttributeSurrogate(context, null));
+            Assert2.ThrowsException<ArgumentOutOfRangeException>(() => new SerializableAttributeSurrogate(context, badTypeData));
         }
 
         #region Test classes

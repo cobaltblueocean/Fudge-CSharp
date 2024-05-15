@@ -21,9 +21,11 @@ using System.Text;
 using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class SerializationTypeMapTest
     {
         [Test]
@@ -32,11 +34,11 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var context = new FudgeContext();
 
             var map1 = new SerializationTypeMap(context);
-            Assert.True(map1.AllowTypeDiscovery);
+            Assert2.True(map1.AllowTypeDiscovery);
 
             context.SetProperty(ContextProperties.AllowTypeDiscoveryProperty, false);
             var map2 = new SerializationTypeMap(context);
-            Assert.False(map2.AllowTypeDiscovery);
+            Assert2.False(map2.AllowTypeDiscovery);
         }
 
         [Test]
@@ -46,12 +48,12 @@ namespace FudgeMessage.Tests.Unit.Serialization
             var map = new SerializationTypeMap(context);
 
             map.AllowTypeDiscovery = false;
-            Assert.Null(map.GetSurrogate(typeof(Reflect.Tick)));
-            Assert.AreEqual(-1, map.GetTypeId(typeof(Reflect.Tick)));
+            Assert2.Null(map.GetSurrogate(typeof(Reflect.Tick)));
+            Assert2.AreEqual(-1, map.GetTypeId(typeof(Reflect.Tick)));
 
             map.AllowTypeDiscovery = true;
-            Assert.NotNull(map.GetSurrogate(typeof(Reflect.Tick)));
-            Assert.AreNotEqual(-1, map.GetTypeId(typeof(Reflect.Person)));
+            Assert2.NotNull(map.GetSurrogate(typeof(Reflect.Tick)));
+            Assert2.AreNotEqual(-1, map.GetTypeId(typeof(Reflect.Person)));
         }
     }
 }

@@ -20,9 +20,11 @@ using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization;
 using FudgeMessage.Serialization.Reflection;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class DataContractSurrogateTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -37,12 +39,12 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             var obj2 = (SimpleTestClass)serializer.Deserialize(msg);
 
-            Assert.AreEqual(obj1.SerializedMember, obj2.SerializedMember);
-            Assert.AreEqual(obj1.SerializedProperty, obj2.SerializedProperty);
+            Assert2.AreEqual(obj1.SerializedMember, obj2.SerializedMember);
+            Assert2.AreEqual(obj1.SerializedProperty, obj2.SerializedProperty);
             
             // Make sure the others weren't serialized
-            Assert.Null(obj2.UnserializedMember);
-            Assert.AreEqual(0, obj2.UnserializedProperty);
+            Assert2.Null(obj2.UnserializedMember);
+            Assert2.AreEqual(0, obj2.UnserializedProperty);
         }
 
         [Test]
@@ -55,7 +57,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             var msg = serializer.SerializeToMsg(obj1);
 
-            Assert.NotNull(msg.GetByName("SERIALIZEDMEMBER"));
+            Assert2.NotNull(msg.GetByName("SERIALIZEDMEMBER"));
         }
 
         [Test]
@@ -66,7 +68,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var serializer = new FudgeSerializer(context);
             var msg = serializer.SerializeToMsg(obj1);
 
-            Assert.NotNull(msg.GetByName("Prop"));
+            Assert2.NotNull(msg.GetByName("Prop"));
         }
 
         [Test]
@@ -76,19 +78,19 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             var serializer = new FudgeSerializer(context);
             var msg = serializer.SerializeToMsg(obj1);
-            Assert.AreEqual("Before|Test", msg.GetString("Val1"));
-            Assert.AreEqual("Before|Test|After", obj1.Val1);
+            Assert2.AreEqual("Before|Test", msg.GetString("Val1"));
+            Assert2.AreEqual("Before|Test|After", obj1.Val1);
 
             var obj2 = (ClassWithBeforeAndAfterMethods)serializer.Deserialize(msg);
-            Assert.AreEqual("Before|Test", obj2.Val1);
-            Assert.AreEqual("null|After2", obj2.Val2);
+            Assert2.AreEqual("Before|Test", obj2.Val1);
+            Assert2.AreEqual("null|After2", obj2.Val2);
         }
 
         // Logged as [FRN-79]
         //[Test]
         //public void HonoursDataContractName_FRN79()
         //{
-        //    Assert.True(false, "Test not implemented yet");
+        //    Assert2.True(false, "Test not implemented yet");
         //}
 
         [Test]
@@ -96,9 +98,9 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
         {
             var typeData = new TypeData(context, new TypeDataCache(context), typeof(SimpleTestClass), FudgeFieldNameConvention.Identity);
             var badTypeData = new TypeData(context, new TypeDataCache(context), GetType(), FudgeFieldNameConvention.Identity);
-            Assert.Throws<ArgumentNullException>(() => new DataContractSurrogate(null, typeData));
-            Assert.Throws<ArgumentNullException>(() => new DataContractSurrogate(context, null));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new DataContractSurrogate(context, badTypeData));
+            Assert2.ThrowsException<ArgumentNullException>(() => new DataContractSurrogate(null, typeData));
+            Assert2.ThrowsException<ArgumentNullException>(() => new DataContractSurrogate(context, null));
+            Assert2.ThrowsException<ArgumentOutOfRangeException>(() => new DataContractSurrogate(context, badTypeData));
         }
 
         #region Test classes

@@ -23,6 +23,7 @@ using NUnit.Framework;
 using System.IO;
 using FudgeMessage;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit
 {
@@ -30,6 +31,7 @@ namespace FudgeMessage.Tests.Unit
     /// A test class that will encode and decode a number of different Fudge messages
     /// to test that encoding and decoding works properly.
     /// </summary>
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeInterOpTest
     {
         private static readonly FudgeContext fudgeContext = new FudgeContext();
@@ -40,7 +42,7 @@ namespace FudgeMessage.Tests.Unit
             FudgeMsg inputMsg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
             FudgeMsg outputMsg = CycleMessage(inputMsg, "allNames.dat");
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }
@@ -51,7 +53,7 @@ namespace FudgeMessage.Tests.Unit
             FudgeMsg inputMsg = StandardFudgeMessages.CreateMessageAllOrdinals(fudgeContext);
             FudgeMsg outputMsg = CycleMessage(inputMsg, "allOrdinals.dat");
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }
@@ -66,7 +68,7 @@ namespace FudgeMessage.Tests.Unit
 
             FudgeMsg outputMsg = CycleMessage(inputMsg, "variableWidthColumnSizes.dat");
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }
@@ -84,7 +86,7 @@ namespace FudgeMessage.Tests.Unit
 
             FudgeMsg outputMsg = CycleMessage(inputMsg, "subMsg.dat");
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }

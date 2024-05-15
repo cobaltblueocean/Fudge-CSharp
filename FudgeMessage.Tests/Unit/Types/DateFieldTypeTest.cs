@@ -24,9 +24,11 @@ using FudgeMessage.Encodings;
 using System.IO;
 using FudgeMessage;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Types
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class DateFieldTypeTest
     {
         private FudgeContext context = new FudgeContext();
@@ -40,7 +42,7 @@ namespace FudgeMessage.Tests.Unit.Types
             var bytes = msg1.ToByteArray();
             var msg2 = context.Deserialize(bytes).Message;
 
-            Assert.AreEqual("1999-12-10", msg2.GetValue<FudgeDate>("d").ToString());
+            Assert2.AreEqual("1999-12-10", msg2.GetValue<FudgeDate>("d").ToString());
         }
 
         [Test]
@@ -55,9 +57,9 @@ namespace FudgeMessage.Tests.Unit.Types
             };
 
             // Using examples from Confluence at http://www.fudgemsg.org/display/FDG/DateTime+encoding
-            Assert.AreEqual("00-0f-b4-3f", toByteString(new FudgeDate(20100131)));
-            Assert.AreEqual("00-0f-a1-00", toByteString(new FudgeDate(20000800)));
-            Assert.AreEqual("a4-72-80-00", toByteString(new FudgeDate(-3000000, 0, 0)));
+            Assert2.AreEqual("00-0f-b4-3f", toByteString(new FudgeDate(20100131)));
+            Assert2.AreEqual("00-0f-a1-00", toByteString(new FudgeDate(20000800)));
+            Assert2.AreEqual("a4-72-80-00", toByteString(new FudgeDate(-3000000, 0, 0)));
         }
     }
 }

@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>0.8.1.2</Version>
-    <Company>Kei Nakai</Company>
+    <Version>0.8.1.11</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Company>Mercury Technologies</Company>
     <Authors>Kei Nakai</Authors>
     <Description>Original project is developed and published by OpenGamma Inc.
 Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
@@ -25,6 +26,7 @@ limitations under the License.
     <RepositoryType>GitHub</RepositoryType>
     <PackageReleaseNotes>- Updated the Target framework to .NET 7.0
 - Updated for BinaryFormatter obsolete methods</PackageReleaseNotes>
+    <PackageIcon>images.jpg</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -36,15 +38,34 @@ limitations under the License.
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cern.Colt.NET" Version="0.9.3.4" />
-    <PackageReference Include="Mercury.Language.Extensions" Version="0.8.2.26" />
+    <PackageReference Include="Mercury.Language.ObjectExtension" Version="0.8.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Compile Update="Properties\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="images.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

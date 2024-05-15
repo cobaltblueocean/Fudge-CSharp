@@ -24,6 +24,7 @@ using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class DotNetSerializationSurrogateSurrogateTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -46,7 +47,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (ClassWithSurrogate)serializer.Deserialize(msg);
 
-            Assert.AreEqual(obj1.A, obj2.A);
+            Assert2.AreEqual(obj1.A, obj2.A);
         }
 
         [Test]
@@ -55,9 +56,9 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var typeData = new TypeData(context, new TypeDataCache(context), GetType(), FudgeFieldNameConvention.Identity);
             var surrogate = new SurrogateClass();
             var selector = new SurrogateSelector();
-            Assert.Throws<ArgumentNullException>(() => new DotNetSerializationSurrogateSurrogate(null, typeData, surrogate, selector));
-            Assert.Throws<ArgumentNullException>(() => new DotNetSerializationSurrogateSurrogate(context, null, surrogate, selector));
-            Assert.Throws<ArgumentNullException>(() => new DotNetSerializationSurrogateSurrogate(context, typeData, null, selector));
+            Assert2.ThrowsException<ArgumentNullException>(() => new DotNetSerializationSurrogateSurrogate(null, typeData, surrogate, selector));
+            Assert2.ThrowsException<ArgumentNullException>(() => new DotNetSerializationSurrogateSurrogate(context, null, surrogate, selector));
+            Assert2.ThrowsException<ArgumentNullException>(() => new DotNetSerializationSurrogateSurrogate(context, typeData, null, selector));
         }
 
         #region Test classes

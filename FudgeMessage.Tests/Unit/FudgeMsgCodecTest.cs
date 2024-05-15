@@ -23,6 +23,7 @@ using NUnit.Framework;
 using System.IO;
 using FudgeMessage;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit
 {
@@ -30,6 +31,7 @@ namespace FudgeMessage.Tests.Unit
     /// A test class that will encode and decode a number of different Fudge messages
     /// to test that encoding and decoding works properly.
     /// </summary>
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeMsgCodecTest
     {
         private readonly Random random = new Random();
@@ -41,7 +43,7 @@ namespace FudgeMessage.Tests.Unit
             FudgeMsg inputMsg = StandardFudgeMessages.CreateMessageAllNames(fudgeContext);
             FudgeMsg outputMsg = CycleMessage(inputMsg);
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }
@@ -56,7 +58,7 @@ namespace FudgeMessage.Tests.Unit
 
             FudgeMsg outputMsg = CycleMessage(inputMsg);
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }
@@ -68,7 +70,7 @@ namespace FudgeMessage.Tests.Unit
 
             FudgeMsg outputMsg = CycleMessage(inputMsg);
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }
@@ -114,12 +116,12 @@ namespace FudgeMessage.Tests.Unit
 
             byte[] content = fudgeContext.ToByteArray(msg);
             // Double-check the size calc was right
-            Assert.AreEqual(content.Length, new FudgeMsgEnvelope(msg).ComputeSize(null));
+            Assert2.AreEqual(content.Length, new FudgeMsgEnvelope(msg).ComputeSize(null));
 
             MemoryStream stream2 = new MemoryStream(content);
             FudgeMsgEnvelope outputMsgEnvelope = fudgeContext.Deserialize(stream2);
-            Assert.NotNull(outputMsgEnvelope);
-            Assert.NotNull(outputMsgEnvelope.Message);
+            Assert2.NotNull(outputMsgEnvelope);
+            Assert2.NotNull(outputMsgEnvelope.Message);
             return outputMsgEnvelope.Message;
         }
     }

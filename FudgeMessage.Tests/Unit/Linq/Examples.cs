@@ -21,6 +21,7 @@ using FudgeMessage;
 using FudgeMessage.Linq;
 using NUnit.Framework;
 using System.Xml.Linq;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Linq
 {
@@ -42,7 +43,7 @@ namespace FudgeMessage.Tests.Unit.Linq
             var query = from tick in msgs.AsQueryable<Tick>() select tick.Ticker;
 
             string[] tickers = query.ToArray();
-            Assert.AreEqual(new string[] {"FOO", "BAR"}, tickers);
+            Assert2.AreEqual(new string[] {"FOO", "BAR"}, tickers);
         }
 
         [Test]
@@ -56,8 +57,8 @@ namespace FudgeMessage.Tests.Unit.Linq
             var query2 = from tick in msgList.AsQueryable<Tick>() select tick.Ticker;
             var query3 = from tick in array.AsQueryable<Tick>() select tick.Ticker;
 
-            Assert.AreEqual(query1, query2);
-            Assert.AreEqual(query1, query3);
+            Assert2.AreEqual(query1, query2);
+            Assert2.AreEqual(query1, query3);
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace FudgeMessage.Tests.Unit.Linq
                         select tick.Bid * 2;
 
             double[] vals = query.ToArray();
-            Assert.AreEqual(new double[] { 20.6, 4.8 }, vals);
+            Assert2.AreEqual(new double[] { 20.6, 4.8 }, vals);
         }
 
         [Test]
@@ -82,7 +83,7 @@ namespace FudgeMessage.Tests.Unit.Linq
                         select tick.Ticker;
 
             string[] tickers = query.ToArray();
-            Assert.AreEqual(new string[] { "BAR" }, tickers);
+            Assert2.AreEqual(new string[] { "BAR" }, tickers);
         }
 
         [Test]
@@ -97,9 +98,9 @@ namespace FudgeMessage.Tests.Unit.Linq
                         select new { tick.Ticker, tick.Ask };
 
             var results = query.ToArray();
-            Assert.AreEqual(1, results.Length);
-            Assert.AreEqual("FOO", results[0].Ticker);
-            Assert.AreEqual(11.1, results[0].Ask);
+            Assert2.AreEqual(1, results.Length);
+            Assert2.AreEqual("FOO", results[0].Ticker);
+            Assert2.AreEqual(11.1, results[0].Ask);
         }
 
         [Test]
@@ -112,7 +113,7 @@ namespace FudgeMessage.Tests.Unit.Linq
                         select tick.Ticker;
 
             string[] tickers = query.ToArray();
-            Assert.AreEqual(new string[] { "BAR", "ZIP", "FOO" }, tickers);
+            Assert2.AreEqual(new string[] { "BAR", "ZIP", "FOO" }, tickers);
 
             // And descending
             query = from tick in msgs.AsQueryable<Tick>()
@@ -120,7 +121,7 @@ namespace FudgeMessage.Tests.Unit.Linq
                         select tick.Ticker;
 
             tickers = query.ToArray();
-            Assert.AreEqual(new string[] { "FOO", "ZIP", "BAR" }, tickers);
+            Assert2.AreEqual(new string[] { "FOO", "ZIP", "BAR" }, tickers);
         }
 
         [Test]
@@ -134,7 +135,7 @@ namespace FudgeMessage.Tests.Unit.Linq
                         select tick.Ticker;
 
             var tickers = query.ToArray();
-            Assert.AreEqual(new string[] { "BAR" }, tickers);
+            Assert2.AreEqual(new string[] { "BAR" }, tickers);
         }
 
         [Test]

@@ -21,9 +21,11 @@ using System.Text;
 using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Serialization;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class ImmutableSurrogateTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -37,7 +39,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var msg = serializer.SerializeToMsg(obj1);
             var obj2 = (SimpleClass)serializer.Deserialize(msg);
 
-            Assert.AreEqual(obj1.Val1, obj2.Val1);
+            Assert2.AreEqual(obj1.Val1, obj2.Val1);
         }
 
         [Test]
@@ -53,8 +55,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
 
             var obj1 = (SimpleClass)serializer.Deserialize(msg1);
             var obj2 = (SimpleClass)serializer.Deserialize(msg2);
-            Assert.AreEqual(obj1.Val1, obj2.Val1);
-            Assert.AreEqual(obj1.Val2, obj2.Val2);
+            Assert2.AreEqual(obj1.Val1, obj2.Val1);
+            Assert2.AreEqual(obj1.Val2, obj2.Val2);
         }
 
         [Test]
@@ -64,8 +66,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
                                           new Field("Val2", "Case"));
             var serializer = new FudgeSerializer(context);
             var obj1 = (SimpleClass)serializer.Deserialize(msg1);
-            Assert.Null(obj1.Val1);
-            Assert.AreEqual("Case", obj1.Val2);
+            Assert2.Null(obj1.Val1);
+            Assert2.AreEqual("Case", obj1.Val2);
         }
 
         [Test]
@@ -76,8 +78,8 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
                                           new Field("B", "foo"));
             var serializer = new FudgeSerializer(context);
             var obj1 = (MultiConstructor)serializer.Deserialize(msg1);
-            Assert.AreEqual(17, obj1.A);
-            Assert.AreEqual("foo", obj1.B);
+            Assert2.AreEqual(17, obj1.A);
+            Assert2.AreEqual("foo", obj1.B);
         }
 
         [Test]
@@ -88,7 +90,7 @@ namespace FudgeMessage.Tests.Unit.Serialization.Reflection
             var serializer = new FudgeSerializer(context);
             var msg = serializer.SerializeToMsg(outer);
             var outer2 = (ImmutableCycle1)serializer.Deserialize(msg);
-            Assert.AreEqual(outer2, outer2.Other.Other);
+            Assert2.AreEqual(outer2, outer2.Other.Other);
         }
 
         private class SimpleClass

@@ -25,8 +25,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FudgeMessage;
+using FudgeMessage.Extension;
+using FudgeMessage.Language;
 using FudgeMessage.Serialization;
-using Mercury.Language;
 
 namespace FudgeMessage.Mapping
 {

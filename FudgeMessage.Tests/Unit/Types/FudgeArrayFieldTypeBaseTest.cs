@@ -22,6 +22,7 @@ using FudgeMessage.Types;
 
 namespace FudgeMessage.Tests.Unit.Types
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeArrayFieldTypeBaseTest
     {
         // No tests here yet

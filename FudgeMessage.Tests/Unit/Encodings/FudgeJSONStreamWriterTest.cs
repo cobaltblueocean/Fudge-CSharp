@@ -23,9 +23,11 @@ using System.IO;
 using NUnit.Framework;
 using FudgeMessage;
 using FudgeMessage.Types;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Encodings
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeJSONStreamWriterTest
     {
         private readonly FudgeContext context = new FudgeContext();
@@ -162,8 +164,9 @@ namespace FudgeMessage.Tests.Unit.Encodings
         public void ConstuctorRangeChecking()
         {
             var stringWriter = new StringWriter();
-            Assert.Throws<ArgumentNullException>(() => new FudgeJSONStreamWriter(null, stringWriter));
-            Assert.Throws<ArgumentNullException>(() => new FudgeJSONStreamWriter(context, null));
+
+            Assert2.ThrowsException<ArgumentNullException>(() => new FudgeJSONStreamWriter(null, stringWriter));
+            Assert2.ThrowsException<ArgumentNullException>(() => new FudgeJSONStreamWriter(context, null));
         }
 
         [Test]
@@ -171,17 +174,17 @@ namespace FudgeMessage.Tests.Unit.Encodings
         {
             var writer = new FudgeJSONStreamWriter(context, new StringWriter());
 
-            Assert.Throws<InvalidOperationException>(() => writer.StartSubMessage("test", null));
-            Assert.Throws<InvalidOperationException>(() => writer.WriteField("test", null, null, "test"));
-            Assert.Throws<InvalidOperationException>(() => writer.EndSubMessage());
-            Assert.Throws<InvalidOperationException>(() => writer.EndMessage());
+            Assert2.ThrowsException<InvalidOperationException>(() => writer.StartSubMessage("test", null));
+            Assert2.ThrowsException<InvalidOperationException>(() => writer.WriteField("test", null, null, "test"));
+            Assert2.ThrowsException<InvalidOperationException>(() => writer.EndSubMessage());
+            Assert2.ThrowsException<InvalidOperationException>(() => writer.EndMessage());
 
             writer.StartMessage();
-            Assert.Throws<InvalidOperationException>(() => writer.StartMessage());
-            Assert.Throws<InvalidOperationException>(() => writer.EndSubMessage());
+            Assert2.ThrowsException<InvalidOperationException>(() => writer.StartMessage());
+            Assert2.ThrowsException<InvalidOperationException>(() => writer.EndSubMessage());
 
             writer.StartSubMessage("test", null);
-            Assert.Throws<InvalidOperationException>(() => writer.EndMessage());
+            Assert2.ThrowsException<InvalidOperationException>(() => writer.EndMessage());
         }
 
         [Test]
@@ -189,7 +192,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
         {
             // Test our test works
             AssertEqualsNoWhiteSpace("\ta b\r\nc", " \rab\n\tc ");
-            Assert.Throws<AssertionException>(() => AssertEqualsNoWhiteSpace("ab", "ac"));
+            Assert2.ThrowsException<AssertionException>(() => AssertEqualsNoWhiteSpace("ab", "ac"));
         }
 
         private void AssertEqualsNoWhiteSpace(string a, string b)
@@ -201,7 +204,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
                 b = b.Replace(s, "");
             }
 
-            Assert.AreEqual(a, b);
+            Assert2.AreEqual(a, b);
         }
     }
 }

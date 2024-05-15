@@ -18,9 +18,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using NUnit.Framework;
 using FudgeMessage.Linq;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Linq
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class ExpressionTreeStructureHasherTest
     {
         [Test]
@@ -33,7 +35,7 @@ namespace FudgeMessage.Tests.Unit.Linq
             var hash1 = ExpressionTreeStructureHasher.ComputeHash(query1.Expression);
             var hash2 = ExpressionTreeStructureHasher.ComputeHash(query2.Expression);
 
-            Assert.AreEqual(hash1, hash2);
+            Assert2.AreEqual(hash1, hash2);
         }
 
         [Test]
@@ -46,7 +48,7 @@ namespace FudgeMessage.Tests.Unit.Linq
             var hash1 = ExpressionTreeStructureHasher.ComputeHash(query1.Expression);
             var hash2 = ExpressionTreeStructureHasher.ComputeHash(query2.Expression);
 
-            Assert.AreNotEqual(hash1, hash2);
+            Assert2.AreNotEqual(hash1, hash2);
         }
 
         [Test]
@@ -59,7 +61,7 @@ namespace FudgeMessage.Tests.Unit.Linq
             var hash1 = ExpressionTreeStructureHasher.ComputeHash(query1.Expression);
             var hash2 = ExpressionTreeStructureHasher.ComputeHash(query2.Expression);
 
-            Assert.AreEqual(hash1, hash2);
+            Assert2.AreEqual(hash1, hash2);
         }
 
         [Test]
@@ -74,7 +76,7 @@ namespace FudgeMessage.Tests.Unit.Linq
             var hash1 = ExpressionTreeStructureHasher.ComputeHash(query1.Expression);
             var hash2 = ExpressionTreeStructureHasher.ComputeHash(query2.Expression);
 
-            Assert.AreEqual(hash1, hash2);
+            Assert2.AreEqual(hash1, hash2);
         }
 
         [Test]
@@ -90,10 +92,10 @@ namespace FudgeMessage.Tests.Unit.Linq
             var query3 = from entry in data.AsQueryable() where entry % mod == 0 select entry * 5;
             var query4 = from entry in data.AsQueryable() where entry % 2 == 0 select entry * 4;
 
-            Assert.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query2.Expression)).Compile()());            // Different parameter value
-            Assert.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query2.Expression, false, null)).Compile()());      // Different parameter value
-            Assert.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query3.Expression, false, null)).Compile()());      // Different constant
-            Assert.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query4.Expression, false, null)).Compile()());     // Constant versus parameter
+            Assert2.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query2.Expression)).Compile()());            // Different parameter value
+            Assert2.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query2.Expression, false, null)).Compile()());      // Different parameter value
+            Assert2.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query3.Expression, false, null)).Compile()());      // Different constant
+            Assert2.False(Expression.Lambda<Func<bool>>(Expression.Equal(query1.Expression, query4.Expression, false, null)).Compile()());     // Constant versus parameter
         }
     }
 }

@@ -26,9 +26,11 @@ using FudgeMessage.Encodings;
 using FudgeMessage.Types;
 using System.IO;
 using FudgeMessage.Util;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit.Encodings
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeXmlStreamWriterTest
     {
         private FudgeContext context = new FudgeContext();
@@ -44,7 +46,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
             writer.WriteField("name", null, StringFieldType.Instance, "Bob");
             writer.EndMessage();
 
-            Assert.AreEqual("<msg><name>Bob</name></msg>", sb.ToString());
+            Assert2.AreEqual("<msg><name>Bob</name></msg>", sb.ToString());
         }
 
         [Test]
@@ -61,7 +63,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
             writer.WriteField("hat", null, StringFieldType.Instance, "Stand");
             writer.EndMessage();
 
-            Assert.AreEqual("<msg><name>Bob</name></msg><msg><hat>Stand</hat></msg>", sb.ToString());
+            Assert2.AreEqual("<msg><name>Bob</name></msg><msg><hat>Stand</hat></msg>", sb.ToString());
         }
 
         [Test]
@@ -81,7 +83,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
             xmlWriter.Flush();
 
             string s = sb.ToString();
-            Assert.AreEqual("<msg><name>Fred</name><address><number>17</number><line1>Our House</line1><line2>In the middle of our street</line2></address></msg>", s);
+            Assert2.AreEqual("<msg><name>Fred</name><address><number>17</number><line1>Our House</line1><line2>In the middle of our street</line2></address></msg>", s);
         }
 
         [Test]
@@ -96,7 +98,7 @@ namespace FudgeMessage.Tests.Unit.Encodings
             xmlWriter.Flush();
 
             string s = sb.ToString();
-            Assert.AreEqual("<msg><blank /></msg>", s);
+            Assert2.AreEqual("<msg><blank /></msg>", s);
         }
 
         [Test]
@@ -105,11 +107,11 @@ namespace FudgeMessage.Tests.Unit.Encodings
             var newContext = new FudgeContext();
 
             var writer = new FudgeXmlStreamWriter(newContext, XmlWriter.Create(new MemoryStream()), "msg");
-            Assert.True(writer.AutoFlushOnMessageEnd);
+            Assert2.True(writer.AutoFlushOnMessageEnd);
 
             newContext.SetProperty(FudgeXmlStreamWriter.AutoFlushOnMessageEndProperty, false);
             writer = new FudgeXmlStreamWriter(newContext, XmlWriter.Create(new MemoryStream()), "msg");
-            Assert.False(writer.AutoFlushOnMessageEnd);
+            Assert2.False(writer.AutoFlushOnMessageEnd);
         }
     }
 }

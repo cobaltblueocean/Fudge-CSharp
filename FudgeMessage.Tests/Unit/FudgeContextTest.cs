@@ -23,9 +23,11 @@ using NUnit.Framework;
 using System.IO;
 using FudgeMessage;
 using FudgeMessage.Taxon;
+using Mercury.Test.Utility;
 
 namespace FudgeMessage.Tests.Unit
 {
+    [Parallelizable(ParallelScope.ContextMask)]
     public class FudgeContextTest
     {
         private static readonly short[] ORDINALS = new short[] { 5, 14, 928, 74 };
@@ -39,7 +41,7 @@ namespace FudgeMessage.Tests.Unit
             FudgeContext context = new FudgeContext();
             FudgeMsg outputMsg = CycleMessage(inputMsg, context, null);
 
-            Assert.NotNull(outputMsg);
+            Assert2.NotNull(outputMsg);
 
             FudgeUtils.AssertAllFieldsMatch(inputMsg, outputMsg);
         }
@@ -59,14 +61,14 @@ namespace FudgeMessage.Tests.Unit
             context.TaxonomyResolver = new ImmutableMapTaxonomyResolver(resolverMap);
 
             FudgeMsg outputMsg = CycleMessage(inputMsg, context, 45);
-            Assert.AreEqual("value1", outputMsg.GetString(NAMES[0]));
-            Assert.AreEqual("value1", outputMsg.GetString(ORDINALS[0]));
-            Assert.AreEqual("value2", outputMsg.GetString(NAMES[1]));
-            Assert.AreEqual("value2", outputMsg.GetString(ORDINALS[1]));
-            Assert.AreEqual("value3", outputMsg.GetString(NAMES[2]));
-            Assert.AreEqual("value3", outputMsg.GetString(ORDINALS[2]));
-            Assert.AreEqual("value4", outputMsg.GetString(NAMES[3]));
-            Assert.AreEqual("value4", outputMsg.GetString(ORDINALS[3]));
+            Assert2.AreEqual("value1", outputMsg.GetString(NAMES[0]));
+            Assert2.AreEqual("value1", outputMsg.GetString(ORDINALS[0]));
+            Assert2.AreEqual("value2", outputMsg.GetString(NAMES[1]));
+            Assert2.AreEqual("value2", outputMsg.GetString(ORDINALS[1]));
+            Assert2.AreEqual("value3", outputMsg.GetString(NAMES[2]));
+            Assert2.AreEqual("value3", outputMsg.GetString(ORDINALS[2]));
+            Assert2.AreEqual("value4", outputMsg.GetString(NAMES[3]));
+            Assert2.AreEqual("value4", outputMsg.GetString(ORDINALS[3]));
         }
 
         [Test]
@@ -85,14 +87,14 @@ namespace FudgeMessage.Tests.Unit
             context.TaxonomyResolver = new ImmutableMapTaxonomyResolver(resolverMap);
 
             FudgeMsg outputMsg = CycleMessage(inputMsg, context, (short)45);
-            Assert.AreEqual("value1", outputMsg.GetString(NAMES[0]));
-            Assert.AreEqual("value1", outputMsg.GetString(ORDINALS[0]));
-            Assert.AreEqual("value2", outputMsg.GetString(NAMES[1]));
-            Assert.AreEqual("value2", outputMsg.GetString(ORDINALS[1]));
-            Assert.AreEqual("value3", outputMsg.GetString(NAMES[2]));
-            Assert.AreEqual("value3", outputMsg.GetString(ORDINALS[2]));
-            Assert.AreEqual("value4", outputMsg.GetString(NAMES[3]));
-            Assert.AreEqual("value4", outputMsg.GetString(ORDINALS[3]));
+            Assert2.AreEqual("value1", outputMsg.GetString(NAMES[0]));
+            Assert2.AreEqual("value1", outputMsg.GetString(ORDINALS[0]));
+            Assert2.AreEqual("value2", outputMsg.GetString(NAMES[1]));
+            Assert2.AreEqual("value2", outputMsg.GetString(ORDINALS[1]));
+            Assert2.AreEqual("value3", outputMsg.GetString(NAMES[2]));
+            Assert2.AreEqual("value3", outputMsg.GetString(ORDINALS[2]));
+            Assert2.AreEqual("value4", outputMsg.GetString(NAMES[3]));
+            Assert2.AreEqual("value4", outputMsg.GetString(ORDINALS[3]));
         }
 
         [Test]
@@ -129,13 +131,13 @@ namespace FudgeMessage.Tests.Unit
             var myProp = new FudgeContextProperty("SomeProp");
             var context = new FudgeContext();
 
-            Assert.Null(context.GetProperty(myProp));
-            Assert.AreEqual(12, context.GetProperty(myProp, 12));
+            Assert2.Null(context.GetProperty(myProp));
+            Assert2.AreEqual(12, context.GetProperty(myProp, 12));
 
             context.SetProperty(myProp, 17);
 
-            Assert.AreEqual(17, context.GetProperty(myProp));
-            Assert.AreEqual(17, context.GetProperty(myProp, 12));
+            Assert2.AreEqual(17, context.GetProperty(myProp));
+            Assert2.AreEqual(17, context.GetProperty(myProp, 12));
         }
 
         [Test]
@@ -146,7 +148,7 @@ namespace FudgeMessage.Tests.Unit
             var context = new FudgeContext();
             context.SetProperty(myProp, 12);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert2.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
                 context.SetProperty(myProp, 17);
             });
@@ -159,9 +161,9 @@ namespace FudgeMessage.Tests.Unit
 
             var newProp = new FudgeContextProperty("NewProp");
 
-            Assert.Null(context.GetProperty(newProp));
+            Assert2.Null(context.GetProperty(newProp));
             context.SetProperty(newProp, "test");
-            Assert.AreEqual("test", context.GetProperty(newProp));
+            Assert2.AreEqual("test", context.GetProperty(newProp));
         }
 
         #endregion
@@ -175,8 +177,8 @@ namespace FudgeMessage.Tests.Unit
 
             MemoryStream inputStream = new MemoryStream(content);
             FudgeMsgEnvelope outputMsgEnvelope = context.Deserialize(inputStream);
-            Assert.NotNull(outputMsgEnvelope);
-            Assert.NotNull(outputMsgEnvelope.Message);
+            Assert2.NotNull(outputMsgEnvelope);
+            Assert2.NotNull(outputMsgEnvelope.Message);
             return outputMsgEnvelope.Message;
         }
     }
