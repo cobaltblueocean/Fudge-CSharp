@@ -27,6 +27,7 @@ limitations under the License.
     <PackageReleaseNotes>- Updated the Target framework to .NET 7.0
 - Updated for BinaryFormatter obsolete methods</PackageReleaseNotes>
     <PackageIcon>images.jpg</PackageIcon>
+    <Title>FudgeMessage for .NET</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -41,9 +42,9 @@ limitations under the License.
     <PackageReference Include="Mercury.Language.ObjectExtension" Version="0.8.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
-    <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.1" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
