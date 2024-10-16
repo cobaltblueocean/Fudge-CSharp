@@ -2,25 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>0.8.1.11</Version>
+    <Version>0.8.1.12</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Company>Mercury Technologies</Company>
     <Authors>Kei Nakai</Authors>
-    <Description>Original project is developed and published by OpenGamma Inc.
-Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
+    <Description>Fudge Messaging
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-     
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-</Description>
+Stand-alone messaging system that has been designed for message-passing, such as in Remote Procedure Calls (RPC) or Message Oriented Middleware (MOM). It is less suited for streaming data. Because it simply specifies the message content, it can be used with HTTP, JMS, AMQP and many other underlying transports.</Description>
     <PackageProjectUrl>https://github.com/cobaltblueocean/Fudge-CSharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cobaltblueocean/Fudge-CSharp</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
@@ -28,6 +16,9 @@ limitations under the License.
 - Updated for BinaryFormatter obsolete methods</PackageReleaseNotes>
     <PackageIcon>images.jpg</PackageIcon>
     <Title>FudgeMessage for .NET</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Copyright>Copyright (C) Mercury Technologies. All rights reserved.</Copyright>
+    <PackageTags>Messaging, Data Exchange, Compact size, performance</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -37,6 +28,13 @@ limitations under the License.
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Mercury.Language.ObjectExtension" Version="0.8.0.5" />
