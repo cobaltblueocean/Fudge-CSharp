@@ -19,6 +19,7 @@ Stand-alone messaging system that has been designed for message-passing, such as
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Copyright>Copyright (C) Mercury Technologies. All rights reserved.</Copyright>
     <PackageTags>Messaging, Data Exchange, Compact size, performance</PackageTags>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,6 +31,10 @@ Stand-alone messaging system that has been designed for message-passing, such as
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
