@@ -25,11 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mercury.Language.ObjectExtension" Version="0.8.0.5" />
-    <PackageReference Include="Mercury.Test.Utility" Version="0.8.1.38" />
+    <PackageReference Include="Mercury.Language.ObjectExtension" Version="0.8.0.11" />
+    <PackageReference Include="Mercury.Test.Utility" Version="0.8.1.44" />
     <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>0.8.1.12</Version>
+    <Version>0.8.1.13</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Company>Mercury Technologies</Company>
     <Authors>Kei Nakai</Authors>
@@ -42,12 +42,12 @@ Stand-alone messaging system that has been designed for message-passing, such as
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mercury.Language.ObjectExtension" Version="0.8.0.5" />
+    <PackageReference Include="Mercury.Language.ObjectExtension" Version="0.8.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
-    <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.1" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
