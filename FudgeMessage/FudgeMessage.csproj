@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Version>0.8.1.14</Version>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Generate a NuGet package automatically when building the project -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IsPackable>true</IsPackable>
+    <Version>0.8.1.15</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Company>Mercury Technologies</Company>
     <Authors>Kei Nakai</Authors>
@@ -17,7 +20,11 @@ Stand-alone messaging system that has been designed for message-passing, such as
 - Updated for BinaryFormatter obsolete methods
 
 [0.8.1.14]
-- Updated the Target framework to .NET 8.0</PackageReleaseNotes>
+- Updated the Target framework to .NET 8.0
+
+[0.8.1.15]
+- Updated the Target framework to .NET 10.0
+- Refactored FudgeMsgStreamReader class</PackageReleaseNotes>
     <PackageIcon>images.jpg</PackageIcon>
     <Title>FudgeMessage for .NET</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -46,13 +53,13 @@ Stand-alone messaging system that has been designed for message-passing, such as
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MercuryTech.Language.ObjectExtension" Version="0.8.0.13" />
-    <PackageReference Include="MercuryTech.Test.Utility" Version="0.8.1.46" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="MercuryTech.Language.ObjectExtension" Version="0.8.0.14" />
+    <PackageReference Include="MercuryTech.Test.Utility" Version="0.8.1.47" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
-    <PackageReference Include="System.Diagnostics.EventLog" Version="9.0.4" />
-    <PackageReference Include="System.Text.Json" Version="9.0.4" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="10.0.9" />
+    <PackageReference Include="System.Text.Json" Version="10.0.9" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FudgeMessage;
 using FudgeMessage.Taxon;
 using FudgeMessage.Types;
 
@@ -27,13 +28,12 @@ namespace FudgeMessage.Encodings
     /// <summary>
     /// <c>FudgeMsgStreamReader</c> allows a <see cref="FudgeMsg"/> to be read as if it were a stream source of data.
     /// </summary>
-    public class FudgeMsgStreamReader : IFudgeStreamReader
+    public class FudgeMsgStreamReader : FudgeStreamReaderBase
     {
         private readonly FudgeContext context;
         private Stack<State> stack = new Stack<State>();
         private State currentState;
-        private FudgeStreamElement element = FudgeStreamElement.NoElement;
-        private IFudgeField field;
+        private IFudgeField currentField;
         private IEnumerator<FudgeMsg> messageSource;
         private FudgeMsg nextMessage;
         private int processingDirectives = 0;
@@ -77,7 +77,7 @@ namespace FudgeMessage.Encodings
         #region IFudgeStreamReader Members
 
         /// <inheritdoc/>
-        public bool HasNext
+        public override bool HasNext
         {
             get
             {
@@ -94,19 +94,27 @@ namespace FudgeMessage.Encodings
         }
 
         /// <inheritdoc/>
-        public FudgeStreamElement MoveNext()
+        public override FudgeStreamElement MoveNext()
         {
             if (currentState == null)
             {
                 if (!HasNext)       // Will fetch the next if required
                 {
-                    element = FudgeStreamElement.NoElement;
+                    CurrentElement = FudgeStreamElement.NoElement;
+                    FieldType = null;
+                    FieldOrdinal = null;
+                    FieldName = null;
+                    FieldValue = null;
                 }
                 else
                 {
                     currentState = new State(nextMessage);
                     nextMessage = null;
-                    element = FudgeStreamElement.MessageStart;
+                    CurrentElement = FudgeStreamElement.MessageStart;
+                    FieldType = null;
+                    FieldOrdinal = null;
+                    FieldName = null;
+                    FieldValue = null;
                 }
             }
             else if (currentState.Fields.Count == 0)
@@ -115,88 +123,74 @@ namespace FudgeMessage.Encodings
                 {
                     // Finished the message
                     currentState = null;
-                    element = FudgeStreamElement.MessageEnd;
+                    CurrentElement = FudgeStreamElement.MessageEnd;
+                    FieldType = null;
+                    FieldOrdinal = null;
+                    FieldName = null;
+                    FieldValue = null;
                 }
                 else
                 {
                     currentState = stack.Pop();
-                    element = FudgeStreamElement.SubmessageFieldEnd;
+                    CurrentElement = FudgeStreamElement.SubmessageFieldEnd;
+                    FieldType = null;
+                    FieldOrdinal = null;
+                    FieldName = null;
+                    FieldValue = null;
                 }
             }
             else
             {
-                field = currentState.Fields.Dequeue();
-                if (field.Type == FudgeMsgFieldType.Instance)
+                currentField = currentState.Fields.Dequeue();
+                // Populate base class field properties for the field
+                FieldType = currentField.Type;
+                FieldOrdinal = currentField.Ordinal;
+                FieldName = currentField.Name;
+                FieldValue = currentField.Value;
+                if (currentField.Type == FudgeMsgFieldType.Instance)
                 {
                     stack.Push(currentState);
-                    currentState = new State((FudgeMsg)field.Value);
-                    element = FudgeStreamElement.SubmessageFieldStart;
+                    currentState = new State((FudgeMsg)currentField.Value);
+                    CurrentElement = FudgeStreamElement.SubmessageFieldStart;
                 }
                 else
                 {
-                    element = FudgeStreamElement.SimpleField;
+                    CurrentElement = FudgeStreamElement.SimpleField;
                 }
             }
 
-            return element;
+            return CurrentElement;
         }
 
-        public void Close()
+        public override void Close()
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public FudgeStreamElement CurrentElement
-        {
-            get { return element; }
-        }
+        // CurrentElement, FieldType, FieldOrdinal, FieldName and FieldValue are provided by the base class
 
-        /// <inheritdoc/>
-        public FudgeFieldType FieldType
-        {
-            get { return field.Type; }
-        }
-
-        /// <inheritdoc/>
-        public short? FieldOrdinal
-        {
-            get { return field.Ordinal; }
-        }
-
-        /// <inheritdoc/>
-        public string FieldName
-        {
-            get { return field.Name; }
-        }
-
-        /// <inheritdoc/>
-        public object FieldValue
-        {
-            get { return field.Value; }
-        }
-
-        public int ProcessingDirectives
+        public override int ProcessingDirectives
         {
             get { return processingDirectives; }
         }
 
-        public int SchemaVersion
+        public override int SchemaVersion
         {
             get { return schemaVersion; }
         }
 
-        public short? TaxonomyId
+        public override short? TaxonomyId
         {
             get { return taxonomyId; }
         }
 
-        public IFudgeTaxonomy Taxonomy
+        public override IFudgeTaxonomy Taxonomy
         {
             get { throw new NotImplementedException(); }
         }
 
-        public FudgeContext FudgeContext
+        public override FudgeContext FudgeContext
         {
             get
             {
